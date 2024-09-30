@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleGearAssembly", "BattleGearAssembly\BattleGearAssembly.csproj", "{3625D2AA-ACC2-400D-B2EA-89FEE3F09DE1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3625D2AA-ACC2-400D-B2EA-89FEE3F09DE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3625D2AA-ACC2-400D-B2EA-89FEE3F09DE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3625D2AA-ACC2-400D-B2EA-89FEE3F09DE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3625D2AA-ACC2-400D-B2EA-89FEE3F09DE1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1CC328B8-EBEA-41C6-8E5F-7410059769F8}
+	EndGlobalSection
+EndGlobal
