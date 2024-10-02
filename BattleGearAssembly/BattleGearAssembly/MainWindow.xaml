@@ -11,23 +11,23 @@
     <Grid Name="MainGrid">
         <Grid Name="HeaderPanel" Width="750" Height="150" VerticalAlignment="Top">
             <Label Content="Region" HorizontalAlignment="Left" Margin="50,20,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold"/>
-            <ComboBox Name="RegionCB" HorizontalAlignment="Left" Margin="50,40,0,0" VerticalAlignment="Top" Width="120" Height="20" Foreground="White">
+            <ComboBox Name="RegionCB" IsEditable="True" Text="US" HorizontalAlignment="Left" Margin="50,40,0,0" VerticalAlignment="Top" Width="120" Height="20" Foreground="White">
                 <ComboBoxItem Content="US" Background="#555555"></ComboBoxItem>
                 <ComboBoxItem Content="EU" Background="#555555"></ComboBoxItem>
             </ComboBox>
 
             <Label Content="Realm" HorizontalAlignment="Left" Margin="200,20,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold"/>
-            <ComboBox Name="RealmCB" HorizontalAlignment="Left" Margin="200,40,0,0" VerticalAlignment="Top" Width="120" Height="20"/>
+            <ComboBox Name="RealmCB" IsEditable="True" Text="Thrall" HorizontalAlignment="Left" Margin="200,40,0,0" VerticalAlignment="Top" Width="120" Height="20"/>
 
             <Label Content="Character Name" HorizontalAlignment="Left" Margin="350,20,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold"/>
-            <TextBox Name="CharacterNameBox"  HorizontalAlignment="Left" Margin="350,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="20"/>
+            <TextBox Name="CharacterNameBox"  Text="Euphrelia" HorizontalAlignment="Left" Margin="350,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="20"/>
 
             <TextBlock Name="CHARACTER_NAME" Margin="0,0,0,20" Text="" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="Bold"  FontSize="26" FontFamily="Franklin Gothic" Foreground="#CCCC00"/>
             <TextBlock Name="CHARACTER_ILVL" Margin="0,0,0,0" Text="" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="Bold" FontStyle="Italic" FontSize="20" FontFamily="Franklin Gothic" Foreground="#CCCC00"/>
         </Grid>
 
         <Grid Name="MainPanel" Width="750" Height="600" VerticalAlignment="Top" Margin="0,120,0,0">
-            <Grid Name="HEAD" Margin="0,80,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Grid Name="HEAD" Margin="0,80,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
                 <Image Name="HEAD_IMAGE" Source="ImageResources/ItemBlanks/HeadBlank.png" Height="50" Width="50" HorizontalAlignment="Left"/>
                 <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Left">
                     <Border.Effect>
@@ -39,7 +39,7 @@
                     <TextBlock Name="HEAD_ILVL" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" FontWeight="Bold" Foreground="#CCCC00"/>
                 </StackPanel>
             </Grid>
-            <Grid Name="NECK" Margin="0,140,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Grid Name="NECK" Margin="0,140,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
                 <Image Name="NECK_IMAGE" Source="ImageResources/ItemBlanks/NeckBlank.png" Height="50" Width="50" HorizontalAlignment="Left"/>
                 <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Left">
                     <Border.Effect>
@@ -51,7 +51,7 @@
                     <TextBlock Name="NECK_ILVL" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" FontWeight="Bold" Foreground="#CCCC00"/>
                 </StackPanel>
             </Grid>
-            <Grid Name="SHOULDER" Margin="0,200,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Grid Name="SHOULDER" Margin="0,200,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
                 <Image Name="SHOULDER_IMAGE" Source="ImageResources/ItemBlanks/ShoulderBlank.png" Height="50" Width="50" HorizontalAlignment="Left"/>
                 <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Left">
                     <Border.Effect>
@@ -63,7 +63,7 @@
                     <TextBlock Name="SHOULDER_ILVL" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" FontWeight="Bold" Foreground="#CCCC00"/>
                 </StackPanel>
             </Grid>
-            <Grid Name="BACK" Margin="0,260,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Grid Name="BACK" Margin="0,260,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
                 <Image Name="BACK_IMAGE" Source="ImageResources/ItemBlanks/BackBlank.png" Height="50" Width="50" HorizontalAlignment="Left"/>
                 <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Left">
                     <Border.Effect>
@@ -75,7 +75,7 @@
                     <TextBlock Name="BACK_ILVL" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" FontWeight="Bold" Foreground="#CCCC00"/>
                 </StackPanel>
             </Grid>
-            <Grid Name="CHEST" Margin="0,320,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Grid Name="CHEST" Margin="0,320,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
                 <Image Name="CHEST_IMAGE" Source="ImageResources/ItemBlanks/ChestBlank.png" Height="50" Width="50" HorizontalAlignment="Left"/>
                 <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Left">
                     <Border.Effect>
@@ -87,7 +87,7 @@
                     <TextBlock Name="CHEST_ILVL" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" FontWeight="Bold" Foreground="#CCCC00"/>
                 </StackPanel>
             </Grid>
-            <Grid Name="SHIRT" Margin="0,380,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Grid Name="SHIRT" Margin="0,380,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
                 <Image Name="SHIRT_IMAGE" Source="ImageResources/ItemBlanks/ShirtBlank.png" Height="50" Width="50" HorizontalAlignment="Left"/>
                 <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Left">
                     <Border.Effect>
@@ -99,7 +99,7 @@
                     <TextBlock Name="SHIRT_ILVL" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" FontWeight="Bold" Foreground="#CCCC00"/>
                 </StackPanel>
             </Grid>
-            <Grid Name="TABARD" Margin="0,440,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Grid Name="TABARD" Margin="0,440,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
                 <Image Name="TABARD_IMAGE" Source="ImageResources/ItemBlanks/TabardBlank.png" Height="50" Width="50" HorizontalAlignment="Left"/>
                 <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Left">
                     <Border.Effect>
@@ -111,7 +111,7 @@
                     <TextBlock Name="TABARD_ILVL" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" FontWeight="Bold" Foreground="#CCCC00"/>
                 </StackPanel>
             </Grid>
-            <Grid Name="WRIST" Margin="0,500,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Grid Name="WRIST" Margin="0,500,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
                 <Image Name="WRIST_IMAGE" Source="ImageResources/ItemBlanks/WristBlank.png" Height="50" Width="50" HorizontalAlignment="Left"/>
                 <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Left">
                     <Border.Effect>
@@ -124,7 +124,7 @@
                 </StackPanel>
             </Grid>
 
-            <Grid Name="HANDS" Margin="0,80,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Grid Name="HANDS" Margin="0,80,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
                 <Image Name="HANDS_IMAGE" Source="ImageResources/ItemBlanks/HandsBlank.png" Height="50" Width="50" HorizontalAlignment="Right"/>
                 <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Right">
                     <Border.Effect>
@@ -136,7 +136,7 @@
                     <TextBlock Name="HANDS_ILVL" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" FontWeight="Bold" Foreground="#CCCC00"/>
                 </StackPanel>
             </Grid>
-            <Grid Name="WAIST" Margin="0,140,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Grid Name="WAIST" Margin="0,140,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
                 <Image Name="WAIST_IMAGE" Source="ImageResources/ItemBlanks/WaistBlank.png" Height="50" Width="50" HorizontalAlignment="Right"/>
                 <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Right">
                     <Border.Effect>
@@ -148,7 +148,7 @@
                     <TextBlock Name="WAIST_ILVL" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" FontWeight="Bold" Foreground="#CCCC00"/>
                 </StackPanel>
             </Grid>
-            <Grid Name="LEGS" Margin="0,200,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Grid Name="LEGS" Margin="0,200,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
                 <Image Name="LEGS_IMAGE" Source="ImageResources/ItemBlanks/LegsBlank.png" Height="50" Width="50" HorizontalAlignment="Right"/>
                 <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Right">
                     <Border.Effect>
@@ -160,7 +160,7 @@
                     <TextBlock Name="LEGS_ILVL" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" FontWeight="Bold" Foreground="#CCCC00"/>
                 </StackPanel>
             </Grid>
-            <Grid Name="FEET" Margin="0,260,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Grid Name="FEET" Margin="0,260,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
                 <Image Name="FEET_IMAGE" Source="ImageResources/ItemBlanks/FeetBlank.png" Height="50" Width="50" HorizontalAlignment="Right"/>
                 <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Right">
                     <Border.Effect>
@@ -172,7 +172,7 @@
                     <TextBlock Name="FEET_ILVL" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" FontWeight="Bold" Foreground="#CCCC00"/>
                 </StackPanel>
             </Grid>
-            <Grid Name="FINGER_1" Margin="0,320,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Grid Name="FINGER_1" Margin="0,320,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
                 <Image Name="FINGER_1_IMAGE" Source="ImageResources/ItemBlanks/FingerBlank.png" Height="50" Width="50" HorizontalAlignment="Right"/>
                 <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Right">
                     <Border.Effect>
@@ -184,7 +184,7 @@
                     <TextBlock Name="FINGER_1_ILVL" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" FontWeight="Bold" Foreground="#CCCC00"/>
                 </StackPanel>
             </Grid>
-            <Grid Name="FINGER_2" Margin="0,380,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Grid Name="FINGER_2" Margin="0,380,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
                 <Image Name="FINGER_2_IMAGE" Source="ImageResources/ItemBlanks/FingerBlank.png" Height="50" Width="50" HorizontalAlignment="Right"/>
                 <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Right">
                     <Border.Effect>
@@ -196,7 +196,7 @@
                     <TextBlock Name="FINGER_2_ILVL" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" FontWeight="Bold" Foreground="#CCCC00"/>
                 </StackPanel>
             </Grid>
-            <Grid Name="TRINKET_1" Margin="0,440,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Grid Name="TRINKET_1" Margin="0,440,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
                 <Image Name="TRINKET_1_IMAGE" Source="ImageResources/ItemBlanks/TrinketBlank.png" Height="50" Width="50" HorizontalAlignment="Right"/>
                 <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Right">
                     <Border.Effect>
@@ -208,7 +208,7 @@
                     <TextBlock Name="TRINKET_1_ILVL" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" FontWeight="Bold" Foreground="#CCCC00"/>
                 </StackPanel>
             </Grid>
-            <Grid Name="TRINKET_2" Margin="0,500,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Grid Name="TRINKET_2" Margin="0,500,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
                 <Image Name="TRINKET_2_IMAGE" Source="ImageResources/ItemBlanks/TrinketBlank.png" Height="50" Width="50" HorizontalAlignment="Right"/>
                 <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Right">
                     <Border.Effect>
@@ -221,8 +221,8 @@
                 </StackPanel>
             </Grid>
 
-            <Grid Name="MAIN_HAND" Margin="0,0,310,0" Height="50" Width="300" HorizontalAlignment="Center" VerticalAlignment="Bottom">
-                <Image Name="MAIN_HAND_IMAGE" Source="ImageResources/ItemBlanks/MainhandBlank.png" Height="50" Width="50" HorizontalAlignment="Right"/>
+            <Grid Name="MAIN_HAND" Margin="0,0,310,0" Height="50" Width="300" HorizontalAlignment="Center" VerticalAlignment="Bottom" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
+                <Image Name="MAIN_HAND_IMAGE" Source="ImageResources/ItemBlanks/Main_HandBlank.png" Height="50" Width="50" HorizontalAlignment="Right"/>
                 <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Right">
                     <Border.Effect>
                         <BlurEffect Radius="5"/>
@@ -233,8 +233,8 @@
                     <TextBlock Name="MAIN_HAND_ILVL" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" FontWeight="Bold" Foreground="#CCCC00"/>
                 </StackPanel>
             </Grid>
-            <Grid Name="OFF_HAND" Margin="310,0,0,0" Height="50" Width="300" HorizontalAlignment="Center" VerticalAlignment="Bottom">
-                <Image Name="OFF_HAND_IMAGE" Source="ImageResources/ItemBlanks/OffhandBlank.png" Height="50" Width="50" HorizontalAlignment="Left"/>
+            <Grid Name="OFF_HAND" Margin="310,0,0,0" Height="50" Width="300" HorizontalAlignment="Center" VerticalAlignment="Bottom" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
+                <Image Name="OFF_HAND_IMAGE" Source="ImageResources/ItemBlanks/Off_HandBlank.png" Height="50" Width="50" HorizontalAlignment="Left"/>
                 <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Left">
                     <Border.Effect>
                         <BlurEffect Radius="5"/>
@@ -250,6 +250,18 @@
             </Grid.Background>
         </Grid>
         <Button Name="LoadGearButton" Click="Button_LoadGear" Width="80" Height="25" Content="Load Gear" Margin="0,0,0,10" VerticalAlignment="Bottom"/>
+        <UserControl Name="GearToolTip" Visibility="Collapsed">
+            <Border Background="#CCCCCC" Height="300" Width="250" CornerRadius="10" Padding="3">
+                <Grid>
+                    <StackPanel Name="GearInfoPanel" Margin="10">
+                        <TextBlock Name="TT_Name" x:FieldModifier="public" Text="OWIEN"/>
+                    </StackPanel>
+                    <Grid.Background>
+                        <SolidColorBrush Color="Black"/>
+                    </Grid.Background>
+                </Grid>
+            </Border>
+        </UserControl>
     </Grid>
 </Window>
     

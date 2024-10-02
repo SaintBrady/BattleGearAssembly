@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 using static System.Net.Mime.MediaTypeNames;
 using Image = System.Windows.Controls.Image;
 
@@ -66,7 +68,7 @@ namespace BattleGearAssembly
             API_Globals.Gear.Clear();
             Dictionary<string, GearItem> Gear = API_Globals.Gear;
 
-            Console.Write(await API_Request.API_LoadItem(API_Globals.API_Token));
+            //Console.Write(await API_Request.API_LoadItem(API_Globals.API_Token));
 
             try
             {
@@ -77,8 +79,9 @@ namespace BattleGearAssembly
                 brush.Stretch = Stretch.UniformToFill;
                 MainPanel.Background = brush;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine("Caught Exception: " + ex);
                 MessageBox.Show("Error: Failed to load player profile data");
                 return;
             }
@@ -99,11 +102,11 @@ namespace BattleGearAssembly
 
                 try
                 {
-                    string qualityColorHex = API_Globals.QualityColors[Gear[g.Name].Quality];
+                    string qualityColorHex = API_Globals.QualityColors[Gear[g.Name].Quality.QualityType];
                     SolidColorBrush itemColor = new SolidColorBrush((Color)System.Windows.Media.ColorConverter.ConvertFromString(qualityColorHex));
 
                     image.Source = Gear[g.Name].Image;
-                    ilvl.Text = Gear[g.Name].Ilvl.ToString();
+                    ilvl.Text = Gear[g.Name].Level.Ilvl.ToString();
                     itemName.Text = Gear[g.Name].Name;
                     itemName.Foreground = itemColor;
                     border.BorderBrush = itemColor;
@@ -133,6 +136,43 @@ namespace BattleGearAssembly
             itemName.Text = "";
             itemName.Foreground = Brushes.Black;
             border.BorderBrush = Brushes.Black;
+        }
+
+        private void ToggleShowGearTT(object sender, EventArgs e)
+        {
+            Grid g = sender as Grid;
+            Console.WriteLine("Sender: " + g.Name);
+
+            CreateGearWindow(g.Name);
+            if (GearToolTip.Visibility == Visibility.Collapsed) { GearToolTip.Visibility = Visibility.Visible; }
+            else { GearToolTip.Visibility = Visibility.Collapsed; }
+        }
+
+        private void CreateGearWindow(string slot)
+        {
+            GearInfoPanel.Children.Clear();
+            GearItem item = API_Globals.Gear[slot];
+
+            // Will be "for not null # of properties
+
+            PropertyInfo[] properties = item.GetType().GetProperties();
+            int count = 0;
+
+            foreach (PropertyInfo property in properties) // returns number of parent methods in GearItem currently
+            {
+                count++;
+                Console.WriteLine(property.Name);
+                TextBox textBox = new TextBox();
+                //textBox.Text = property;
+            }
+
+            //GearTextBox g = new GearTextBox(string text, SolidColorBrush foreground, FontWeight fontWeight, int fontSize);
+            Console.WriteLine(item.Name + ": " + count.ToString());
+            TT_Name.Text = "Test";
+            TT_Name.Foreground = Brushes.White;
+
+            GearInfoPanel.Children.Add(TT_Name);
+            
         }
     }
 }

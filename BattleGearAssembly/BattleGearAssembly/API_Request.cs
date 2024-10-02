@@ -4,15 +4,22 @@ using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.Remoting;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 
 namespace BattleGearAssembly
 {
@@ -39,26 +46,104 @@ namespace BattleGearAssembly
 
     public class GearItem
     {
-        [JsonProperty]
-        internal int ID { get; set; }
+        [JsonProperty("item")]
+        public Item Item { get; set; }
 
-        [JsonProperty]
-        internal int Ilvl { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
 
-        [JsonProperty]
-        internal string Binding { get; set; }
+        [JsonProperty("quality")]
+        public Quality Quality { get; set; }
 
-        [JsonProperty]
-        internal string Slot { get; set; }
+        [JsonProperty("level")]
+        public Level Level { get; set; }
 
-        [JsonProperty]
-        internal string Quality { get; set; }
+        [JsonProperty("binding")]
+        public Binding Binding { get; set; }
 
-        [JsonProperty]
-        internal string Name { get; set; }
+        [JsonProperty("slot")]
+        public Slot Slot { get; set; }
 
-        [JsonProperty]
-        internal BitmapImage Image { get; set; }
+        [JsonProperty("inventory_type")]
+        public InventoryType InventoryType { set; get; }
+
+        [JsonProperty("attack_speed")]
+        public Item AttackSpeed { get; set; }
+
+        public BitmapImage Image { get; set; }
+    }
+
+    public partial class Root
+    {
+        [JsonProperty("equipped_items")]
+        public GearItem[] GearItems { get; set; }
+    }
+
+    public partial class Item
+    {
+        [JsonProperty("id")]
+        public int ID { get; set; }
+    }
+
+    public partial class Quality
+    {
+        [JsonProperty("type")]
+        public string QualityType { get; set; }
+    }
+
+    public partial class Level
+    {
+        [JsonProperty("value")]
+        public int Ilvl { get; set; }
+    }
+
+    public partial class Binding
+    {
+        [JsonProperty("name")]
+        public string BindingType { get; set; }
+    }
+
+    public partial class Slot
+    {
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+    }
+
+    public partial class InventoryType
+    {
+        [JsonProperty("type")]
+        public string Type { get; set; }
+    }
+
+    public partial class AttackSpeed
+    {
+        [JsonProperty("display_string")]
+        public string Speed { get; set; }
+    }
+    /*
+     * public string Text;
+        public SolidColorBrush Foreground = Brushes.Purple;
+        public FontWeight FontWeight = FontWeights.DemiBold;
+        public int FontSize = 16;
+     */
+
+    public class GearTextBox
+    {
+        string Text;
+        public SolidColorBrush Foreground;
+        public FontWeight FontWeight;
+        public int FontSize;
+
+        GearTextBox(string text, SolidColorBrush foreground, FontWeight fontWeight, int fontSize)
+        {
+            Text = text;
+            Foreground = foreground;
+            FontWeight = fontWeight;
+            FontSize = fontSize;
+        }
     }
 
     public class API_Request
@@ -99,11 +184,11 @@ namespace BattleGearAssembly
         // Gets Image From API Source using item_id
         public static async Task<BitmapImage> API_LoadImage(string token, int item_id = 19019, string region = "us")
         {
-           var parameters = new Dictionary<string, string> { { "namespace", "static-us" }, { "locale", "en_US" } };
-           string httpMessage = $"https://{region}.api.blizzard.com/data/wow/media/item/{item_id}?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
-           string responseBody = await BuildHttpRequest(token, httpMessage);
+            var parameters = new Dictionary<string, string> { { "namespace", "static-us" }, { "locale", "en_US" } };
+            string httpMessage = $"https://{region}.api.blizzard.com/data/wow/media/item/{item_id}?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
+            string responseBody = await BuildHttpRequest(token, httpMessage);
 
-           string imageURL = JObject.Parse(responseBody)["assets"][0]["value"].ToString();
+            string imageURL = JObject.Parse(responseBody)["assets"][0]["value"].ToString();
 
             // Build image off of URL
             BitmapImage image = new BitmapImage();
@@ -128,34 +213,56 @@ namespace BattleGearAssembly
         // Parses JSON Data into workable gear list in API_Globals
         private static async Task API_ParseGear(string jsonGearList)
         {
-            dynamic d = JObject.Parse(jsonGearList);
+            Root root = JsonConvert.DeserializeObject<Root>(jsonGearList);
             API_Globals.Player_Ilvl = 0;
             bool isTwoHanded = false;
 
-            // Eventually need to add additional stats. Will need to rework calls to make more efficient
-            foreach(dynamic item in d.equipped_items)
+            foreach (GearItem gearItem in root.GearItems)
             {
                 if (isTwoHanded) continue;
 
-                GearItem gearItem = new GearItem()
-                {
-                    ID = item["item"]["id"],
-                    Slot = item["slot"]["type"],
-                    Ilvl = item["level"]["value"],
-                    Quality = item["quality"]["type"],
-                    Name = item["name"],
-                };
-                gearItem.Image = await API_LoadImage(API_Globals.API_Token, gearItem.ID);
+                //gearItem.Item.ID = item["item"]["id"],
+                //gearItem.Name = item["name"],
+                //gearItem.Quality.QualityType = item["quality"]["type"],
+                //Source = item["name_description"]["display_string"],
+                //gearItem.Level.Ilvl = item["level"]["value"],
+                //Transmog = item[] Fix later
+                //gearItem.Binding.BindingType = item["binding"]["name"],
+                // Unique Equipped
+                //gearItem.Slot.Type = item["slot"]["type"],
+                //gearItem.Slot.Name = item["slot"]["name"]
+                // Leather
+                // Damage Range
+                // Speed
+                // DPS
+                //Stats = item["stats"], //??? for stat in stats, ["display"]["display_string"] @ ["display]["color"] value
+                // Enchants
+                // Sharpening/Oils
+                //Gems = item["sockets"]["display_string"],
+                // Equip Effect
+                // On use Name
+                // On use effect
+                // CD
+                // Set Bonus
+                //Durability = item["durability"]["display_string"],
+                //Requirements = item["requirements"]["level"]["display_string"],
+                //Sell_Price = item["sell_price"]["display_strings"]
 
-                if (gearItem.Slot.Equals("MAIN_HAND") && item["inventory_type"]["type"] == "TWOHWEAPON")
+
+                // ID, Source?, Ilvl, Transmog, BOE/PU, Unique-Equipped (Embellish), Slot -> Leather, Damage Range -> Speed, DPS, Main Stats, Stam,
+                // Secondary Stats, Tertiary Stats, Enchants, Sharpening, Gems, Equip effect, on use name, on use effect, cd, Set Bonus, Durability, Level req, sell price
+
+                gearItem.Image = await API_LoadImage(API_Globals.API_Token, gearItem.Item.ID);
+
+                if (gearItem.Slot.Type == "MAIN_HAND" && gearItem.InventoryType.Type == "TWOHWEAPON")
                 {
-                    API_Globals.Player_Ilvl += gearItem.Ilvl;
+                    API_Globals.Player_Ilvl += gearItem.Level.Ilvl;
                     isTwoHanded = true;
                 }
 
-                API_Globals.Gear[gearItem.Slot] = gearItem;
+                API_Globals.Gear[gearItem.Slot.Type] = gearItem;
                 if (gearItem.Slot.Equals("SHIRT") || gearItem.Slot.Equals("TABARD")) { continue; }
-                API_Globals.Player_Ilvl += gearItem.Ilvl;
+                API_Globals.Player_Ilvl += gearItem.Level.Ilvl;
             }
 
             API_Globals.Player_Ilvl /= 16;
@@ -176,7 +283,8 @@ namespace BattleGearAssembly
             dynamic d = JObject.Parse(jsonRealmList);
             List<string> realmNames = new List<string>();
 
-            foreach(dynamic realm in d.realms) {
+            foreach (dynamic realm in d.realms)
+            {
                 API_Globals.RealmSlugDict[realm["name"].ToString()] = realm["slug"].ToString();
                 realmNames.Add(realm["name"].ToString());
             }
@@ -208,6 +316,7 @@ namespace BattleGearAssembly
 
             return image;
         }
+
         public static async Task<string> API_LoadItem(string token, string region = "us", string item_id = "19019")
         {
             var parameters = new Dictionary<string, string> { { "namespace", "static-us" }, { "locale", "en_US" } };
