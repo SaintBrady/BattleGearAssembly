@@ -24,6 +24,17 @@
 
             <TextBlock Name="CHARACTER_NAME" Margin="0,0,0,20" Text="" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="Bold"  FontSize="26" FontFamily="Franklin Gothic" Foreground="#CCCC00"/>
             <TextBlock Name="CHARACTER_ILVL" Margin="0,0,0,0" Text="" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="Bold" FontStyle="Italic" FontSize="20" FontFamily="Franklin Gothic" Foreground="#CCCC00"/>
+
+            <Grid Name="TestGrid" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100">
+                <Image Name="GoldImage" Source="ImageResources/Money/Gold.png" Height="10" Width="10" HorizontalAlignment="Left"/>
+                <TextBlock Name="Gold" Text="32" Foreground="White" FontSize="8" HorizontalAlignment="Left" Margin="15,0,0,0"/>
+
+                <Image Name="SilverImage" Source="ImageResources/Money/Silver.png" Height="10" Width="10" HorizontalAlignment="Left" Margin="30,0,0,0"/>
+                <TextBlock Name="Silver" Text="32" Foreground="White" FontSize="8" HorizontalAlignment="Left" Margin="45,0,0,0"/>
+
+                <Image Name="CopperImage" Source="ImageResources/Money/Copper.png" Height="10" Width="10" HorizontalAlignment="Left" Margin="60,0,0,0"/>
+                <TextBlock Name="Copper" Text="32" Foreground="White" FontSize="8" HorizontalAlignment="Left" Margin="75,0,0,0"/>
+            </Grid>
         </Grid>
 
         <Grid Name="MainPanel" Width="750" Height="600" VerticalAlignment="Top" Margin="0,120,0,0">

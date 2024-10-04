@@ -102,7 +102,7 @@ namespace BattleGearAssembly
 
                 try
                 {
-                    string qualityColorHex = API_Globals.QualityColors[Gear[g.Name].Quality.QualityType];
+                    string qualityColorHex = API_Globals.QualityColors[Gear[g.Name].Quality.Value];
                     SolidColorBrush itemColor = new SolidColorBrush((Color)System.Windows.Media.ColorConverter.ConvertFromString(qualityColorHex));
 
                     image.Source = Gear[g.Name].Image;
@@ -143,36 +143,83 @@ namespace BattleGearAssembly
             Grid g = sender as Grid;
             Console.WriteLine("Sender: " + g.Name);
 
-            CreateGearWindow(g.Name);
+            if(CreateGearWindow(g.Name) != 0) return;
             if (GearToolTip.Visibility == Visibility.Collapsed) { GearToolTip.Visibility = Visibility.Visible; }
             else { GearToolTip.Visibility = Visibility.Collapsed; }
         }
 
-        private void CreateGearWindow(string slot)
+        private int CreateGearWindow(string slot)
         {
+            // Handles empty gear slot hover
+            if (!API_Globals.Gear.TryGetValue(slot, out GearItem item)) return -1;
+
             GearInfoPanel.Children.Clear();
-            GearItem item = API_Globals.Gear[slot];
 
-            // Will be "for not null # of properties
-
-            PropertyInfo[] properties = item.GetType().GetProperties();
-            int count = 0;
-
-            foreach (PropertyInfo property in properties) // returns number of parent methods in GearItem currently
+            Dictionary<string, string[]> textBlockData = new Dictionary<string, string[]>
             {
-                count++;
-                Console.WriteLine(property.Name);
-                TextBox textBox = new TextBox();
-                //textBox.Text = property;
+                { "Name", new string[] { item.Name, API_Globals.QualityColors[item.Quality.Value], "demibold", "16" } },
+                { "Level", new string[] { "Item Level " + item.Level.Ilvl.ToString(), "#EEEE00", "regular", "12" } },
+                { "Binding", new string[] { item.Binding.Type, "#FFFFFF", "regular", "12" } },
+                { "InventoryType", new string[] { item.InventoryType.Name, "#FFFFFF", "regular", "12" } },
+                { "ArmorClass", new string[] { item.ArmorClass.Class, "#FFFFFF", "regular", "12" } }
+            };
+
+            if(item.Source != null)
+            {
+                textBlockData.Add("Source", new string[] { item.Source.Name, "#00FF00", "regular", "12" });
             }
 
-            //GearTextBox g = new GearTextBox(string text, SolidColorBrush foreground, FontWeight fontWeight, int fontSize);
-            Console.WriteLine(item.Name + ": " + count.ToString());
-            TT_Name.Text = "Test";
-            TT_Name.Foreground = Brushes.White;
+            if (item.Weapon != null) // Is Weapon
+            {
+                textBlockData.Add("Weapon", new string[] { item.Weapon.Damage.Value, "#FFFFFF", "regular", "12" });
+                textBlockData.Add("Speed", new string[] { item.Weapon.AttackSpeed.Speed, "#FFFFFF", "regular", "12" });
+            }
 
-            GearInfoPanel.Children.Add(TT_Name);
-            
+            PropertyInfo[] properties = item.GetType().GetProperties();
+
+            string[] propertyExclusions = { "ID", "Quality", "Slot", "Image"};
+            string[] armorTypeExclusions = { "NECK", "CLOAK", "FINGER", "TRINKET" };
+            Grid g = new Grid();
+
+            foreach (PropertyInfo property in properties)
+            {
+                // Ignores properties not set on item i.e. Weapon on non-weapon items
+                if (property.GetValue(item, null) == null) { continue; }
+                if (propertyExclusions.Contains(property.Name)) { continue;  }
+
+                TextBlock t = GearItem.ItemText(textBlockData[property.Name]);
+
+                // Handles left and right aligned elements within the same stackpanel vertical slice (Fix me, I look like black magic)
+                if (property.Name == "InventoryType")
+                {
+                    g.Children.Add(t);
+                    continue;
+                }
+                else if (property.Name == "ArmorClass")
+                {
+                    if (!armorTypeExclusions.Contains(item.InventoryType.Type))
+                    {
+                        t.HorizontalAlignment = HorizontalAlignment.Right;
+                        g.Children.Add(t);
+                    }
+                    GearInfoPanel.Children.Add(g);
+                    g = new Grid();
+                    continue;
+                }
+                else if (property.Name == "Weapon")
+                {
+                    g.Children.Add(t);
+                    t = GearItem.ItemText(textBlockData["Speed"]);
+                    t.HorizontalAlignment = HorizontalAlignment.Right;
+                    g.Children.Add(t);
+                    GearInfoPanel.Children.Add(g);
+                    continue;
+                }
+
+                GearInfoPanel.Children.Add(t);
+            }
+
+            return 0;
         }
     }
 }

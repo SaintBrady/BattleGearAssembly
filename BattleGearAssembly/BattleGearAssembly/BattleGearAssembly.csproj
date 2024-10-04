@@ -130,5 +130,10 @@
     <Resource Include="ImageResources\ItemBlanks\TrinketBlank.png" />
     <Resource Include="ImageResources\ItemBlanks\WristBlank.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageResources\Money\copper.png" />
+    <Resource Include="ImageResources\Money\gold.png" />
+    <Resource Include="ImageResources\Money\silver.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

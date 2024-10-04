@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml.Linq;
+using BattleGearAssembly;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -47,13 +48,16 @@ namespace BattleGearAssembly
     public class GearItem
     {
         [JsonProperty("item")]
-        public Item Item { get; set; }
+        public ID ID { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
 
         [JsonProperty("quality")]
         public Quality Quality { get; set; }
+
+        [JsonProperty("name_description")]
+        public Source Source { get; set; }
 
         [JsonProperty("level")]
         public Level Level { get; set; }
@@ -65,12 +69,26 @@ namespace BattleGearAssembly
         public Slot Slot { get; set; }
 
         [JsonProperty("inventory_type")]
-        public InventoryType InventoryType { set; get; }
+        public InventoryType InventoryType { get; set; }
 
-        [JsonProperty("attack_speed")]
-        public Item AttackSpeed { get; set; }
+        [JsonProperty("item_subclass")]
+        public ArmorClass ArmorClass { get; set; }
+
+        [JsonProperty("weapon")]
+        public Weapon Weapon { get; set; }
 
         public BitmapImage Image { get; set; }
+
+        public static TextBlock ItemText(string[] textProperties)
+        {
+            return new TextBlock
+            {
+                Text = textProperties[0],
+                Foreground = new SolidColorBrush((Color)System.Windows.Media.ColorConverter.ConvertFromString(textProperties[1])),
+                FontWeight = textProperties[2] == "demibold" ? FontWeights.DemiBold : FontWeights.Regular,
+                FontSize = Int32.Parse(textProperties[3])
+            };
+        }
     }
 
     public partial class Root
@@ -79,16 +97,16 @@ namespace BattleGearAssembly
         public GearItem[] GearItems { get; set; }
     }
 
-    public partial class Item
+    public partial class ID
     {
         [JsonProperty("id")]
-        public int ID { get; set; }
+        public int Value { get; set; }
     }
 
     public partial class Quality
     {
         [JsonProperty("type")]
-        public string QualityType { get; set; }
+        public string Value { get; set; }
     }
 
     public partial class Level
@@ -100,7 +118,7 @@ namespace BattleGearAssembly
     public partial class Binding
     {
         [JsonProperty("name")]
-        public string BindingType { get; set; }
+        public string Type { get; set; }
     }
 
     public partial class Slot
@@ -116,34 +134,42 @@ namespace BattleGearAssembly
     {
         [JsonProperty("type")]
         public string Type { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+    }
+
+    public partial class ArmorClass
+    {
+        [JsonProperty("name")]
+        public string Class { get; set; }
+    }
+
+    public partial class Source
+    {
+        [JsonProperty("display_string")]
+        public string Name { get; set; }
+    }
+
+    public partial class Weapon
+    {
+        [JsonProperty("damage")]
+        public Damage Damage { get; set; }
+
+        [JsonProperty("attack_speed")]
+        public AttackSpeed AttackSpeed { get; set; }
+    }
+
+    public partial class Damage
+    {
+        [JsonProperty("display_string")]
+        public string Value { get; set; }
     }
 
     public partial class AttackSpeed
     {
         [JsonProperty("display_string")]
         public string Speed { get; set; }
-    }
-    /*
-     * public string Text;
-        public SolidColorBrush Foreground = Brushes.Purple;
-        public FontWeight FontWeight = FontWeights.DemiBold;
-        public int FontSize = 16;
-     */
-
-    public class GearTextBox
-    {
-        string Text;
-        public SolidColorBrush Foreground;
-        public FontWeight FontWeight;
-        public int FontSize;
-
-        GearTextBox(string text, SolidColorBrush foreground, FontWeight fontWeight, int fontSize)
-        {
-            Text = text;
-            Foreground = foreground;
-            FontWeight = fontWeight;
-            FontSize = fontSize;
-        }
     }
 
     public class API_Request
@@ -221,40 +247,35 @@ namespace BattleGearAssembly
             {
                 if (isTwoHanded) continue;
 
-                //gearItem.Item.ID = item["item"]["id"],
-                //gearItem.Name = item["name"],
-                //gearItem.Quality.QualityType = item["quality"]["type"],
-                //Source = item["name_description"]["display_string"],
-                //gearItem.Level.Ilvl = item["level"]["value"],
-                //Transmog = item[] Fix later
-                //gearItem.Binding.BindingType = item["binding"]["name"],
-                // Unique Equipped
-                //gearItem.Slot.Type = item["slot"]["type"],
-                //gearItem.Slot.Name = item["slot"]["name"]
-                // Leather
-                // Damage Range
-                // Speed
-                // DPS
-                //Stats = item["stats"], //??? for stat in stats, ["display"]["display_string"] @ ["display]["color"] value
-                // Enchants
-                // Sharpening/Oils
-                //Gems = item["sockets"]["display_string"],
-                // Equip Effect
-                // On use Name
-                // On use effect
-                // CD
-                // Set Bonus
-                //Durability = item["durability"]["display_string"],
-                //Requirements = item["requirements"]["level"]["display_string"],
-                //Sell_Price = item["sell_price"]["display_strings"]
+                //ID.Value = OK
+                //Name = OK
+                //Quality.Value = OK
+                //Source = OK
+                //Level.Ilvl = OK
+                //!!!//Transmog = item[] Fix later
+                //Binding.Type = OK
+                //!!!// Unique Equipped
+                //gearItem.InventoryType.Name = OK
+                //ArmorClass.Class = OK
+                //!!!// Damage Range
+                // Weapon.AttackSpeed.Speed = OK
+                //!!!// DPS
+                //!!!//Stats = item["stats"], //??? for stat in stats, ["display"]["display_string"] @ ["display]["color"] value --> Main, Stam, Secondary, Tertiary
+                //!!!// Enchants
+                //!!!// Sharpening/Oils
+                //!!!//Gems = item["sockets"]["display_string"],
+                //!!!// Equip Effect
+                //!!!// On use Name
+                //!!!// On use effect
+                //!!!// CD
+                //!!!// Set Bonus
+                //!!!//Durability = item["durability"]["display_string"],
+                //!!!//Requirements = item["requirements"]["level"]["display_string"],
+                //!!!//Sell_Price = item["sell_price"]["display_strings"]
 
+                gearItem.Image = await API_LoadImage(API_Globals.API_Token, gearItem.ID.Value);
 
-                // ID, Source?, Ilvl, Transmog, BOE/PU, Unique-Equipped (Embellish), Slot -> Leather, Damage Range -> Speed, DPS, Main Stats, Stam,
-                // Secondary Stats, Tertiary Stats, Enchants, Sharpening, Gems, Equip effect, on use name, on use effect, cd, Set Bonus, Durability, Level req, sell price
-
-                gearItem.Image = await API_LoadImage(API_Globals.API_Token, gearItem.Item.ID);
-
-                if (gearItem.Slot.Type == "MAIN_HAND" && gearItem.InventoryType.Type == "TWOHWEAPON")
+                if (gearItem.InventoryType.Type == "TWOHWEAPON")
                 {
                     API_Globals.Player_Ilvl += gearItem.Level.Ilvl;
                     isTwoHanded = true;
