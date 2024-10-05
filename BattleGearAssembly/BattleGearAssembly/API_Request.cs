@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
@@ -62,8 +63,14 @@ namespace BattleGearAssembly
         [JsonProperty("level")]
         public Level Level { get; set; }
 
+        [JsonProperty("transmog")]
+        public Transmog Transmog { get; set; }
+
         [JsonProperty("binding")]
         public Binding Binding { get; set; }
+
+        [JsonProperty("unique_equipped")]
+        public string UniqueEquipped {  get; set; }
 
         [JsonProperty("slot")]
         public Slot Slot { get; set; }
@@ -76,6 +83,18 @@ namespace BattleGearAssembly
 
         [JsonProperty("weapon")]
         public Weapon Weapon { get; set; }
+
+        [JsonProperty("stats")]
+        public Stat[] Stats { get; set; }
+
+        [JsonProperty("enchantments")]
+        public Enchantment[] Enchantments { get; set; }
+
+        [JsonProperty("durability")]
+        public Durability Durability { get; set; }
+
+        [JsonProperty("requirements")]
+        public Requirements Requirements { get; set; }
 
         public BitmapImage Image { get; set; }
 
@@ -113,6 +132,12 @@ namespace BattleGearAssembly
     {
         [JsonProperty("value")]
         public int Ilvl { get; set; }
+    }
+
+    public partial class Transmog
+    {
+        [JsonProperty("display_string")]
+        public string Value { get; set; }
     }
 
     public partial class Binding
@@ -158,6 +183,9 @@ namespace BattleGearAssembly
 
         [JsonProperty("attack_speed")]
         public AttackSpeed AttackSpeed { get; set; }
+
+        [JsonProperty("dps")]
+        public DPS DPS { get; set; }
     }
 
     public partial class Damage
@@ -170,6 +198,77 @@ namespace BattleGearAssembly
     {
         [JsonProperty("display_string")]
         public string Speed { get; set; }
+    }
+
+    public partial class DPS
+    {
+        [JsonProperty("display_string")]
+        public string Value { get; set; }
+    }
+
+    public partial class Stat
+    {
+        [JsonProperty("type")]
+        public StatType Type { get; set; }
+
+        [JsonProperty("display")]
+        public StatDisplay Display { get; set; }
+    }
+
+    public partial class StatType
+    {
+        [JsonProperty("type")]
+        public string Value { get; set; }
+    }
+
+    public partial class StatDisplay
+    {
+        [JsonProperty("display_string")]
+        public string Value { get; set; }
+
+        [JsonProperty("color")]
+        public DisplayColor Color { get; set; }
+    }
+
+    public partial class Enchantment
+    {
+        [JsonProperty("display_string")]
+        public string Value { get; set; }
+    }
+
+    public partial class Durability
+    {
+        [JsonProperty("display_string")]
+        public string Value { get; set; }
+    }
+
+    public partial class Requirements
+    {
+        [JsonProperty("level")]
+        public LevelRequirement LevelRequirement { get; set; }
+    }
+
+    public partial class LevelRequirement
+    {
+        [JsonProperty("display_string")]
+        public string Value { get; set; }
+    }
+
+    public partial class DisplayColor
+    {
+        [JsonProperty("r")]
+        public int Red { get; set; }
+
+        [JsonProperty("g")]
+        public int Green { get; set; }
+
+        [JsonProperty("b")]
+        public int Blue { get; set; }
+
+        public string GetColor()
+        {
+            return "#" + Red.ToString("X2") + Green.ToString("X2") + Blue.ToString("X2");
+        }
     }
 
     public class API_Request
@@ -252,25 +351,25 @@ namespace BattleGearAssembly
                 //Quality.Value = OK
                 //Source = OK
                 //Level.Ilvl = OK
-                //!!!//Transmog = item[] Fix later
+                //Transmog = OK
                 //Binding.Type = OK
-                //!!!// Unique Equipped
+                //Unique Equipped = OK
                 //gearItem.InventoryType.Name = OK
                 //ArmorClass.Class = OK
-                //!!!// Damage Range
-                // Weapon.AttackSpeed.Speed = OK
-                //!!!// DPS
-                //!!!//Stats = item["stats"], //??? for stat in stats, ["display"]["display_string"] @ ["display]["color"] value --> Main, Stam, Secondary, Tertiary
-                //!!!// Enchants
-                //!!!// Sharpening/Oils
+                //Damage Range = OK
+                //Weapon.AttackSpeed.Speed = OK
+                //DPS = OK
+                //Stats = OK
+                //Enchants = OK
+                //Sharpening/Oils = OK
                 //!!!//Gems = item["sockets"]["display_string"],
                 //!!!// Equip Effect
                 //!!!// On use Name
                 //!!!// On use effect
                 //!!!// CD
                 //!!!// Set Bonus
-                //!!!//Durability = item["durability"]["display_string"],
-                //!!!//Requirements = item["requirements"]["level"]["display_string"],
+                //Durability = OK
+                //Requirements = OK
                 //!!!//Sell_Price = item["sell_price"]["display_strings"]
 
                 gearItem.Image = await API_LoadImage(API_Globals.API_Token, gearItem.ID.Value);
@@ -282,7 +381,7 @@ namespace BattleGearAssembly
                 }
 
                 API_Globals.Gear[gearItem.Slot.Type] = gearItem;
-                if (gearItem.Slot.Equals("SHIRT") || gearItem.Slot.Equals("TABARD")) { continue; }
+                if (gearItem.Slot.Type == "SHIRT" || gearItem.Slot.Type == "TABARD") { continue; }
                 API_Globals.Player_Ilvl += gearItem.Level.Ilvl;
             }
 
