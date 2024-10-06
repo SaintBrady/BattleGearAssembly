@@ -90,6 +90,9 @@ namespace BattleGearAssembly
         [JsonProperty("enchantments")]
         public Enchantment[] Enchantments { get; set; }
 
+        [JsonProperty("spells")]
+        public Spell[] Spells { get; set; }
+
         [JsonProperty("durability")]
         public Durability Durability { get; set; }
 
@@ -105,7 +108,9 @@ namespace BattleGearAssembly
                 Text = textProperties[0],
                 Foreground = new SolidColorBrush((Color)System.Windows.Media.ColorConverter.ConvertFromString(textProperties[1])),
                 FontWeight = textProperties[2] == "demibold" ? FontWeights.DemiBold : FontWeights.Regular,
-                FontSize = Int32.Parse(textProperties[3])
+                FontSize = Int32.Parse(textProperties[3]),
+                TextWrapping = TextWrapping.Wrap,
+                MaxWidth = 250
             };
         }
     }
@@ -234,6 +239,15 @@ namespace BattleGearAssembly
     {
         [JsonProperty("display_string")]
         public string Value { get; set; }
+    }
+
+    public partial class Spell
+    {
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("display_color")]
+        public DisplayColor Color { get; set; }
     }
 
     public partial class Durability
