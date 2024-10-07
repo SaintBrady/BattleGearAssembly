@@ -144,11 +144,9 @@ namespace BattleGearAssembly
             Console.WriteLine("Sender: " + g.Name);
 
             if(CreateGearWindow(g.Name) != 0) return;
-            if (GearToolTip.Visibility == Visibility.Collapsed) { GearToolTip.Visibility = Visibility.Visible; }
-            else { GearToolTip.Visibility = Visibility.Collapsed; }
+            GearToolTip.Visibility = GearToolTip.Visibility == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        //!!! LOOK INTO VIEWBOX FOR DYNAMIC RESIZING OF WINDOW ELEMENT OR CREATE ON THE FLY !!!//
         private int CreateGearWindow(string slot)
         {
             // Handles empty gear slot hover
@@ -167,6 +165,7 @@ namespace BattleGearAssembly
                 { "ArmorClass", new string[] { item.ArmorClass.Class, "#FFFFFF", "regular", "12" } },
                 { "Requirements", new string[] { item.Requirements == null ? "" : item.Requirements.LevelRequirement.Value, "#FFFFFF", "regular", "12" } },
                 { "Stats", new string[] { item.Stats[0].Display.Value, "#FFFFFF", "regular", "12" } },
+                { "Sockets", new string[] { item.Sockets == null ? "" : item.Sockets[0].Value, "#FFFFFF", "regular", "12" } },
                 { "Source", new string[] { item.Source == null ? "" : item.Source.Name, "#00FF00", "regular", "12" } },
                 { "Spells", new string[] { item.Spells == null ? "" : item.Spells[0].Description, "#FFFFFF", "regular", "12" } },
                 { "Transmog", new string[] { item.Transmog == null ? "" : item.Transmog.Value, "#FF99FF", "regular", "12" } },
@@ -177,10 +176,9 @@ namespace BattleGearAssembly
             };
 
             PropertyInfo[] properties = item.GetType().GetProperties();
-            GearToolTip.Width = 250;
 
             string[] armorTypeExclusions = { "NECK", "CLOAK", "FINGER", "TRINKET" };
-            Grid g = new Grid();
+            Grid g;
 
             foreach (PropertyInfo property in properties)
             {
@@ -189,23 +187,24 @@ namespace BattleGearAssembly
                 if (property.GetValue(item, null) == null) { continue; }
 
                 TextBlock t = GearItem.ItemText(textBlockData[property.Name]);
+                g = new Grid();
 
                 switch (property.Name)
                 {
-                    // Handles left and right aligned elements within the same stackpanel vertical slice (Fix me, I look like black magic)
                     case "InventoryType":
-                        g.Children.Add(t);
-                        break;
+                        goto case "ArmorClass";
 
                     case "ArmorClass":
+                        if (property.Name == "ArmorClass") break;
+                        g.Children.Add(t);
                         if (!armorTypeExclusions.Contains(item.InventoryType.Type))
                         {
+                            t = GearItem.ItemText(textBlockData["ArmorClass"]);
                             t.HorizontalAlignment = HorizontalAlignment.Right;
                             g.Children.Add(t);
                         }
 
                         GearInfoPanel.Children.Add(g);
-                        g = new Grid();
                         break;
 
                     case "Weapon":
@@ -215,6 +214,7 @@ namespace BattleGearAssembly
                         g.Children.Add(t);
                         GearInfoPanel.Children.Add(g);
                         GearInfoPanel.Children.Add(GearItem.ItemText(textBlockData["DPS"]));
+                        
                         break;
 
                     case "Stats":
@@ -223,13 +223,26 @@ namespace BattleGearAssembly
                             t = GearItem.ItemText(new string[] { item.Stats[i].Display.Value, item.Stats[i].Display.Color.GetColor(), "regular", "12" });
                             GearInfoPanel.Children.Add(t);
                         }
+                        GearInfoPanel.Children.Add(new TextBlock()); // Spacing
                         break;
 
                     case "Enchantments":
                         for (int i = 0; i < item.Enchantments.Length; i++)
                         {
                             string s = item.Enchantments[i].Value;
-                            t = GearItem.ItemText(new string[] { item.Enchantments[i].Value.Substring(0, s.IndexOf(" |A") < 0 ? s.Length : s.IndexOf(" |A")), "#00FF00", "regular", "12" });
+                            t = GearItem.ItemText(new string[] { s.Substring(0, s.IndexOf(" |A") < 0 ? s.Length : s.IndexOf(" |A")), "#00FF00", "regular", "12" });
+                            GearInfoPanel.Children.Add(t);
+                        }
+                        GearInfoPanel.Children.Add(new TextBlock()); // Spacing
+                        break;
+
+                    case "Sockets":
+                        for (int i = 0; i < item.Sockets.Length; i++)
+                        {
+                            string s = item.Sockets[i].Value;
+                            t = GearItem.ItemText(new string[] { item.Sockets[i].Value, "#FFFFFF", "regular", "12" });
+                            //g.Children.Add(API_Request.RenderImage("ImageResources/Gems/" + item.Sockets[i].Media.Value.ToString() + ".png"));
+                            //g.Children.Add(t);
                             GearInfoPanel.Children.Add(t);
                         }
                         break;
@@ -240,12 +253,6 @@ namespace BattleGearAssembly
                             string color = item.Spells[i].Color == null ? "#00FF00" : item.Spells[i].Color.GetColor();
                             t = GearItem.ItemText(new string[] { item.Spells[i].Description, color, "regular", "12" });
                             GearInfoPanel.Children.Add(t);
-
-                            if (item.Spells[i].Description.Length * 10 > GearToolTip.MinWidth)
-                            {
-                                GearToolTip.Width = item.Spells.Length * 5;
-                                Console.WriteLine("TT Width: " + GearToolTip.Width + " - Spell Desc Length: " + )
-                            }
                         }
                         break;
 
@@ -253,7 +260,7 @@ namespace BattleGearAssembly
                         GearInfoPanel.Children.Add(t);
                         break;
                 }
-            }
+            }  
 
             return 0;
         }

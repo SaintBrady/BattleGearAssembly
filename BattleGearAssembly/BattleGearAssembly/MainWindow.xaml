@@ -261,17 +261,17 @@
             </Grid.Background>
         </Grid>
         <Button Name="LoadGearButton" Click="Button_LoadGear" Width="80" Height="25" Content="Load Gear" Margin="0,0,0,10" VerticalAlignment="Bottom"/>
-        <UserControl Name="GearToolTip" Visibility="Collapsed" MinWidth="250" MinHeight="300">
-            <Border Background="#CCCCCC" Height="350" CornerRadius="10" Padding="3">
-                <Grid>
-                    <StackPanel Name="GearInfoPanel" Margin="10">
-                        <TextBlock Name="TT_Name" x:FieldModifier="public" Text="OWIEN"/>
-                    </StackPanel>
-                    <Grid.Background>
-                        <SolidColorBrush Color="Black"/>
-                    </Grid.Background>
-                </Grid>
-            </Border>
+        <UserControl Name="GearToolTip" Visibility="Collapsed">
+            <Viewbox Name ="GearViewBox" MaxWidth="350" MinHeight="350" Stretch="UniformToFill" StretchDirection="DownOnly">
+                <Border Background="#CCCCCC" CornerRadius="10" BorderThickness="3" Padding="2">
+                    <Grid>
+                        <Border Name="Mask" Background="Black" CornerRadius="7"/>
+                        <StackPanel Name="GearInfoPanel" Margin="10" MinWidth="200">
+                        </StackPanel>
+                        
+                    </Grid>
+                </Border>
+            </Viewbox>
         </UserControl>
     </Grid>
 </Window>

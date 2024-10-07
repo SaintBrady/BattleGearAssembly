@@ -135,5 +135,8 @@
     <Resource Include="ImageResources\Money\gold.png" />
     <Resource Include="ImageResources\Money\silver.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ImageResources\Gems\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

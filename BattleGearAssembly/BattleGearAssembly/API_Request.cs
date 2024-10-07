@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Remoting;
@@ -90,6 +91,9 @@ namespace BattleGearAssembly
         [JsonProperty("enchantments")]
         public Enchantment[] Enchantments { get; set; }
 
+        [JsonProperty("sockets")]
+        public Socket[] Sockets { get; set; }
+
         [JsonProperty("spells")]
         public Spell[] Spells { get; set; }
 
@@ -110,7 +114,7 @@ namespace BattleGearAssembly
                 FontWeight = textProperties[2] == "demibold" ? FontWeights.DemiBold : FontWeights.Regular,
                 FontSize = Int32.Parse(textProperties[3]),
                 TextWrapping = TextWrapping.Wrap,
-                MaxWidth = 250
+                MaxWidth = 300
             };
         }
     }
@@ -238,6 +242,24 @@ namespace BattleGearAssembly
     public partial class Enchantment
     {
         [JsonProperty("display_string")]
+        public string Value { get; set; }
+    }
+
+    public partial class Socket
+    {
+        [JsonProperty("socket_type")]
+        public SocketType SocketType { get; set; }
+
+        [JsonProperty("media")]
+        public ID Media { get; set; }
+
+        [JsonProperty("display_string")]
+        public string Value { get; set; }
+    }
+
+    public partial class SocketType
+    {
+        [JsonProperty("type")]
         public string Value { get; set; }
     }
 
@@ -377,10 +399,10 @@ namespace BattleGearAssembly
                 //Enchants = OK
                 //Sharpening/Oils = OK
                 //!!!//Gems = item["sockets"]["display_string"],
-                //!!!// Equip Effect
-                //!!!// On use Name
-                //!!!// On use effect
-                //!!!// CD
+                //Equip Effect = OK
+                //On use Name = OK
+                //On use effect = OK
+                //CD = OK
                 //!!!// Set Bonus
                 //Durability = OK
                 //Requirements = OK
@@ -472,6 +494,25 @@ namespace BattleGearAssembly
             image.EndInit();
 
             return image;
+        }
+
+        public static Image RenderImage(string mediaString)
+        {
+            Image myImage = new Image();
+            myImage.Width = 20;
+
+            // Create source
+            BitmapImage myBitmapImage = new BitmapImage();
+
+            // BitmapImage.UriSource must be in a BeginInit/EndInit block
+            myBitmapImage.BeginInit();
+            myBitmapImage.UriSource = new Uri(mediaString);
+            myBitmapImage.DecodePixelWidth = 20;
+            myBitmapImage.EndInit();
+
+            myImage.Source = myBitmapImage;
+
+            return myImage;
         }
     }
 }
