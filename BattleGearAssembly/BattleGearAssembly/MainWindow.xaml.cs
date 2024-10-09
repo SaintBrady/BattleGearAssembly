@@ -163,6 +163,7 @@ namespace BattleGearAssembly
                 { "Binding", new string[] { item.Binding.Type, "#FFFFFF", "regular", "12" } },
                 { "InventoryType", new string[] { item.InventoryType.Name, "#FFFFFF", "regular", "12" } },
                 { "ArmorClass", new string[] { item.ArmorClass.Class, "#FFFFFF", "regular", "12" } },
+                { "SellPrice", new string[] { item.SellPrice == null ? "" : item.SellPrice.Value.Gold, "#FFFFFF", "regular", "12" } },
                 { "Requirements", new string[] { item.Requirements == null ? "" : item.Requirements.LevelRequirement.Value, "#FFFFFF", "regular", "12" } },
                 { "Stats", new string[] { item.Stats[0].Display.Value, "#FFFFFF", "regular", "12" } },
                 { "Sockets", new string[] { item.Sockets == null ? "" : item.Sockets[0].Value, "#FFFFFF", "regular", "12" } },
@@ -237,13 +238,17 @@ namespace BattleGearAssembly
                         break;
 
                     case "Sockets":
-                        for (int i = 0; i < item.Sockets.Length; i++)
+                        for (int i = 0; i < item.Sockets.Length; i++) // Add in other gem pngs
                         {
                             string s = item.Sockets[i].Value;
+                            Image image = API_Request.RenderImage("ImageResources/Gems/" + item.Sockets[i].Media.Value.ToString() + ".png");
+                            image.Margin = new Thickness(0, 0, 10, 0);
                             t = GearItem.ItemText(new string[] { item.Sockets[i].Value, "#FFFFFF", "regular", "12" });
-                            //g.Children.Add(API_Request.RenderImage("ImageResources/Gems/" + item.Sockets[i].Media.Value.ToString() + ".png"));
-                            //g.Children.Add(t);
-                            GearInfoPanel.Children.Add(t);
+                            StackPanel socketPanel = new StackPanel();
+                            socketPanel.Orientation = Orientation.Horizontal;
+                            socketPanel.Children.Add(image);
+                            socketPanel.Children.Add(t);
+                            GearInfoPanel.Children.Add(socketPanel);                       
                         }
                         break;
 
@@ -254,6 +259,26 @@ namespace BattleGearAssembly
                             t = GearItem.ItemText(new string[] { item.Spells[i].Description, color, "regular", "12" });
                             GearInfoPanel.Children.Add(t);
                         }
+                        break;
+
+                    case "SellPrice":
+                        StackPanel stackPanel = new StackPanel();
+                        stackPanel.Orientation = Orientation.Horizontal;
+                        Image goldpng = API_Request.RenderImage("ImageResources/Money/Gold.png");
+                        Image silverpng = API_Request.RenderImage("ImageResources/Money/Silver.png");
+                        Image copperpng = API_Request.RenderImage("ImageResources/Money/Copper.png");
+                        goldpng.Margin = new Thickness(5, 0, 5, 0);
+                        silverpng.Margin = new Thickness(5, 0, 5, 0);
+                        copperpng.Margin = new Thickness(5, 0, 5, 0);
+
+                        stackPanel.Children.Add(GearItem.ItemText(new string[] { "Sell Price: " + item.SellPrice.Value.Gold, "#FFFFFF", "regular", "12" }));
+                        stackPanel.Children.Add(goldpng);
+                        stackPanel.Children.Add(GearItem.ItemText(new string[] { item.SellPrice.Value.Silver, "#FFFFFF", "regular", "12" }));
+                        stackPanel.Children.Add(silverpng);
+                        stackPanel.Children.Add(GearItem.ItemText(new string[] { item.SellPrice.Value.Copper, "#FFFFFF", "regular", "12" }));
+                        stackPanel.Children.Add(copperpng);
+
+                        GearInfoPanel.Children.Add(stackPanel);
                         break;
 
                     default:

@@ -103,6 +103,9 @@ namespace BattleGearAssembly
         [JsonProperty("requirements")]
         public Requirements Requirements { get; set; }
 
+        [JsonProperty("sell_price")]
+        public SellPrice SellPrice { get; set; }
+
         public BitmapImage Image { get; set; }
 
         public static TextBlock ItemText(string[] textProperties)
@@ -110,6 +113,7 @@ namespace BattleGearAssembly
             return new TextBlock
             {
                 Text = textProperties[0],
+                FontFamily = new FontFamily("Open Sans"),
                 Foreground = new SolidColorBrush((Color)System.Windows.Media.ColorConverter.ConvertFromString(textProperties[1])),
                 FontWeight = textProperties[2] == "demibold" ? FontWeights.DemiBold : FontWeights.Regular,
                 FontSize = Int32.Parse(textProperties[3]),
@@ -290,6 +294,24 @@ namespace BattleGearAssembly
         public string Value { get; set; }
     }
 
+    public partial class SellPrice
+    {
+        [JsonProperty("display_strings")]
+        public Cost Value { get; set; }
+    }
+
+    public partial class Cost
+    {
+        [JsonProperty("gold")]
+        public string Gold { get; set; }
+
+        [JsonProperty("silver")]
+        public string Silver { get; set; }
+
+        [JsonProperty("copper")]
+        public string Copper { get; set; }
+    }
+
     public partial class DisplayColor
     {
         [JsonProperty("r")]
@@ -377,6 +399,7 @@ namespace BattleGearAssembly
             Root root = JsonConvert.DeserializeObject<Root>(jsonGearList);
             API_Globals.Player_Ilvl = 0;
             bool isTwoHanded = false;
+            Console.WriteLine(jsonGearList);
 
             foreach (GearItem gearItem in root.GearItems)
             {
@@ -398,7 +421,7 @@ namespace BattleGearAssembly
                 //Stats = OK
                 //Enchants = OK
                 //Sharpening/Oils = OK
-                //!!!//Gems = item["sockets"]["display_string"],
+                //Gems = OK
                 //Equip Effect = OK
                 //On use Name = OK
                 //On use effect = OK
@@ -499,15 +522,15 @@ namespace BattleGearAssembly
         public static Image RenderImage(string mediaString)
         {
             Image myImage = new Image();
-            myImage.Width = 20;
+            myImage.Width = 10;
 
             // Create source
             BitmapImage myBitmapImage = new BitmapImage();
 
             // BitmapImage.UriSource must be in a BeginInit/EndInit block
             myBitmapImage.BeginInit();
-            myBitmapImage.UriSource = new Uri(mediaString);
-            myBitmapImage.DecodePixelWidth = 20;
+            myBitmapImage.UriSource = new Uri("pack://application:,,,/" + mediaString);
+            myBitmapImage.DecodePixelWidth = 10;
             myBitmapImage.EndInit();
 
             myImage.Source = myBitmapImage;
