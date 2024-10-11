@@ -54,9 +54,10 @@ namespace BattleGearAssembly
             Globals.API_TOKEN = await API_Request.RequestAsync();
         }
 
-        private async void LoadRealms()
+        private async void LoadRealms(object sender = null, RoutedEventArgs e = null)
         {
-            List<string> realmList = await API_Request.API_LoadRealms(Globals.API_TOKEN);
+            RealmCB.Items.Clear();
+            List<string> realmList = await API_Request.API_LoadRealms(Globals.API_TOKEN, RegionCB.Text);
             foreach (string realm in realmList)
             {
                 RealmCB.Items.Add(realm);
@@ -68,16 +69,18 @@ namespace BattleGearAssembly
             API_Globals.Gear.Clear();
             Dictionary<string, GearItem> Gear = API_Globals.Gear;
 
-            //Console.Write(await API_Request.API_LoadItem(API_Globals.API_Token));
-
             try
             {
                 await API_Request.API_LoadGear(Globals.API_TOKEN, RegionCB.Text, RealmCB.Text, CharacterNameBox.Text);
 
-                ImageBrush brush = new ImageBrush();
-                brush.ImageSource = await API_Request.API_LoadPlayerMedia(Globals.API_TOKEN, RegionCB.Text, RealmCB.Text, CharacterNameBox.Text);
-                brush.Stretch = Stretch.UniformToFill;
-                MainPanel.Background = brush;
+                ImageBrush backdrop = new ImageBrush();
+                backdrop.ImageSource = API_Request.RenderImage("ImageResources/Backgrounds/Background_Nzoth.png", 800, 800);
+                backdrop.Opacity = 0.6;
+                MainGrid.Background = backdrop;
+
+                ImageBrush charImage = new ImageBrush();
+                charImage.ImageSource = await API_Request.API_LoadPlayerMedia(Globals.API_TOKEN, RegionCB.Text, RealmCB.Text, CharacterNameBox.Text);
+                MainPanel.Background = charImage;
             }
             catch (Exception ex)
             {
@@ -86,12 +89,11 @@ namespace BattleGearAssembly
                 return;
             }
 
-            string tempName = CharacterNameBox.Text;
-            string retName = tempName[0].ToString().ToUpper() + tempName.Substring(1, tempName.Length - 1).ToLower();
-
-            CHARACTER_NAME.Text = retName;
+            string charName = CharacterNameBox.Text.ToLower();
+            CHARACTER_NAME.Text = charName[0].ToString().ToUpper() + charName.Substring(1, charName.Length - 1);
             CHARACTER_ILVL.Text = "Item Level " + API_Globals.Player_Ilvl.ToString();
 
+            //!!!// EVENTUALLY MOVE TO INSTANTIATE GRIDS BASED ON STYLES? //!!!//
             foreach (Grid g in MainPanel.Children)
             {
                 Image image = g.Children.OfType<Image>().First();
@@ -141,7 +143,7 @@ namespace BattleGearAssembly
         private void ToggleShowGearTT(object sender, EventArgs e)
         {
             Grid g = sender as Grid;
-            Console.WriteLine("Sender: " + g.Name);
+            //Console.WriteLine("Sender: " + g.Name);
 
             if(CreateGearWindow(g.Name) != 0) return;
             GearToolTip.Visibility = GearToolTip.Visibility == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
@@ -156,30 +158,29 @@ namespace BattleGearAssembly
 
             Dictionary<string, string[]> textBlockData = new Dictionary<string, string[]> // Eventually move keys to function that allows default args
             {
-                { "Durability", new string[] { item.Durability == null ? "" : item.Durability.Value, "#FFFFFF", "regular", "12" } },
-                { "Enchantments", new string[] { item.Enchantments == null ? "" : item.Enchantments[0].Value, "#00FF00", "regular", "12" } },
-                { "Name", new string[] { item.Name, API_Globals.QualityColors[item.Quality.Value], "demibold", "16" } },
-                { "Level", new string[] { "Item Level " + item.Level.Ilvl.ToString(), "#EEEE00", "regular", "12" } },
-                { "Binding", new string[] { item.Binding.Type, "#FFFFFF", "regular", "12" } },
-                { "InventoryType", new string[] { item.InventoryType.Name, "#FFFFFF", "regular", "12" } },
-                { "ArmorClass", new string[] { item.ArmorClass.Class, "#FFFFFF", "regular", "12" } },
-                { "SellPrice", new string[] { item.SellPrice == null ? "" : item.SellPrice.Value.Gold, "#FFFFFF", "regular", "12" } },
-                { "Requirements", new string[] { item.Requirements == null ? "" : item.Requirements.LevelRequirement.Value, "#FFFFFF", "regular", "12" } },
-                { "Stats", new string[] { item.Stats[0].Display.Value, "#FFFFFF", "regular", "12" } },
-                { "Sockets", new string[] { item.Sockets == null ? "" : item.Sockets[0].Value, "#FFFFFF", "regular", "12" } },
-                { "Source", new string[] { item.Source == null ? "" : item.Source.Name, "#00FF00", "regular", "12" } },
-                { "Spells", new string[] { item.Spells == null ? "" : item.Spells[0].Description, "#FFFFFF", "regular", "12" } },
-                { "Transmog", new string[] { item.Transmog == null ? "" : item.Transmog.Value, "#FF99FF", "regular", "12" } },
-                { "UniqueEquipped", new string[] { item.UniqueEquipped, "#FFFFFF", "regular", "12" } },
-                { "Weapon", new string[] { item.Weapon == null ? "" : item.Weapon.Damage.Value, "#FFFFFF", "regular", "12" } },
-                { "Speed", new string[] { item.Weapon == null ? "" : item.Weapon.AttackSpeed.Speed, "#FFFFFF", "regular", "12" } },
-                { "DPS", new string[] { item.Weapon == null ? "" : item.Weapon.DPS.Value, "#FFFFFF", "regular", "12" } },
+                { "ArmorClass", new string[] { item.ArmorClass.Class, "#FFFFFF", "12"} },
+                { "Binding", new string[] { item.Binding.Type, "#FFFFFF", "12" } },
+                { "DPS", new string[] { item.Weapon == null ? "" : item.Weapon.DPS.Value, "#FFFFFF", "12" } },
+                { "Durability", new string[] { item.Durability == null ? "" : item.Durability.Value, "#FFFFFF", "12" } },
+                { "Enchantments", new string[] { item.Enchantments == null ? "" : item.Enchantments[0].Value, "#00FF00", "12" } },
+                { "InventoryType", new string[] { item.InventoryType.Name, "#FFFFFF", "12" } },
+                { "Level", new string[] { "Item Level " + item.Level.Ilvl.ToString(), "#EEEE00", "12" } },
+                { "Name", new string[] { item.Name, API_Globals.QualityColors[item.Quality.Value], "16" } },
+                { "Requirements", new string[] { item.Requirements == null || item.Requirements.LevelRequirement == null ? "" : item.Requirements.LevelRequirement.Value, "#FFFFFF", "12" } },
+                { "SellPrice", new string[] { item.SellPrice == null ? "" : item.SellPrice.Value.Gold, "#FFFFFF", "12" } },
+                { "Sockets", new string[] { item.Sockets == null ? "" : item.Sockets[0].Value, "#FFFFFF", "12" } },
+                { "Source", new string[] { item.Source == null ? "" : item.Source.Name, "#00FF00", "12" } },
+                { "Speed", new string[] { item.Weapon == null ? "" : item.Weapon.AttackSpeed.Speed, "#FFFFFF", "12" } },
+                { "Spells", new string[] { item.Spells == null ? "" : item.Spells[0].Description, "#FFFFFF", "12" } },
+                { "Stats", new string[] { item.Stats == null ? "" : item.Stats[0].Display.Value, "#FFFFFF", "12" } },
+                { "Transmog", new string[] { item.Transmog == null ? "" : item.Transmog.Value, "#FF99FF", "12" } },
+                { "UniqueEquipped", new string[] { item.UniqueEquipped, "#FFFFFF", "12" } },
+                { "Weapon", new string[] { item.Weapon == null ? "" : item.Weapon.Damage.Value, "#FFFFFF", "12" } },
             };
 
             PropertyInfo[] properties = item.GetType().GetProperties();
 
-            string[] armorTypeExclusions = { "NECK", "CLOAK", "FINGER", "TRINKET" };
-            Grid g;
+            string[] armorTypeExclusions = { "BODY", "SHIRT", "TABARD", "NECK", "CLOAK", "FINGER", "TRINKET" };
 
             foreach (PropertyInfo property in properties)
             {
@@ -188,7 +189,7 @@ namespace BattleGearAssembly
                 if (property.GetValue(item, null) == null) { continue; }
 
                 TextBlock t = GearItem.ItemText(textBlockData[property.Name]);
-                g = new Grid();
+                Grid g = new Grid();
 
                 switch (property.Name)
                 {
@@ -221,7 +222,7 @@ namespace BattleGearAssembly
                     case "Stats":
                         for (int i = 0; i < item.Stats.Length; i++)
                         {
-                            t = GearItem.ItemText(new string[] { item.Stats[i].Display.Value, item.Stats[i].Display.Color.GetColor(), "regular", "12" });
+                            t = GearItem.ItemText(new string[] { item.Stats[i].Display.Value, item.Stats[i].Display.Color.GetColor(), "12" });
                             GearInfoPanel.Children.Add(t);
                         }
                         GearInfoPanel.Children.Add(new TextBlock()); // Spacing
@@ -231,23 +232,52 @@ namespace BattleGearAssembly
                         for (int i = 0; i < item.Enchantments.Length; i++)
                         {
                             string s = item.Enchantments[i].Value;
-                            t = GearItem.ItemText(new string[] { s.Substring(0, s.IndexOf(" |A") < 0 ? s.Length : s.IndexOf(" |A")), "#00FF00", "regular", "12" });
+                            t = GearItem.ItemText(new string[] { s.Substring(0, s.IndexOf(" |A") < 0 ? s.Length : s.IndexOf(" |A")), "#00FF00", "12" });
                             GearInfoPanel.Children.Add(t);
                         }
                         GearInfoPanel.Children.Add(new TextBlock()); // Spacing
                         break;
 
                     case "Sockets":
-                        for (int i = 0; i < item.Sockets.Length; i++) // Add in other gem pngs
+                        for (int i = 0; i < item.Sockets.Length; i++)
                         {
-                            string s = item.Sockets[i].Value;
-                            Image image = API_Request.RenderImage("ImageResources/Gems/" + item.Sockets[i].Media.Value.ToString() + ".png");
-                            image.Margin = new Thickness(0, 0, 10, 0);
-                            t = GearItem.ItemText(new string[] { item.Sockets[i].Value, "#FFFFFF", "regular", "12" });
+                            Image gemImage = new Image();
+                            try
+                            {
+                                //Catches empty sockets
+                                if (item.Sockets[i].Gem != null)
+                                {
+                                    gemImage.Source = API_Request.RenderImage("ImageResources/Gems/" + item.Sockets[i].Gem.Name + ".png", 12, 12);
+                                    t = GearItem.ItemText(new string[] { item.Sockets[i].Value, "#FFFFFF", "12" });
+                                }
+                                else
+                                {
+                                    t = GearItem.ItemText(new string[] { "Empty Socket", "#FF0000", "12" });
+                                }
+                            }
+                            catch
+                            {
+                                gemImage.Source = API_Request.RenderImage("ImageResources/Gems/Unknown.png", 12, 12);
+                            }
+
                             StackPanel socketPanel = new StackPanel();
                             socketPanel.Orientation = Orientation.Horizontal;
-                            socketPanel.Children.Add(image);
+
+                            Border border = new Border();
+                            border.Style = (Style)Resources["GemBorder"];
+                            
+                            Border mask = new Border();
+                            mask.Style = (Style)Resources["GemMask"];
+
+                            Grid gr = new Grid();
+                            border.Child = gr;
+                            
+                            gr.Children.Add(mask);
+                            gr.Children.Add(gemImage);
+
+                            socketPanel.Children.Add(border);
                             socketPanel.Children.Add(t);
+
                             GearInfoPanel.Children.Add(socketPanel);                       
                         }
                         break;
@@ -256,7 +286,7 @@ namespace BattleGearAssembly
                         for (int i = 0; i < item.Spells.Length; i++)
                         {
                             string color = item.Spells[i].Color == null ? "#00FF00" : item.Spells[i].Color.GetColor();
-                            t = GearItem.ItemText(new string[] { item.Spells[i].Description, color, "regular", "12" });
+                            t = GearItem.ItemText(new string[] { item.Spells[i].Description, color, "12" });
                             GearInfoPanel.Children.Add(t);
                         }
                         break;
@@ -264,19 +294,17 @@ namespace BattleGearAssembly
                     case "SellPrice":
                         StackPanel stackPanel = new StackPanel();
                         stackPanel.Orientation = Orientation.Horizontal;
-                        Image goldpng = API_Request.RenderImage("ImageResources/Money/Gold.png");
-                        Image silverpng = API_Request.RenderImage("ImageResources/Money/Silver.png");
-                        Image copperpng = API_Request.RenderImage("ImageResources/Money/Copper.png");
-                        goldpng.Margin = new Thickness(5, 0, 5, 0);
-                        silverpng.Margin = new Thickness(5, 0, 5, 0);
-                        copperpng.Margin = new Thickness(5, 0, 5, 0);
+                        stackPanel.Children.Add(GearItem.ItemText(new string[] { "Sell Price: ", "#FFFFFF", "12" }));
 
-                        stackPanel.Children.Add(GearItem.ItemText(new string[] { "Sell Price: " + item.SellPrice.Value.Gold, "#FFFFFF", "regular", "12" }));
-                        stackPanel.Children.Add(goldpng);
-                        stackPanel.Children.Add(GearItem.ItemText(new string[] { item.SellPrice.Value.Silver, "#FFFFFF", "regular", "12" }));
-                        stackPanel.Children.Add(silverpng);
-                        stackPanel.Children.Add(GearItem.ItemText(new string[] { item.SellPrice.Value.Copper, "#FFFFFF", "regular", "12" }));
-                        stackPanel.Children.Add(copperpng);
+                        PropertyInfo[] priceProperties = item.SellPrice.Value.GetType().GetProperties();
+                        foreach(PropertyInfo p in priceProperties)
+                        {
+                            Image img = new Image();
+                            img.Source = API_Request.RenderImage("ImageResources/Money/" + p.Name + ".png", 12, 12);
+                            img.Margin = new Thickness(5, 0, 5, 0);
+                            stackPanel.Children.Add(GearItem.ItemText(new string[] {p.GetValue(item.SellPrice.Value).ToString(), "#FFFFFF", "12" }));
+                            stackPanel.Children.Add(img);
+                        }
 
                         GearInfoPanel.Children.Add(stackPanel);
                         break;

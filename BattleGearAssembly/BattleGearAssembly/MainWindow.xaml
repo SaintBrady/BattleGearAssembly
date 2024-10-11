@@ -8,12 +8,28 @@
         Loaded="Window_Loaded"
         Background="Black"
         Title="MainWindow" Height="800" Width="800">
-    <Grid Name="MainGrid">
+    <Window.Resources>
+        <Style TargetType="Border" x:Key="GemBorder">
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="CornerRadius" Value="2"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="Margin" Value="0, 0, 5, 0"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="BorderBrush" Value="Goldenrod"/>
+        </Style>
+        <Style TargetType="Border" x:Key="GemMask">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="CornerRadius" Value="1"/>
+        </Style>
+    </Window.Resources>
+    <Grid Name="MainGrid" Height="800" Width="800">
         <Grid Name="HeaderPanel" Width="750" Height="150" VerticalAlignment="Top">
             <Label Content="Region" HorizontalAlignment="Left" Margin="50,20,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold"/>
-            <ComboBox Name="RegionCB" IsEditable="True" Text="US" HorizontalAlignment="Left" Margin="50,40,0,0" VerticalAlignment="Top" Width="120" Height="20" Foreground="White">
-                <ComboBoxItem Content="US" Background="#555555"></ComboBoxItem>
-                <ComboBoxItem Content="EU" Background="#555555"></ComboBoxItem>
+            <ComboBox Name="RegionCB" SelectionChanged="LoadRealms" IsEditable="True" Text="US" HorizontalAlignment="Left" Margin="50,40,0,0" VerticalAlignment="Top" Width="120" Height="20">
+                <ComboBoxItem Content="US"></ComboBoxItem>
+                <ComboBoxItem Content="EU"></ComboBoxItem>
+                <ComboBoxItem Content="KR"></ComboBoxItem>
+                <ComboBoxItem Content="TW"></ComboBoxItem>
             </ComboBox>
 
             <Label Content="Realm" HorizontalAlignment="Left" Margin="200,20,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold"/>
@@ -260,7 +276,6 @@
                 <ImageBrush Stretch="None" AlignmentY="Top"/>
             </Grid.Background>
         </Grid>
-        <Button Name="LoadGearButton" Click="Button_LoadGear" Width="80" Height="25" Content="Load Gear" Margin="0,0,0,10" VerticalAlignment="Bottom"/>
         <UserControl Name="GearToolTip" Visibility="Collapsed">
             <Viewbox Name ="GearViewBox" MaxWidth="350" MinHeight="350" Stretch="UniformToFill" StretchDirection="DownOnly">
                 <Border Background="#CCCCCC" CornerRadius="10" BorderThickness="3" Padding="2">
@@ -268,11 +283,12 @@
                         <Border Name="Mask" Background="Black" CornerRadius="7"/>
                         <StackPanel Name="GearInfoPanel" Margin="10" MinWidth="200">
                         </StackPanel>
-                        
+
                     </Grid>
                 </Border>
             </Viewbox>
         </UserControl>
+        <Button Name="LoadGearButton" Click="Button_LoadGear" Width="80" Height="25" Content="Load Gear" Margin="0,0,0,40" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>
     

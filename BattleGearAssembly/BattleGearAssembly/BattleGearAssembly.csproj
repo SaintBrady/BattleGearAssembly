@@ -135,12 +135,43 @@
     <Resource Include="ImageResources\Money\gold.png" />
     <Resource Include="ImageResources\Money\silver.png" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Resource Include="ImageResources\Gems\213461.png" />
-    <Resource Include="ImageResources\Gems\213467.png" />
-    <Resource Include="ImageResources\Gems\213485.png" />
-    <Resource Include="ImageResources\Gems\213743.png" />
+    <Resource Include="ImageResources\Gems\Deadly Amber.png" />
+    <Resource Include="ImageResources\Gems\Deadly Emerald.png" />
+    <Resource Include="ImageResources\Gems\Deadly Onyx.png" />
+    <Resource Include="ImageResources\Gems\Enduring Bloodstone.png" />
+    <Resource Include="ImageResources\Gems\Masterful Amber.png" />
+    <Resource Include="ImageResources\Gems\Masterful Emerald.png" />
+    <Resource Include="ImageResources\Gems\Masterful Ruby.png" />
+    <Resource Include="ImageResources\Gems\Masterful Sapphire.png" />
+    <Resource Include="ImageResources\Gems\Quick Amber.png" />
+    <Resource Include="ImageResources\Gems\Quick Onyx.png" />
+    <Resource Include="ImageResources\Gems\Quick Ruby.png" />
+    <Resource Include="ImageResources\Gems\Quick Sapphire.png" />
+    <Resource Include="ImageResources\Gems\Versatile Amber.png" />
+    <Resource Include="ImageResources\Gems\Versatile Onyx.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageResources\Gems\Versatile Ruby.png" />
+    <Resource Include="ImageResources\Gems\Deadly Sapphire.png" />
+    <Resource Include="ImageResources\Gems\Versatile Emerald.png" />
+    <Resource Include="ImageResources\Gems\Culminating Blasphemite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageResources\Gems\Unknown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageResources\Gems\Deadly Ruby.png" />
+    <Resource Include="ImageResources\Gems\Masterful Onyx.png" />
+    <Resource Include="ImageResources\Gems\Quick Emerald.png" />
+    <Resource Include="ImageResources\Gems\Solid Amber.png" />
+    <Resource Include="ImageResources\Gems\Versatile Sapphire.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageResources\Gems\Elusive Blasphemite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageResources\Backgrounds\Background_Nzoth.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

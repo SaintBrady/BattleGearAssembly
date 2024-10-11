@@ -71,7 +71,7 @@ namespace BattleGearAssembly
         public Binding Binding { get; set; }
 
         [JsonProperty("unique_equipped")]
-        public string UniqueEquipped {  get; set; }
+        public string UniqueEquipped { get; set; }
 
         [JsonProperty("slot")]
         public Slot Slot { get; set; }
@@ -97,6 +97,8 @@ namespace BattleGearAssembly
         [JsonProperty("spells")]
         public Spell[] Spells { get; set; }
 
+        //!!!// SET BONUS GOES HERE //!!!//
+
         [JsonProperty("durability")]
         public Durability Durability { get; set; }
 
@@ -113,10 +115,10 @@ namespace BattleGearAssembly
             return new TextBlock
             {
                 Text = textProperties[0],
-                FontFamily = new FontFamily("Open Sans"),
+                FontFamily = new FontFamily("sans-serif"),
                 Foreground = new SolidColorBrush((Color)System.Windows.Media.ColorConverter.ConvertFromString(textProperties[1])),
-                FontWeight = textProperties[2] == "demibold" ? FontWeights.DemiBold : FontWeights.Regular,
-                FontSize = Int32.Parse(textProperties[3]),
+                FontWeight = FontWeights.DemiBold,
+                FontSize = Int32.Parse(textProperties[2]),
                 TextWrapping = TextWrapping.Wrap,
                 MaxWidth = 300
             };
@@ -254,8 +256,8 @@ namespace BattleGearAssembly
         [JsonProperty("socket_type")]
         public SocketType SocketType { get; set; }
 
-        [JsonProperty("media")]
-        public ID Media { get; set; }
+        [JsonProperty("item")]
+        public Gem Gem { get; set; }
 
         [JsonProperty("display_string")]
         public string Value { get; set; }
@@ -265,6 +267,12 @@ namespace BattleGearAssembly
     {
         [JsonProperty("type")]
         public string Value { get; set; }
+    }
+
+    public partial class Gem
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; }
     }
 
     public partial class Spell
@@ -367,7 +375,7 @@ namespace BattleGearAssembly
         // Gets Image From API Source using item_id
         public static async Task<BitmapImage> API_LoadImage(string token, int item_id = 19019, string region = "us")
         {
-            var parameters = new Dictionary<string, string> { { "namespace", "static-us" }, { "locale", "en_US" } };
+            var parameters = new Dictionary<string, string> { { "namespace", "static-" + region }, { "locale", "en_US" } };
             string httpMessage = $"https://{region}.api.blizzard.com/data/wow/media/item/{item_id}?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
             string responseBody = await BuildHttpRequest(token, httpMessage);
 
@@ -386,7 +394,7 @@ namespace BattleGearAssembly
         public static async Task API_LoadGear(string token, string region = "us", string realmSlug = "thrall", string characterName = "euphrelia")
         {
             realmSlug = API_Globals.RealmSlugDict[realmSlug];
-            var parameters = new Dictionary<string, string> { { "namespace", "profile-us" }, { "locale", "en_US" } };
+            var parameters = new Dictionary<string, string> { { "namespace", "profile-" + region }, { "locale", "en_US" } };
             string httpMessage = $"https://{region}.api.blizzard.com/profile/wow/character/{realmSlug}/{characterName}/equipment?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
             string responseBody = await BuildHttpRequest(token, httpMessage);
 
@@ -399,37 +407,11 @@ namespace BattleGearAssembly
             Root root = JsonConvert.DeserializeObject<Root>(jsonGearList);
             API_Globals.Player_Ilvl = 0;
             bool isTwoHanded = false;
-            Console.WriteLine(jsonGearList);
+            //Console.WriteLine(jsonGearList);
 
             foreach (GearItem gearItem in root.GearItems)
             {
                 if (isTwoHanded) continue;
-
-                //ID.Value = OK
-                //Name = OK
-                //Quality.Value = OK
-                //Source = OK
-                //Level.Ilvl = OK
-                //Transmog = OK
-                //Binding.Type = OK
-                //Unique Equipped = OK
-                //gearItem.InventoryType.Name = OK
-                //ArmorClass.Class = OK
-                //Damage Range = OK
-                //Weapon.AttackSpeed.Speed = OK
-                //DPS = OK
-                //Stats = OK
-                //Enchants = OK
-                //Sharpening/Oils = OK
-                //Gems = OK
-                //Equip Effect = OK
-                //On use Name = OK
-                //On use effect = OK
-                //CD = OK
-                //!!!// Set Bonus
-                //Durability = OK
-                //Requirements = OK
-                //!!!//Sell_Price = item["sell_price"]["display_strings"]
 
                 gearItem.Image = await API_LoadImage(API_Globals.API_Token, gearItem.ID.Value);
 
@@ -448,9 +430,9 @@ namespace BattleGearAssembly
         }
 
         // Gets Realm JSON from API Request
-        public static async Task<List<string>> API_LoadRealms(string token, string region = "us")
+        public static async Task<List<string>> API_LoadRealms(string token, string region)
         {
-            var parameters = new Dictionary<string, string> { { "namespace", "dynamic-us" }, { "locale", "en_US" } };
+            var parameters = new Dictionary<string, string> { { "namespace", "dynamic-" + region }, { "locale", "en_US" } };
             string httpMessage = $"https://{region}.api.blizzard.com/data/wow/realm/index?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
             string responseBody = await BuildHttpRequest(token, httpMessage);
 
@@ -473,19 +455,18 @@ namespace BattleGearAssembly
         }
 
         // Gets Character Media JSON from API Request
-        public static async Task<BitmapImage> API_LoadPlayerMedia(string token, string region = "us", string realmSlug = "thrall", string characterName = "euphrelia")
+        public static async Task<BitmapImage> API_LoadPlayerMedia(string token, string region, string realmSlug = "thrall", string characterName = "euphrelia")
         {
-            var parameters = new Dictionary<string, string> { { "namespace", "profile-us" }, { "locale", "en_US" } };
+            var parameters = new Dictionary<string, string> { { "namespace", "profile-" + region }, { "locale", "en_US" } };
             string httpMessage = $"https://{region}.api.blizzard.com/profile/wow/character/{realmSlug}/{characterName}/character-media?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
             string responseBody = await BuildHttpRequest(token, httpMessage);
 
             return API_ParsePlayerMedia(responseBody);
         }
 
-        public static BitmapImage API_ParsePlayerMedia(string mediaString)
+        public static BitmapImage API_ParsePlayerMedia(string mediaString) //!!!// CONDENSE ME TO RenderImage Function //!!!//
         {
             dynamic d = JObject.Parse(mediaString);
-            // Assets[2]["value"] or Assets[where key = main-raw]["value"]
             string imageURL = d.assets[2]["value"].ToString();
 
             BitmapImage image = new BitmapImage();
@@ -496,9 +477,9 @@ namespace BattleGearAssembly
             return image;
         }
 
-        public static async Task<string> API_LoadItem(string token, string region = "us", string item_id = "19019")
+        public static async Task<string> API_LoadItem(string token, string region, string item_id = "19019")
         {
-            var parameters = new Dictionary<string, string> { { "namespace", "static-us" }, { "locale", "en_US" } };
+            var parameters = new Dictionary<string, string> { { "namespace", "static-" + region }, { "locale", "en_US" } };
             string httpMessage = $"https://{region}.api.blizzard.com/data/wow/item/{item_id}?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
             string responseBody = await BuildHttpRequest(token, httpMessage);
 
@@ -519,23 +500,17 @@ namespace BattleGearAssembly
             return image;
         }
 
-        public static Image RenderImage(string mediaString)
+        public static ImageSource RenderImage(string mediaString, int width, int height)
         {
-            Image myImage = new Image();
-            myImage.Width = 10;
+            BitmapImage image = new BitmapImage();
 
-            // Create source
-            BitmapImage myBitmapImage = new BitmapImage();
+            image.BeginInit();
+            image.UriSource = new Uri("pack://application:,,,/" + mediaString);
+            image.DecodePixelWidth = width;
+            image.DecodePixelHeight = height;
+            image.EndInit();
 
-            // BitmapImage.UriSource must be in a BeginInit/EndInit block
-            myBitmapImage.BeginInit();
-            myBitmapImage.UriSource = new Uri("pack://application:,,,/" + mediaString);
-            myBitmapImage.DecodePixelWidth = 10;
-            myBitmapImage.EndInit();
-
-            myImage.Source = myBitmapImage;
-
-            return myImage;
+            return image;
         }
     }
 }
