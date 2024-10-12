@@ -15,7 +15,17 @@
             <Setter Property="BorderBrush" Value="White"/>
             <Setter Property="Margin" Value="0, 0, 5, 0"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="BorderBrush" Value="Goldenrod"/>
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="Purple" Offset="0"/>
+                        <GradientStop Color="Red" Offset="0.25"/>
+                        <GradientStop Color="Goldenrod" Offset="0.5"/>
+                        <GradientStop Color="Green" Offset="0.75"/>
+                        <GradientStop Color="Blue" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
         </Style>
         <Style TargetType="Border" x:Key="GemMask">
             <Setter Property="Background" Value="Black"/>

@@ -1,25 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Sockets;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.Remoting;
-using System.Security.Principal;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Xml.Linq;
-using BattleGearAssembly;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -50,7 +37,7 @@ namespace BattleGearAssembly
     public class GearItem
     {
         [JsonProperty("item")]
-        public ID ID { get; set; }
+        public ItemInfo ItemInfo { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -97,10 +84,14 @@ namespace BattleGearAssembly
         [JsonProperty("spells")]
         public Spell[] Spells { get; set; }
 
-        //!!!// SET BONUS GOES HERE //!!!//
+        [JsonProperty("set")]
+        public ItemSet Set { get; set; }
 
         [JsonProperty("durability")]
         public Durability Durability { get; set; }
+
+        [JsonProperty("playable_classes")]
+        public PlayerClass PlayerClass { get; set; }
 
         [JsonProperty("requirements")]
         public Requirements Requirements { get; set; }
@@ -112,65 +103,63 @@ namespace BattleGearAssembly
 
         public static TextBlock ItemText(string[] textProperties)
         {
+            int numProps = textProperties.Length;
+            string color = numProps > 1 ? textProperties[1] : "#FFFFFF";
+            string size = numProps > 2 ? textProperties[2] : "12";
+
             return new TextBlock
             {
                 Text = textProperties[0],
                 FontFamily = new FontFamily("sans-serif"),
-                Foreground = new SolidColorBrush((Color)System.Windows.Media.ColorConverter.ConvertFromString(textProperties[1])),
+                Foreground = new SolidColorBrush((Color)System.Windows.Media.ColorConverter.ConvertFromString(color)),
                 FontWeight = FontWeights.DemiBold,
-                FontSize = Int32.Parse(textProperties[2]),
+                FontSize = Int32.Parse(size),
                 TextWrapping = TextWrapping.Wrap,
                 MaxWidth = 300
             };
         }
     }
 
-    public partial class Root
+    public class Root
     {
         [JsonProperty("equipped_items")]
         public GearItem[] GearItems { get; set; }
     }
 
-    public partial class ID
+    public class ItemInfo
     {
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
         [JsonProperty("id")]
-        public int Value { get; set; }
+        public int ID { get; set; }
     }
 
-    public partial class Quality
+    public class Quality
     {
         [JsonProperty("type")]
         public string Value { get; set; }
     }
 
-    public partial class Level
+    public class Level
     {
         [JsonProperty("value")]
         public int Ilvl { get; set; }
     }
 
-    public partial class Transmog
+    public class Transmog
     {
         [JsonProperty("display_string")]
         public string Value { get; set; }
     }
 
-    public partial class Binding
+    public class Binding
     {
         [JsonProperty("name")]
         public string Type { get; set; }
     }
 
-    public partial class Slot
-    {
-        [JsonProperty("type")]
-        public string Type { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
-    }
-
-    public partial class InventoryType
+    public class Slot
     {
         [JsonProperty("type")]
         public string Type { get; set; }
@@ -179,19 +168,28 @@ namespace BattleGearAssembly
         public string Name { get; set; }
     }
 
-    public partial class ArmorClass
+    public class InventoryType
+    {
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+    }
+
+    public class ArmorClass
     {
         [JsonProperty("name")]
         public string Class { get; set; }
     }
 
-    public partial class Source
+    public class Source
     {
         [JsonProperty("display_string")]
         public string Name { get; set; }
     }
 
-    public partial class Weapon
+    public class Weapon
     {
         [JsonProperty("damage")]
         public Damage Damage { get; set; }
@@ -203,25 +201,25 @@ namespace BattleGearAssembly
         public DPS DPS { get; set; }
     }
 
-    public partial class Damage
+    public class Damage
     {
         [JsonProperty("display_string")]
         public string Value { get; set; }
     }
 
-    public partial class AttackSpeed
+    public class AttackSpeed
     {
         [JsonProperty("display_string")]
         public string Speed { get; set; }
     }
 
-    public partial class DPS
+    public class DPS
     {
         [JsonProperty("display_string")]
         public string Value { get; set; }
     }
 
-    public partial class Stat
+    public class Stat
     {
         [JsonProperty("type")]
         public StatType Type { get; set; }
@@ -230,13 +228,13 @@ namespace BattleGearAssembly
         public StatDisplay Display { get; set; }
     }
 
-    public partial class StatType
+    public class StatType
     {
         [JsonProperty("type")]
         public string Value { get; set; }
     }
 
-    public partial class StatDisplay
+    public class StatDisplay
     {
         [JsonProperty("display_string")]
         public string Value { get; set; }
@@ -245,13 +243,13 @@ namespace BattleGearAssembly
         public DisplayColor Color { get; set; }
     }
 
-    public partial class Enchantment
+    public class Enchantment
     {
         [JsonProperty("display_string")]
         public string Value { get; set; }
     }
 
-    public partial class Socket
+    public class Socket
     {
         [JsonProperty("socket_type")]
         public SocketType SocketType { get; set; }
@@ -263,19 +261,19 @@ namespace BattleGearAssembly
         public string Value { get; set; }
     }
 
-    public partial class SocketType
+    public class SocketType
     {
         [JsonProperty("type")]
         public string Value { get; set; }
     }
 
-    public partial class Gem
+    public class Gem
     {
         [JsonProperty("name")]
         public string Name { get; set; }
     }
 
-    public partial class Spell
+    public class Spell
     {
         [JsonProperty("description")]
         public string Description { get; set; }
@@ -284,31 +282,82 @@ namespace BattleGearAssembly
         public DisplayColor Color { get; set; }
     }
 
-    public partial class Durability
+    public class ItemSet
+    {
+        [JsonProperty("items")]
+        public SetPiece[] SetPieces { get; set; }
+
+        [JsonProperty("effects")]
+        public SetEffect[] Effects { get; set; }
+
+        [JsonProperty("display_string")]
+        public string Count { get; set; }
+    }
+
+    public class SetPiece
+    {
+        [JsonProperty("item")]
+        public ItemInfo ItemInfo { get; set; }
+
+        [JsonProperty("is_equipped")]
+        public bool IsEquipped { get; set; } = false;
+
+        public string Color(bool IsEquipped)
+        {
+            if(IsEquipped) return "#FFFF99";
+            else return "#808080";
+        }
+    }
+
+    public class SetEffect
+    {
+        [JsonProperty("display_string")]
+        public string Value { get; set; }
+
+        [JsonProperty("required_count")]
+        public int RequiredCount { get; set; }
+
+        [JsonProperty("is_active")]
+        public bool IsActive { get; set; } = false;
+
+        public string Color(bool IsActive)
+        {
+            if (IsActive) return "#00FF00";
+            else return "#808080";
+        }
+    }
+
+    public class Durability
     {
         [JsonProperty("display_string")]
         public string Value { get; set; }
     }
 
-    public partial class Requirements
+    public class PlayerClass
+    {
+        [JsonProperty("display_string")]
+        public string Value { get; set; }
+    }
+
+    public class Requirements
     {
         [JsonProperty("level")]
         public LevelRequirement LevelRequirement { get; set; }
     }
 
-    public partial class LevelRequirement
+    public class LevelRequirement
     {
         [JsonProperty("display_string")]
         public string Value { get; set; }
     }
 
-    public partial class SellPrice
+    public class SellPrice
     {
         [JsonProperty("display_strings")]
         public Cost Value { get; set; }
     }
 
-    public partial class Cost
+    public class Cost
     {
         [JsonProperty("gold")]
         public string Gold { get; set; }
@@ -320,7 +369,7 @@ namespace BattleGearAssembly
         public string Copper { get; set; }
     }
 
-    public partial class DisplayColor
+    public class DisplayColor
     {
         [JsonProperty("r")]
         public int Red { get; set; }
@@ -339,7 +388,7 @@ namespace BattleGearAssembly
 
     public class API_Request
     {
-        // Generate API Token
+        // Generates API Token
         public static async Task<string> BuildHttpRequest(string token, string httpMessage)
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, httpMessage);
@@ -373,7 +422,7 @@ namespace BattleGearAssembly
         }
 
         // Gets Image From API Source using item_id
-        public static async Task<BitmapImage> API_LoadImage(string token, int item_id = 19019, string region = "us")
+        public static async Task<BitmapImage> API_LoadImage(string token, int item_id, string region = "us")
         {
             var parameters = new Dictionary<string, string> { { "namespace", "static-" + region }, { "locale", "en_US" } };
             string httpMessage = $"https://{region}.api.blizzard.com/data/wow/media/item/{item_id}?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
@@ -391,7 +440,7 @@ namespace BattleGearAssembly
         }
 
         // Gets Character Gear JSON from API Request
-        public static async Task API_LoadGear(string token, string region = "us", string realmSlug = "thrall", string characterName = "euphrelia")
+        public static async Task API_LoadGear(string token, string region, string realmSlug, string characterName)
         {
             realmSlug = API_Globals.RealmSlugDict[realmSlug];
             var parameters = new Dictionary<string, string> { { "namespace", "profile-" + region }, { "locale", "en_US" } };
@@ -413,7 +462,7 @@ namespace BattleGearAssembly
             {
                 if (isTwoHanded) continue;
 
-                gearItem.Image = await API_LoadImage(API_Globals.API_Token, gearItem.ID.Value);
+                gearItem.Image = await API_LoadImage(API_Globals.API_Token, gearItem.ItemInfo.ID);
 
                 if (gearItem.InventoryType.Type == "TWOHWEAPON")
                 {
@@ -455,57 +504,24 @@ namespace BattleGearAssembly
         }
 
         // Gets Character Media JSON from API Request
-        public static async Task<BitmapImage> API_LoadPlayerMedia(string token, string region, string realmSlug = "thrall", string characterName = "euphrelia")
+        public static async Task<ImageSource> API_LoadPlayerMedia(string token, string region, string realmSlug, string characterName)
         {
             var parameters = new Dictionary<string, string> { { "namespace", "profile-" + region }, { "locale", "en_US" } };
             string httpMessage = $"https://{region}.api.blizzard.com/profile/wow/character/{realmSlug}/{characterName}/character-media?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
             string responseBody = await BuildHttpRequest(token, httpMessage);
 
-            return API_ParsePlayerMedia(responseBody);
-        }
-
-        public static BitmapImage API_ParsePlayerMedia(string mediaString) //!!!// CONDENSE ME TO RenderImage Function //!!!//
-        {
-            dynamic d = JObject.Parse(mediaString);
+            dynamic d = JObject.Parse(responseBody);
             string imageURL = d.assets[2]["value"].ToString();
-
-            BitmapImage image = new BitmapImage();
-            image.BeginInit();
-            image.UriSource = new Uri(@imageURL, UriKind.Absolute);
-            image.EndInit();
-
-            return image;
+            return RenderImage(imageURL, 800, 800, "");
         }
 
-        public static async Task<string> API_LoadItem(string token, string region, string item_id = "19019")
-        {
-            var parameters = new Dictionary<string, string> { { "namespace", "static-" + region }, { "locale", "en_US" } };
-            string httpMessage = $"https://{region}.api.blizzard.com/data/wow/item/{item_id}?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
-            string responseBody = await BuildHttpRequest(token, httpMessage);
-
-            return responseBody;
-        }
-
-        public static BitmapImage API_PaseItem(string mediaString)
-        {
-            dynamic d = JObject.Parse(mediaString);
-            // Assets[2]["value"] or Assets[where key = main-raw]["value"]
-            string imageURL = d.assets[2]["value"].ToString();
-
-            BitmapImage image = new BitmapImage();
-            image.BeginInit();
-            image.UriSource = new Uri(@imageURL, UriKind.Absolute);
-            image.EndInit();
-
-            return image;
-        }
-
-        public static ImageSource RenderImage(string mediaString, int width, int height)
+        // Renders Image at given dimensions
+        public static ImageSource RenderImage(string mediaString, int width, int height, string prefix = "pack://application:,,,/")
         {
             BitmapImage image = new BitmapImage();
 
             image.BeginInit();
-            image.UriSource = new Uri("pack://application:,,,/" + mediaString);
+            image.UriSource = new Uri(prefix + mediaString);
             image.DecodePixelWidth = width;
             image.DecodePixelHeight = height;
             image.EndInit();

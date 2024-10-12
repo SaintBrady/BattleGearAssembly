@@ -1,22 +1,12 @@
-﻿using Newtonsoft.Json.Serialization;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml.Linq;
-using static System.Net.Mime.MediaTypeNames;
 using Image = System.Windows.Controls.Image;
 
 /* TODO
@@ -90,7 +80,7 @@ namespace BattleGearAssembly
             }
 
             string charName = CharacterNameBox.Text.ToLower();
-            CHARACTER_NAME.Text = charName[0].ToString().ToUpper() + charName.Substring(1, charName.Length - 1);
+            CHARACTER_NAME.Text = Char.ToUpper(charName[0]) + charName.Substring(1, charName.Length - 1);
             CHARACTER_ILVL.Text = "Item Level " + API_Globals.Player_Ilvl.ToString();
 
             //!!!// EVENTUALLY MOVE TO INSTANTIATE GRIDS BASED ON STYLES? //!!!//
@@ -156,26 +146,28 @@ namespace BattleGearAssembly
 
             GearInfoPanel.Children.Clear();
 
-            Dictionary<string, string[]> textBlockData = new Dictionary<string, string[]> // Eventually move keys to function that allows default args
+            Dictionary<string, string[]> textBlockData = new Dictionary<string, string[]>
             {
-                { "ArmorClass", new string[] { item.ArmorClass.Class, "#FFFFFF", "12"} },
-                { "Binding", new string[] { item.Binding.Type, "#FFFFFF", "12" } },
-                { "DPS", new string[] { item.Weapon == null ? "" : item.Weapon.DPS.Value, "#FFFFFF", "12" } },
-                { "Durability", new string[] { item.Durability == null ? "" : item.Durability.Value, "#FFFFFF", "12" } },
-                { "Enchantments", new string[] { item.Enchantments == null ? "" : item.Enchantments[0].Value, "#00FF00", "12" } },
-                { "InventoryType", new string[] { item.InventoryType.Name, "#FFFFFF", "12" } },
-                { "Level", new string[] { "Item Level " + item.Level.Ilvl.ToString(), "#EEEE00", "12" } },
+                { "ArmorClass", new string[] { item.ArmorClass.Class } },
+                { "Binding", new string[] { item.Binding.Type } },
+                { "DPS", new string[] { item.Weapon == null ? "" : item.Weapon.DPS.Value } },
+                { "Durability", new string[] { item.Durability == null ? "" : item.Durability.Value } },
+                { "Enchantments", new string[] { item.Enchantments == null ? "" : item.Enchantments[0].Value, "#00FF00"} },
+                { "InventoryType", new string[] { item.InventoryType.Name } },
+                { "Level", new string[] { "Item Level " + item.Level.Ilvl.ToString(), "#EEEE00"} },
+                { "PlayerClass", new string[] { item.PlayerClass == null ? "" : item.PlayerClass.Value } },
                 { "Name", new string[] { item.Name, API_Globals.QualityColors[item.Quality.Value], "16" } },
-                { "Requirements", new string[] { item.Requirements == null || item.Requirements.LevelRequirement == null ? "" : item.Requirements.LevelRequirement.Value, "#FFFFFF", "12" } },
-                { "SellPrice", new string[] { item.SellPrice == null ? "" : item.SellPrice.Value.Gold, "#FFFFFF", "12" } },
-                { "Sockets", new string[] { item.Sockets == null ? "" : item.Sockets[0].Value, "#FFFFFF", "12" } },
-                { "Source", new string[] { item.Source == null ? "" : item.Source.Name, "#00FF00", "12" } },
-                { "Speed", new string[] { item.Weapon == null ? "" : item.Weapon.AttackSpeed.Speed, "#FFFFFF", "12" } },
-                { "Spells", new string[] { item.Spells == null ? "" : item.Spells[0].Description, "#FFFFFF", "12" } },
-                { "Stats", new string[] { item.Stats == null ? "" : item.Stats[0].Display.Value, "#FFFFFF", "12" } },
-                { "Transmog", new string[] { item.Transmog == null ? "" : item.Transmog.Value, "#FF99FF", "12" } },
-                { "UniqueEquipped", new string[] { item.UniqueEquipped, "#FFFFFF", "12" } },
-                { "Weapon", new string[] { item.Weapon == null ? "" : item.Weapon.Damage.Value, "#FFFFFF", "12" } },
+                { "Requirements", new string[] { item.Requirements == null || item.Requirements.LevelRequirement == null ? "" : item.Requirements.LevelRequirement.Value } },
+                { "Set", new string[] { item.Set == null ? "" : item.Set.Count, "#FFC822"} },
+                { "SellPrice", new string[] { item.SellPrice == null ? "" : item.SellPrice.Value.Gold } },
+                { "Sockets", new string[] { item.Sockets == null ? "" : item.Sockets[0].Value, "#FFBB00"} },
+                { "Source", new string[] { item.Source == null ? "" : item.Source.Name, "#00FF00"} },
+                { "Speed", new string[] { item.Weapon == null ? "" : item.Weapon.AttackSpeed.Speed } },
+                { "Spells", new string[] { item.Spells == null ? "" : item.Spells[0].Description } },
+                { "Stats", new string[] { item.Stats == null ? "" : item.Stats[0].Display.Value } },
+                { "Transmog", new string[] { item.Transmog == null ? "" : item.Transmog.Value, "#FF99FF"} },
+                { "UniqueEquipped", new string[] { item.UniqueEquipped } },
+                { "Weapon", new string[] { item.Weapon == null ? "" : item.Weapon.Damage.Value } }
             };
 
             PropertyInfo[] properties = item.GetType().GetProperties();
@@ -185,19 +177,17 @@ namespace BattleGearAssembly
             foreach (PropertyInfo property in properties)
             {
                 // Ignores properties not set on item i.e. Weapon on non-weapon items
-                if (!textBlockData.ContainsKey(property.Name)) { continue; }
-                if (property.GetValue(item, null) == null) { continue; }
+                if (!textBlockData.ContainsKey(property.Name) || property.GetValue(item, null) == null) { continue; }
 
                 TextBlock t = GearItem.ItemText(textBlockData[property.Name]);
                 Grid g = new Grid();
 
                 switch (property.Name)
                 {
-                    case "InventoryType":
-                        goto case "ArmorClass";
-
                     case "ArmorClass":
-                        if (property.Name == "ArmorClass") break;
+                        break;
+
+                    case "InventoryType":
                         g.Children.Add(t);
                         if (!armorTypeExclusions.Contains(item.InventoryType.Type))
                         {
@@ -222,7 +212,7 @@ namespace BattleGearAssembly
                     case "Stats":
                         for (int i = 0; i < item.Stats.Length; i++)
                         {
-                            t = GearItem.ItemText(new string[] { item.Stats[i].Display.Value, item.Stats[i].Display.Color.GetColor(), "12" });
+                            t = GearItem.ItemText(new string[] { item.Stats[i].Display.Value, item.Stats[i].Display.Color.GetColor() });
                             GearInfoPanel.Children.Add(t);
                         }
                         GearInfoPanel.Children.Add(new TextBlock()); // Spacing
@@ -232,7 +222,7 @@ namespace BattleGearAssembly
                         for (int i = 0; i < item.Enchantments.Length; i++)
                         {
                             string s = item.Enchantments[i].Value;
-                            t = GearItem.ItemText(new string[] { s.Substring(0, s.IndexOf(" |A") < 0 ? s.Length : s.IndexOf(" |A")), "#00FF00", "12" });
+                            t = GearItem.ItemText(new string[] { s.Substring(0, s.IndexOf(" |A") < 0 ? s.Length : s.IndexOf(" |A")), "#00FF00" });
                             GearInfoPanel.Children.Add(t);
                         }
                         GearInfoPanel.Children.Add(new TextBlock()); // Spacing
@@ -248,11 +238,12 @@ namespace BattleGearAssembly
                                 if (item.Sockets[i].Gem != null)
                                 {
                                     gemImage.Source = API_Request.RenderImage("ImageResources/Gems/" + item.Sockets[i].Gem.Name + ".png", 12, 12);
-                                    t = GearItem.ItemText(new string[] { item.Sockets[i].Value, "#FFFFFF", "12" });
+                                    t = GearItem.ItemText(new string[] { item.Sockets[i].Value });
                                 }
                                 else
                                 {
-                                    t = GearItem.ItemText(new string[] { "Empty Socket", "#FF0000", "12" });
+                                    gemImage.Source = API_Request.RenderImage("ImageResources/Gems/Unknown.png", 12, 12);
+                                    t = GearItem.ItemText(new string[] { "Prismatic Socket", "#808080" });
                                 }
                             }
                             catch
@@ -278,23 +269,47 @@ namespace BattleGearAssembly
                             socketPanel.Children.Add(border);
                             socketPanel.Children.Add(t);
 
-                            GearInfoPanel.Children.Add(socketPanel);                       
+                            GearInfoPanel.Children.Add(socketPanel);
                         }
+                        GearInfoPanel.Children.Add(new TextBlock()); // Spacing
                         break;
 
                     case "Spells":
                         for (int i = 0; i < item.Spells.Length; i++)
                         {
                             string color = item.Spells[i].Color == null ? "#00FF00" : item.Spells[i].Color.GetColor();
-                            t = GearItem.ItemText(new string[] { item.Spells[i].Description, color, "12" });
+                            t = GearItem.ItemText(new string[] { item.Spells[i].Description, color });
                             GearInfoPanel.Children.Add(t);
                         }
+                        GearInfoPanel.Children.Add(new TextBlock()); // Spacing
+                        break;
+                    
+                    case "Set":
+                        GearInfoPanel.Children.Add(t);
+                        for (int i = 0; i < item.Set.SetPieces.Length; i++)
+                        {
+                            var setItem = item.Set.SetPieces[i];
+                            t = GearItem.ItemText(new string[] { setItem.ItemInfo.Name, setItem.Color(setItem.IsEquipped) });
+                            GearInfoPanel.Children.Add(t);
+                        }
+                        GearInfoPanel.Children.Add(new TextBlock()); // Spacing
+                        for (int i = 0; i < item.Set.Effects.Length; i++)
+                        {
+                            var setEffect = item.Set.Effects[i];
+                            t = GearItem.ItemText(new string[] { setEffect.Value, setEffect.Color(setEffect.IsActive) });
+                            GearInfoPanel.Children.Add(t);
+                        }
+                        GearInfoPanel.Children.Add(new TextBlock()); // Spacing
+                        break;
+
+                    case "Durability":
+                        GearInfoPanel.Children.Add(t);
                         break;
 
                     case "SellPrice":
                         StackPanel stackPanel = new StackPanel();
                         stackPanel.Orientation = Orientation.Horizontal;
-                        stackPanel.Children.Add(GearItem.ItemText(new string[] { "Sell Price: ", "#FFFFFF", "12" }));
+                        stackPanel.Children.Add(GearItem.ItemText(new string[] { "Sell Price: " }));
 
                         PropertyInfo[] priceProperties = item.SellPrice.Value.GetType().GetProperties();
                         foreach(PropertyInfo p in priceProperties)
@@ -302,7 +317,7 @@ namespace BattleGearAssembly
                             Image img = new Image();
                             img.Source = API_Request.RenderImage("ImageResources/Money/" + p.Name + ".png", 12, 12);
                             img.Margin = new Thickness(5, 0, 5, 0);
-                            stackPanel.Children.Add(GearItem.ItemText(new string[] {p.GetValue(item.SellPrice.Value).ToString(), "#FFFFFF", "12" }));
+                            stackPanel.Children.Add(GearItem.ItemText(new string[] {p.GetValue(item.SellPrice.Value).ToString() }));
                             stackPanel.Children.Add(img);
                         }
 
