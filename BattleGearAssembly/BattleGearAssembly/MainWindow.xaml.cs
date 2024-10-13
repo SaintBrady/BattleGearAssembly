@@ -36,7 +36,7 @@ namespace BattleGearAssembly
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             await GetAPIToken();
-            LoadRealms();
+            await API_Request.LoadRealms(Globals.API_TOKEN, "US");
         }
 
         private async Task GetAPIToken()
@@ -47,7 +47,8 @@ namespace BattleGearAssembly
         private async void LoadRealms(object sender = null, RoutedEventArgs e = null)
         {
             RealmCB.Items.Clear();
-            List<string> realmList = await API_Request.API_LoadRealms(Globals.API_TOKEN, RegionCB.Text);
+            List<string> realmList = await API_Request.LoadRealms(Globals.API_TOKEN, ((ComboBoxItem)RegionCB.SelectedItem).Content.ToString());
+
             foreach (string realm in realmList)
             {
                 RealmCB.Items.Add(realm);
@@ -58,10 +59,12 @@ namespace BattleGearAssembly
         {
             API_Globals.Gear.Clear();
             Dictionary<string, GearItem> Gear = API_Globals.Gear;
+            Character character = new Character();
 
             try
             {
-                await API_Request.API_LoadGear(Globals.API_TOKEN, RegionCB.Text, RealmCB.Text, CharacterNameBox.Text);
+                await API_Request.LoadGear(Globals.API_TOKEN, RegionCB.Text, RealmCB.Text, CharacterNameBox.Text);
+                character = await API_Request.LoadCharacterProfile(Globals.API_TOKEN, RegionCB.Text, RealmCB.Text, CharacterNameBox.Text);
 
                 ImageBrush backdrop = new ImageBrush();
                 backdrop.ImageSource = API_Request.RenderImage("ImageResources/Backgrounds/Background_Nzoth.png", 800, 800);
@@ -69,7 +72,7 @@ namespace BattleGearAssembly
                 MainGrid.Background = backdrop;
 
                 ImageBrush charImage = new ImageBrush();
-                charImage.ImageSource = await API_Request.API_LoadPlayerMedia(Globals.API_TOKEN, RegionCB.Text, RealmCB.Text, CharacterNameBox.Text);
+                charImage.ImageSource = await API_Request.LoadPlayerMedia(Globals.API_TOKEN, RegionCB.Text, RealmCB.Text, CharacterNameBox.Text);
                 MainPanel.Background = charImage;
             }
             catch (Exception ex)
@@ -79,9 +82,8 @@ namespace BattleGearAssembly
                 return;
             }
 
-            string charName = CharacterNameBox.Text.ToLower();
-            CHARACTER_NAME.Text = Char.ToUpper(charName[0]) + charName.Substring(1, charName.Length - 1);
-            CHARACTER_ILVL.Text = "Item Level " + API_Globals.Player_Ilvl.ToString();
+            CHARACTER_NAME.Text = character.Name;
+            CHARACTER_ILVL.Text = "Item Level " + character.Ilvl;
 
             //!!!// EVENTUALLY MOVE TO INSTANTIATE GRIDS BASED ON STYLES? //!!!//
             foreach (Grid g in MainPanel.Children)
