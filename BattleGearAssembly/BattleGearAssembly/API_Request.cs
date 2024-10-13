@@ -506,6 +506,7 @@ namespace BattleGearAssembly
         // Gets Character Media JSON from API Request
         public static async Task<ImageSource> API_LoadPlayerMedia(string token, string region, string realmSlug, string characterName)
         {
+            realmSlug = API_Globals.RealmSlugDict[realmSlug];
             var parameters = new Dictionary<string, string> { { "namespace", "profile-" + region }, { "locale", "en_US" } };
             string httpMessage = $"https://{region}.api.blizzard.com/profile/wow/character/{realmSlug}/{characterName}/character-media?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
             string responseBody = await BuildHttpRequest(token, httpMessage);
