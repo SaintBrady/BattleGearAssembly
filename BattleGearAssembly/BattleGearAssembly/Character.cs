@@ -21,6 +21,15 @@ namespace BattleGearAssembly
 
         [JsonProperty("media")]
         public Href Media { get; set; }
+
+        [JsonProperty("mythic_keystone_profile")]
+        public Href MythicPlus { get; set; }
+    }
+
+    public class KeyProfile
+    {
+        [JsonProperty("best_runs")]
+        public Dungeon[] Dungeons { get; set; }
     }
 
     public class Faction

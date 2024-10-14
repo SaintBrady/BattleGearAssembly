@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,6 +24,12 @@ namespace BattleGearAssembly
         public MythicPlus()
         {
             InitializeComponent();
+        }
+
+        public async void ShowMythicPlus(object sender, RoutedEventArgs e)
+        {
+            Character character = API_Globals.character;
+            await API_Request.LoadMythicPlus(Globals.API_TOKEN, character.MythicPlus.Url);
         }
     }
 }

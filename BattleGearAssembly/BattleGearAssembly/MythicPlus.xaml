@@ -9,6 +9,19 @@
       Title="MythicPlus">
 
     <Grid>
+        <StackPanel Orientation="Horizontal" Height="100" VerticalAlignment="Bottom">
+            <Grid Width="100">
+                <Border BorderBrush="Black">
+                    <Border.Effect>
+                        <BlurEffect Radius="5"/>
+                    </Border.Effect>
+                </Border>
+                <Image Name="DNG_IMG" Source="ImageResources/ItemBlanks/NeckBlank.png"/>
+                <TextBlock Text="12" FontSize="40" FontWeight="DemiBold" Foreground="DarkOrange" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
+        </StackPanel>
         
+        <TextBlock Text="Coming Soon" FontSize="100" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FFFFFF"/>
+        <Button Click="ShowMythicPlus" Content="Show" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
     </Grid>
 </Page>

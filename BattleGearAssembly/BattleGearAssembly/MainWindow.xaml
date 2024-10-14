@@ -5,305 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BattleGearAssembly"
         mc:Ignorable="d"
-        Loaded="Window_Loaded"
+        Title="Battle Gear Assembly"
+        WindowStyle="None"
         Background="Black"
-        Title="MainWindow" Height="800" Width="800"
+        Height="800" Width="850"
         ResizeMode="NoResize">
     <Window.Resources>
-        <Style TargetType="Border" x:Key="GemBorder">
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="CornerRadius" Value="2"/>
-            <Setter Property="BorderBrush" Value="White"/>
-            <Setter Property="Margin" Value="0, 0, 5, 0"/>
-            <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="BorderBrush">
+        <Style TargetType="StackPanel">
+            <Setter Property="Background">
                 <Setter.Value>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                        <GradientStop Color="Purple" Offset="0"/>
-                        <GradientStop Color="Red" Offset="0.25"/>
-                        <GradientStop Color="Goldenrod" Offset="0.5"/>
-                        <GradientStop Color="Green" Offset="0.75"/>
-                        <GradientStop Color="Blue" Offset="1"/>
+                    <LinearGradientBrush StartPoint="0.25,0" EndPoint="1,0">
+                        <GradientStop Color="#CC0000" Offset="0"/>
+                        <GradientStop Color="#202020" Offset="1"/>
                     </LinearGradientBrush>
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style TargetType="Border" x:Key="GemMask">
-            <Setter Property="Background" Value="Black"/>
-            <Setter Property="CornerRadius" Value="1"/>
-        </Style>
     </Window.Resources>
-    <Grid Name="MainGrid" Height="800" Width="800">
-        <Grid Name="HeaderPanel" Width="750" Height="200" VerticalAlignment="Top">
-            <Label Content="Region" HorizontalAlignment="Left" Margin="50,20,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold"/>
-            <ComboBox Name="RegionCB" SelectionChanged="LoadRealms" IsEditable="True" Text="US" HorizontalAlignment="Left" Margin="50,40,0,0" VerticalAlignment="Top" Width="120" Height="20">
-                <ComboBoxItem Content="US"></ComboBoxItem>
-                <ComboBoxItem Content="EU"></ComboBoxItem>
-                <ComboBoxItem Content="KR"></ComboBoxItem>
-                <ComboBoxItem Content="TW"></ComboBoxItem>
-            </ComboBox>
-
-            <Label Content="Realm" HorizontalAlignment="Left" Margin="200,20,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold"/>
-            <ComboBox Name="RealmCB" IsEditable="True" Text="Thrall" HorizontalAlignment="Left" Margin="200,40,0,0" VerticalAlignment="Top" Width="120" Height="20"/>
-
-            <Label Content="Character Name" HorizontalAlignment="Left" Margin="350,20,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold"/>
-            <TextBox Name="CharacterNameBox"  Text="Euphrelia" HorizontalAlignment="Left" Margin="350,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="20"/>
-
-            <TextBlock Name="CHARACTER_NAME" Margin="100,0,0,70" Text="" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontWeight="Bold"  FontSize="26" FontFamily="Franklin Gothic" Foreground="#CCCC00"/>
-            <TextBlock Name="CHARACTER_TITLE" Margin="100,0,0,50" Text="" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontWeight="Bold"  FontSize="20" FontFamily="Franklin Gothic" Foreground="#FFFFFF"/>
-            <Image Name="CHARACTER_FACTION" Width="100" Height="100" Margin="0,0,0,10" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
-            <TextBlock Name="CHARACTER_ILVL" Margin="100,0,0,30" Text="" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontWeight="Bold" FontStyle="Italic" FontSize="20" FontFamily="Franklin Gothic" Foreground="#CCCC00"/>
-
-            
-            <Grid Name="TestGrid" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100">
-                <Image Name="GoldImage" Source="ImageResources/Money/Gold.png" Height="10" Width="10" HorizontalAlignment="Left"/>
-                <TextBlock Name="Gold" Text="32" Foreground="White" FontSize="8" HorizontalAlignment="Left" Margin="15,0,0,0"/>
-
-                <Image Name="SilverImage" Source="ImageResources/Money/Silver.png" Height="10" Width="10" HorizontalAlignment="Left" Margin="30,0,0,0"/>
-                <TextBlock Name="Silver" Text="32" Foreground="White" FontSize="8" HorizontalAlignment="Left" Margin="45,0,0,0"/>
-
-                <Image Name="CopperImage" Source="ImageResources/Money/Copper.png" Height="10" Width="10" HorizontalAlignment="Left" Margin="60,0,0,0"/>
-                <TextBlock Name="Copper" Text="32" Foreground="White" FontSize="8" HorizontalAlignment="Left" Margin="75,0,0,0"/>
-            </Grid>
+    <Window.Content>
+        <Grid>
+            <StackPanel Name="NavigationPanel" VerticalAlignment="Top" HorizontalAlignment="Left" Height="800">
+                <Button Name="Gear" Click="ChangeWindow" Width="35" Height="25" Content="GEAR" Margin="0,0,0,0"/>
+                <Button Name="MythicPlus" Click="ChangeWindow" Width="35" Height="25" Content="M+" Margin="0,20,0,0" />
+            </StackPanel>
+            <Frame Name="ActiveFrame" Source="Gear.xaml" NavigationUIVisibility="Hidden"/>
         </Grid>
+    </Window.Content>
 
-        <Grid Name="MainPanel" Width="750" Height="600" VerticalAlignment="Top" Margin="0,120,0,0">
-            <Grid Name="HEAD" Margin="0,80,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
-                <Image Name="HEAD_IMAGE" Source="ImageResources/ItemBlanks/HeadBlank.png" Height="50" Width="50" HorizontalAlignment="Left"/>
-                <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Left">
-                    <Border.Effect>
-                        <BlurEffect Radius="5"/>
-                    </Border.Effect>
-                </Border>
-                <StackPanel>
-                    <TextBlock Name="HEAD_NAME" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Foreground="#A335EE"/>
-                    <TextBlock Name="HEAD_ILVL" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" FontWeight="Bold" Foreground="#CCCC00"/>
-                </StackPanel>
-            </Grid>
-            <Grid Name="NECK" Margin="0,140,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
-                <Image Name="NECK_IMAGE" Source="ImageResources/ItemBlanks/NeckBlank.png" Height="50" Width="50" HorizontalAlignment="Left"/>
-                <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Left">
-                    <Border.Effect>
-                        <BlurEffect Radius="5"/>
-                    </Border.Effect>
-                </Border>
-                <StackPanel>
-                    <TextBlock Name="NECK_NAME" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Foreground="#1EFF00"/>
-                    <TextBlock Name="NECK_ILVL" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" FontWeight="Bold" Foreground="#CCCC00"/>
-                </StackPanel>
-            </Grid>
-            <Grid Name="SHOULDER" Margin="0,200,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
-                <Image Name="SHOULDER_IMAGE" Source="ImageResources/ItemBlanks/ShoulderBlank.png" Height="50" Width="50" HorizontalAlignment="Left"/>
-                <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Left">
-                    <Border.Effect>
-                        <BlurEffect Radius="5"/>
-                    </Border.Effect>
-                </Border>
-                <StackPanel>
-                    <TextBlock Name="SHOULDER_NAME" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Foreground="#A335EE"/>
-                    <TextBlock Name="SHOULDER_ILVL" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" FontWeight="Bold" Foreground="#CCCC00"/>
-                </StackPanel>
-            </Grid>
-            <Grid Name="BACK" Margin="0,260,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
-                <Image Name="BACK_IMAGE" Source="ImageResources/ItemBlanks/BackBlank.png" Height="50" Width="50" HorizontalAlignment="Left"/>
-                <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Left">
-                    <Border.Effect>
-                        <BlurEffect Radius="5"/>
-                    </Border.Effect>
-                </Border>
-                <StackPanel>
-                    <TextBlock Name="BACK_NAME" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Foreground="#A335EE"/>
-                    <TextBlock Name="BACK_ILVL" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" FontWeight="Bold" Foreground="#CCCC00"/>
-                </StackPanel>
-            </Grid>
-            <Grid Name="CHEST" Margin="0,320,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
-                <Image Name="CHEST_IMAGE" Source="ImageResources/ItemBlanks/ChestBlank.png" Height="50" Width="50" HorizontalAlignment="Left"/>
-                <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Left">
-                    <Border.Effect>
-                        <BlurEffect Radius="5"/>
-                    </Border.Effect>
-                </Border>
-                <StackPanel>
-                    <TextBlock Name="CHEST_NAME" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Foreground="#A335EE"/>
-                    <TextBlock Name="CHEST_ILVL" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" FontWeight="Bold" Foreground="#CCCC00"/>
-                </StackPanel>
-            </Grid>
-            <Grid Name="SHIRT" Margin="0,380,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
-                <Image Name="SHIRT_IMAGE" Source="ImageResources/ItemBlanks/ShirtBlank.png" Height="50" Width="50" HorizontalAlignment="Left"/>
-                <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Left">
-                    <Border.Effect>
-                        <BlurEffect Radius="5"/>
-                    </Border.Effect>
-                </Border>
-                <StackPanel>
-                    <TextBlock Name="SHIRT_NAME" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Foreground="#A335EE"/>
-                    <TextBlock Name="SHIRT_ILVL" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" FontWeight="Bold" Foreground="#CCCC00"/>
-                </StackPanel>
-            </Grid>
-            <Grid Name="TABARD" Margin="0,440,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
-                <Image Name="TABARD_IMAGE" Source="ImageResources/ItemBlanks/TabardBlank.png" Height="50" Width="50" HorizontalAlignment="Left"/>
-                <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Left">
-                    <Border.Effect>
-                        <BlurEffect Radius="5"/>
-                    </Border.Effect>
-                </Border>
-                <StackPanel>
-                    <TextBlock Name="TABARD_NAME" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Foreground="#A335EE"/>
-                    <TextBlock Name="TABARD_ILVL" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" FontWeight="Bold" Foreground="#CCCC00"/>
-                </StackPanel>
-            </Grid>
-            <Grid Name="WRIST" Margin="0,500,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
-                <Image Name="WRIST_IMAGE" Source="ImageResources/ItemBlanks/WristBlank.png" Height="50" Width="50" HorizontalAlignment="Left"/>
-                <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Left">
-                    <Border.Effect>
-                        <BlurEffect Radius="5"/>
-                    </Border.Effect>
-                </Border>
-                <StackPanel>
-                    <TextBlock Name="WRIST_NAME" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Foreground="#A335EE"/>
-                    <TextBlock Name="WRIST_ILVL" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" FontWeight="Bold" Foreground="#CCCC00"/>
-                </StackPanel>
-            </Grid>
-
-            <Grid Name="HANDS" Margin="0,80,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
-                <Image Name="HANDS_IMAGE" Source="ImageResources/ItemBlanks/HandsBlank.png" Height="50" Width="50" HorizontalAlignment="Right"/>
-                <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Right">
-                    <Border.Effect>
-                        <BlurEffect Radius="5"/>
-                    </Border.Effect>
-                </Border>
-                <StackPanel>
-                    <TextBlock Name="HANDS_NAME" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" VerticalAlignment="Top" FontWeight="Bold" Foreground="#A335EE"/>
-                    <TextBlock Name="HANDS_ILVL" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" FontWeight="Bold" Foreground="#CCCC00"/>
-                </StackPanel>
-            </Grid>
-            <Grid Name="WAIST" Margin="0,140,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
-                <Image Name="WAIST_IMAGE" Source="ImageResources/ItemBlanks/WaistBlank.png" Height="50" Width="50" HorizontalAlignment="Right"/>
-                <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Right">
-                    <Border.Effect>
-                        <BlurEffect Radius="5"/>
-                    </Border.Effect>
-                </Border>
-                <StackPanel>
-                    <TextBlock Name="WAIST_NAME" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" VerticalAlignment="Top" FontWeight="Bold" Foreground="#A335EE"/>
-                    <TextBlock Name="WAIST_ILVL" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" FontWeight="Bold" Foreground="#CCCC00"/>
-                </StackPanel>
-            </Grid>
-            <Grid Name="LEGS" Margin="0,200,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
-                <Image Name="LEGS_IMAGE" Source="ImageResources/ItemBlanks/LegsBlank.png" Height="50" Width="50" HorizontalAlignment="Right"/>
-                <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Right">
-                    <Border.Effect>
-                        <BlurEffect Radius="5"/>
-                    </Border.Effect>
-                </Border>
-                <StackPanel>
-                    <TextBlock Name="LEGS_NAME" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" VerticalAlignment="Top" FontWeight="Bold" Foreground="#A335EE"/>
-                    <TextBlock Name="LEGS_ILVL" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" FontWeight="Bold" Foreground="#CCCC00"/>
-                </StackPanel>
-            </Grid>
-            <Grid Name="FEET" Margin="0,260,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
-                <Image Name="FEET_IMAGE" Source="ImageResources/ItemBlanks/FeetBlank.png" Height="50" Width="50" HorizontalAlignment="Right"/>
-                <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Right">
-                    <Border.Effect>
-                        <BlurEffect Radius="5"/>
-                    </Border.Effect>
-                </Border>
-                <StackPanel>
-                    <TextBlock Name="FEET_NAME" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" VerticalAlignment="Top" FontWeight="Bold" Foreground="#A335EE"/>
-                    <TextBlock Name="FEET_ILVL" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" FontWeight="Bold" Foreground="#CCCC00"/>
-                </StackPanel>
-            </Grid>
-            <Grid Name="FINGER_1" Margin="0,320,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
-                <Image Name="FINGER_1_IMAGE" Source="ImageResources/ItemBlanks/FingerBlank.png" Height="50" Width="50" HorizontalAlignment="Right"/>
-                <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Right">
-                    <Border.Effect>
-                        <BlurEffect Radius="5"/>
-                    </Border.Effect>
-                </Border>
-                <StackPanel>
-                    <TextBlock Name="FINGER_1_NAME" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" VerticalAlignment="Top" FontWeight="Bold" Foreground="#A335EE"/>
-                    <TextBlock Name="FINGER_1_ILVL" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" FontWeight="Bold" Foreground="#CCCC00"/>
-                </StackPanel>
-            </Grid>
-            <Grid Name="FINGER_2" Margin="0,380,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
-                <Image Name="FINGER_2_IMAGE" Source="ImageResources/ItemBlanks/FingerBlank.png" Height="50" Width="50" HorizontalAlignment="Right"/>
-                <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Right">
-                    <Border.Effect>
-                        <BlurEffect Radius="5"/>
-                    </Border.Effect>
-                </Border>
-                <StackPanel>
-                    <TextBlock Name="FINGER_2_NAME" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" VerticalAlignment="Top" FontWeight="Bold" Foreground="#A335EE"/>
-                    <TextBlock Name="FINGER_2_ILVL" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" FontWeight="Bold" Foreground="#CCCC00"/>
-                </StackPanel>
-            </Grid>
-            <Grid Name="TRINKET_1" Margin="0,440,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
-                <Image Name="TRINKET_1_IMAGE" Source="ImageResources/ItemBlanks/TrinketBlank.png" Height="50" Width="50" HorizontalAlignment="Right"/>
-                <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Right">
-                    <Border.Effect>
-                        <BlurEffect Radius="5"/>
-                    </Border.Effect>
-                </Border>
-                <StackPanel>
-                    <TextBlock Name="TRINKET_1_NAME" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" VerticalAlignment="Top" FontWeight="Bold" Foreground="#A335EE"/>
-                    <TextBlock Name="TRINKET_1_ILVL" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" FontWeight="Bold" Foreground="#CCCC00"/>
-                </StackPanel>
-            </Grid>
-            <Grid Name="TRINKET_2" Margin="0,500,0,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
-                <Image Name="TRINKET_2_IMAGE" Source="ImageResources/ItemBlanks/TrinketBlank.png" Height="50" Width="50" HorizontalAlignment="Right"/>
-                <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Right">
-                    <Border.Effect>
-                        <BlurEffect Radius="5"/>
-                    </Border.Effect>
-                </Border>
-                <StackPanel>
-                    <TextBlock Name="TRINKET_2_NAME" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" VerticalAlignment="Top" FontWeight="Bold" Foreground="#A335EE"/>
-                    <TextBlock Name="TRINKET_2_ILVL" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" FontWeight="Bold" Foreground="#CCCC00"/>
-                </StackPanel>
-            </Grid>
-
-            <Grid Name="MAIN_HAND" Margin="0,0,310,0" Height="50" Width="300" HorizontalAlignment="Center" VerticalAlignment="Bottom" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
-                <Image Name="MAIN_HAND_IMAGE" Source="ImageResources/ItemBlanks/Main_HandBlank.png" Height="50" Width="50" HorizontalAlignment="Right"/>
-                <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Right">
-                    <Border.Effect>
-                        <BlurEffect Radius="5"/>
-                    </Border.Effect>
-                </Border>
-                <StackPanel>
-                    <TextBlock Name="MAIN_HAND_NAME" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" VerticalAlignment="Top" FontWeight="Bold" Foreground="#A335EE"/>
-                    <TextBlock Name="MAIN_HAND_ILVL" Margin="0,0,60,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" FontWeight="Bold" Foreground="#CCCC00"/>
-                </StackPanel>
-            </Grid>
-            <Grid Name="OFF_HAND" Margin="310,0,0,0" Height="50" Width="300" HorizontalAlignment="Center" VerticalAlignment="Bottom" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleShowGearTT">
-                <Image Name="OFF_HAND_IMAGE" Source="ImageResources/ItemBlanks/Off_HandBlank.png" Height="50" Width="50" HorizontalAlignment="Left"/>
-                <Border BorderThickness="3" BorderBrush="#000000" Width="50" Height="50" Opacity="1" HorizontalAlignment="Left">
-                    <Border.Effect>
-                        <BlurEffect Radius="5"/>
-                    </Border.Effect>
-                </Border>
-                <StackPanel>
-                    <TextBlock Name="OFF_HAND_NAME" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Foreground="#A335EE"/>
-                    <TextBlock Name="OFF_HAND_ILVL" Margin="60,0,0,0" TextWrapping="Wrap" Text="" HorizontalAlignment="Left" FontWeight="Bold" Foreground="#CCCC00"/>
-                </StackPanel>
-            </Grid>
-            <Grid.Background>
-                <ImageBrush Stretch="None" AlignmentY="Top"/>
-            </Grid.Background>
-        </Grid>
-        <UserControl Name="GearToolTip" Visibility="Collapsed">
-            <Viewbox Name ="GearViewBox" MaxWidth="350" MinHeight="350" Stretch="UniformToFill" StretchDirection="DownOnly">
-                <Border Background="#CCCCCC" CornerRadius="10" BorderThickness="3" Padding="2">
-                    <Grid>
-                        <Border Name="Mask" Background="Black" CornerRadius="7"/>
-                        <StackPanel Name="GearInfoPanel" Margin="10" MinWidth="200">
-                        </StackPanel>
-
-                    </Grid>
-                </Border>
-            </Viewbox>
-        </UserControl>
-        <Button Name="LoadGearButton" Click="Button_LoadGear" Width="80" Height="25" Content="Load Gear" Margin="0,0,0,40" VerticalAlignment="Bottom"/>
-        <Button Name="MythicPlusButton" Click="ChangeWindow" Width="80" Height="25" Content="M+" Margin="0,0,0,140" VerticalAlignment="Bottom"/>
-    </Grid>
 </Window>
     

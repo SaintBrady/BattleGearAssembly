@@ -63,6 +63,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Character.cs" />
+    <Compile Include="Dungeon.cs" />
     <Compile Include="Gear.cs" />
     <Compile Include="Gear.xaml.cs">
       <DependentUpon>Gear.xaml</DependentUpon>

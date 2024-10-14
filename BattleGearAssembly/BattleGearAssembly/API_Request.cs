@@ -15,6 +15,7 @@ namespace BattleGearAssembly
         public static HttpClient client = new HttpClient();
         public static string API_Token = "";
         public static string Player_Ilvl = "";
+        public static Character character = new Character();
 
         public static Dictionary<string, GearItem> Gear = new Dictionary<string, GearItem>();
         public static Dictionary<string, string> RealmSlugDict = new Dictionary<string, string>();
@@ -114,6 +115,14 @@ namespace BattleGearAssembly
 
             realmNames.Sort();
             return realmNames;
+        }
+
+        public static async Task LoadMythicPlus(string token, string url)
+        {
+            string responseBody = await BuildHttpRequest(token, url + "&locale=en_us");
+
+
+            Console.Write(responseBody);
         }
 
         // Gets Character Media JSON from API Request
