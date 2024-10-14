@@ -34,7 +34,7 @@
         </Style>
     </Window.Resources>
     <Grid Name="MainGrid" Height="800" Width="800">
-        <Grid Name="HeaderPanel" Width="750" Height="150" VerticalAlignment="Top">
+        <Grid Name="HeaderPanel" Width="750" Height="200" VerticalAlignment="Top">
             <Label Content="Region" HorizontalAlignment="Left" Margin="50,20,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold"/>
             <ComboBox Name="RegionCB" SelectionChanged="LoadRealms" IsEditable="True" Text="US" HorizontalAlignment="Left" Margin="50,40,0,0" VerticalAlignment="Top" Width="120" Height="20">
                 <ComboBoxItem Content="US"></ComboBoxItem>
@@ -49,9 +49,12 @@
             <Label Content="Character Name" HorizontalAlignment="Left" Margin="350,20,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold"/>
             <TextBox Name="CharacterNameBox"  Text="Euphrelia" HorizontalAlignment="Left" Margin="350,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="20"/>
 
-            <TextBlock Name="CHARACTER_NAME" Margin="0,0,0,20" Text="" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="Bold"  FontSize="26" FontFamily="Franklin Gothic" Foreground="#CCCC00"/>
-            <TextBlock Name="CHARACTER_ILVL" Margin="0,0,0,0" Text="" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="Bold" FontStyle="Italic" FontSize="20" FontFamily="Franklin Gothic" Foreground="#CCCC00"/>
+            <TextBlock Name="CHARACTER_NAME" Margin="100,0,0,70" Text="" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontWeight="Bold"  FontSize="26" FontFamily="Franklin Gothic" Foreground="#CCCC00"/>
+            <TextBlock Name="CHARACTER_TITLE" Margin="100,0,0,50" Text="" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontWeight="Bold"  FontSize="20" FontFamily="Franklin Gothic" Foreground="#FFFFFF"/>
+            <Image Name="CHARACTER_FACTION" Width="100" Height="100" Margin="0,0,0,10" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+            <TextBlock Name="CHARACTER_ILVL" Margin="100,0,0,30" Text="" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontWeight="Bold" FontStyle="Italic" FontSize="20" FontFamily="Franklin Gothic" Foreground="#CCCC00"/>
 
+            
             <Grid Name="TestGrid" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100">
                 <Image Name="GoldImage" Source="ImageResources/Money/Gold.png" Height="10" Width="10" HorizontalAlignment="Left"/>
                 <TextBlock Name="Gold" Text="32" Foreground="White" FontSize="8" HorizontalAlignment="Left" Margin="15,0,0,0"/>
@@ -300,6 +303,7 @@
             </Viewbox>
         </UserControl>
         <Button Name="LoadGearButton" Click="Button_LoadGear" Width="80" Height="25" Content="Load Gear" Margin="0,0,0,40" VerticalAlignment="Bottom"/>
+        <Button Name="MythicPlusButton" Click="ChangeWindow" Width="80" Height="25" Content="M+" Margin="0,0,0,140" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>
     

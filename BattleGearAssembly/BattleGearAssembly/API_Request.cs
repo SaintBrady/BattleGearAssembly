@@ -70,7 +70,7 @@ namespace BattleGearAssembly
         public static async Task<Character> LoadCharacterProfile(string token, string region, string realmSlug, string characterName)
         {
             realmSlug = API_Globals.RealmSlugDict[realmSlug];
-            var parameters = new Dictionary<string, string> { { "namespace", "profile-" + region }, { "locale", "en_US" } };
+            var parameters = new Dictionary<string, string> { { "namespace", "profile-" + region }, { "locale", "en_us" } };
             string httpMessage = $"https://{region}.api.blizzard.com/profile/wow/character/{realmSlug}/{characterName}?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
             string responseBody = await BuildHttpRequest(token, httpMessage);
 
@@ -78,12 +78,9 @@ namespace BattleGearAssembly
         }
 
         // Gets Character Gear JSON from API Request and Converts to Gear List
-        public static async Task LoadGear(string token, string region, string realmSlug, string characterName)
+        public static async Task LoadGear(string token, string url)
         {
-            realmSlug = API_Globals.RealmSlugDict[realmSlug];
-            var parameters = new Dictionary<string, string> { { "namespace", "profile-" + region }, { "locale", "en_US" } };
-            string httpMessage = $"https://{region}.api.blizzard.com/profile/wow/character/{realmSlug}/{characterName}/equipment?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
-            string responseBody = await BuildHttpRequest(token, httpMessage);
+            string responseBody = await BuildHttpRequest(token, url + "&locale=en_us");
 
             Root root = JsonConvert.DeserializeObject<Root>(responseBody);
 
@@ -97,7 +94,7 @@ namespace BattleGearAssembly
         // Gets Realm JSON from API Request
         public static async Task<List<string>> LoadRealms(string token, string region)
         {
-            var parameters = new Dictionary<string, string> { { "namespace", "dynamic-" + region }, { "locale", "en_US" } };
+            var parameters = new Dictionary<string, string> { { "namespace", "dynamic-" + region }, { "locale", "en_us" } };
             string httpMessage = $"https://{region}.api.blizzard.com/data/wow/realm/index?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
             string responseBody = await BuildHttpRequest(token, httpMessage);
 
@@ -120,12 +117,9 @@ namespace BattleGearAssembly
         }
 
         // Gets Character Media JSON from API Request
-        public static async Task<ImageSource> LoadPlayerMedia(string token, string region, string realmSlug, string characterName)
+        public static async Task<ImageSource> LoadPlayerMedia(string token, string url)
         {
-            realmSlug = API_Globals.RealmSlugDict[realmSlug];
-            var parameters = new Dictionary<string, string> { { "namespace", "profile-" + region }, { "locale", "en_US" } };
-            string httpMessage = $"https://{region}.api.blizzard.com/profile/wow/character/{realmSlug}/{characterName}/character-media?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
-            string responseBody = await BuildHttpRequest(token, httpMessage);
+            string responseBody = await BuildHttpRequest(token, url);
 
             dynamic d = JObject.Parse(responseBody);
             string imageURL = d.assets[2]["value"].ToString();

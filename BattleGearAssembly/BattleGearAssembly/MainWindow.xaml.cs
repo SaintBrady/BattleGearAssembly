@@ -55,6 +55,11 @@ namespace BattleGearAssembly
             }
         }
 
+        private void ChangeWindow(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private async void Button_LoadGear(object sender, RoutedEventArgs e)
         {
             API_Globals.Gear.Clear();
@@ -63,8 +68,8 @@ namespace BattleGearAssembly
 
             try
             {
-                await API_Request.LoadGear(Globals.API_TOKEN, RegionCB.Text, RealmCB.Text, CharacterNameBox.Text);
                 character = await API_Request.LoadCharacterProfile(Globals.API_TOKEN, RegionCB.Text, RealmCB.Text, CharacterNameBox.Text);
+                await API_Request.LoadGear(Globals.API_TOKEN, character.Equipment.Url);
 
                 ImageBrush backdrop = new ImageBrush();
                 backdrop.ImageSource = API_Request.RenderImage("ImageResources/Backgrounds/Background_Nzoth.png", 800, 800);
@@ -72,7 +77,7 @@ namespace BattleGearAssembly
                 MainGrid.Background = backdrop;
 
                 ImageBrush charImage = new ImageBrush();
-                charImage.ImageSource = await API_Request.LoadPlayerMedia(Globals.API_TOKEN, RegionCB.Text, RealmCB.Text, CharacterNameBox.Text);
+                charImage.ImageSource = await API_Request.LoadPlayerMedia(Globals.API_TOKEN, character.Media.Url);
                 MainPanel.Background = charImage;
             }
             catch (Exception ex)
@@ -83,6 +88,8 @@ namespace BattleGearAssembly
             }
 
             CHARACTER_NAME.Text = character.Name;
+            CHARACTER_TITLE.Text = character.Title == null ? "" : character.Title.Name;
+            CHARACTER_FACTION.Source = character.Faction.Type == "HORDE" ? API_Request.RenderImage("ImageResources/Faction/Horde.png", 240, 240) : API_Request.RenderImage("ImageResources/Faction/Alliance.png", 240, 240);
             CHARACTER_ILVL.Text = "Item Level " + character.Ilvl;
 
             //!!!// EVENTUALLY MOVE TO INSTANTIATE GRIDS BASED ON STYLES? //!!!//
