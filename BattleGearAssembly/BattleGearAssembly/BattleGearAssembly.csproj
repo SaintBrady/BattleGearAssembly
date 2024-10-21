@@ -188,5 +188,28 @@
     <Resource Include="ImageResources\Faction\Alliance.png" />
     <Resource Include="ImageResources\Faction\Horde.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageResources\Dungeons\AK.png" />
+    <Resource Include="ImageResources\Dungeons\GB.png" />
+    <Resource Include="ImageResources\Dungeons\COT.png" />
+    <Resource Include="ImageResources\Dungeons\DB.png" />
+    <Resource Include="ImageResources\Dungeons\MOTS.png" />
+    <Resource Include="ImageResources\Dungeons\NW.png" />
+    <Resource Include="ImageResources\Dungeons\SOB.png" />
+    <Resource Include="ImageResources\Dungeons\SV.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageResources\Dungeons\Blanks\AK_GRAY.png" />
+    <Resource Include="ImageResources\Dungeons\Blanks\COT_GRAY.png" />
+    <Resource Include="ImageResources\Dungeons\Blanks\DB_GRAY.png" />
+    <Resource Include="ImageResources\Dungeons\Blanks\GB_GRAY.png" />
+    <Resource Include="ImageResources\Dungeons\Blanks\MOTS_GRAY.png" />
+    <Resource Include="ImageResources\Dungeons\Blanks\NW_GRAY.png" />
+    <Resource Include="ImageResources\Dungeons\Blanks\SOB_GRAY.png" />
+    <Resource Include="ImageResources\Dungeons\Blanks\SV_GRAY.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageResources\Backgrounds\Background_Deathwing.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

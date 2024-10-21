@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -14,7 +15,6 @@ namespace BattleGearAssembly
     {
         public static HttpClient client = new HttpClient();
         public static string API_Token = "";
-        public static string Player_Ilvl = "";
         public static Character character = new Character();
 
         public static Dictionary<string, GearItem> Gear = new Dictionary<string, GearItem>();
@@ -34,7 +34,6 @@ namespace BattleGearAssembly
 
     public class API_Request
     {
-        // Generates API Token
         public static async Task<string> BuildHttpRequest(string token, string httpMessage)
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, httpMessage);
@@ -42,11 +41,13 @@ namespace BattleGearAssembly
             request.Headers.Add("Authorization", $"Bearer {token}");
 
             HttpResponseMessage response = await API_Globals.client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
+            response.EnsureSuccessStatusCode(); //!!!// THROWS 404 ON CHARACTERS WITHOUT A KEY COMPLETED ON THE CURRENT SEASON //!!!//
             string responseBody = await response.Content.ReadAsStringAsync();
 
             return responseBody;
         }
+
+        // Generates API Token
         public static async Task<string> RequestAsync()
         {
             string client_id = tokens.client_id;
@@ -92,19 +93,14 @@ namespace BattleGearAssembly
             }
         }
 
-        // Gets Realm JSON from API Request
+        // Gets Realms from given Region
         public static async Task<List<string>> LoadRealms(string token, string region)
         {
             var parameters = new Dictionary<string, string> { { "namespace", "dynamic-" + region }, { "locale", "en_us" } };
             string httpMessage = $"https://{region}.api.blizzard.com/data/wow/realm/index?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
             string responseBody = await BuildHttpRequest(token, httpMessage);
 
-            return ParseRealms(responseBody);
-        }
-
-        public static List<string> ParseRealms(string jsonRealmList)
-        {
-            dynamic d = JObject.Parse(jsonRealmList);
+            dynamic d = JObject.Parse(responseBody);
             List<string> realmNames = new List<string>();
 
             foreach (dynamic realm in d.realms)
@@ -117,12 +113,16 @@ namespace BattleGearAssembly
             return realmNames;
         }
 
-        public static async Task LoadMythicPlus(string token, string url)
+        public static async Task LoadMythicPlus(string token)
         {
-            string responseBody = await BuildHttpRequest(token, url + "&locale=en_us");
+            int index = API_Globals.character.MythicPlus.Url.IndexOf('?');
+            string url = API_Globals.character.MythicPlus.Url.Insert(index, "/season/13") + "&locale=en_us";
+            string responseBody = await BuildHttpRequest(token, url);
+            API_Globals.character.KeyProfile = JsonConvert.DeserializeObject<KeyProfile>(responseBody);
 
-
-            Console.Write(responseBody);
+            // Sorts so that highest keys are pulled into dict for MythicPlus.xaml
+            API_Globals.character.KeyProfile.Dungeons = API_Globals.character.KeyProfile.Dungeons.OrderBy(c => c.Level).ToArray();
+            Array.Reverse(API_Globals.character.KeyProfile.Dungeons);
         }
 
         // Gets Character Media JSON from API Request

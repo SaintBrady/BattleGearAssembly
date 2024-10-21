@@ -16,6 +16,8 @@ namespace BattleGearAssembly
         [JsonProperty("faction")]
         public Faction Faction { get; set; }
 
+        public KeyProfile KeyProfile { get; set; }
+
         [JsonProperty("equipment")]
         public Href Equipment { get; set; }
 
@@ -24,12 +26,6 @@ namespace BattleGearAssembly
 
         [JsonProperty("mythic_keystone_profile")]
         public Href MythicPlus { get; set; }
-    }
-
-    public class KeyProfile
-    {
-        [JsonProperty("best_runs")]
-        public Dungeon[] Dungeons { get; set; }
     }
 
     public class Faction

@@ -9,18 +9,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Image = System.Windows.Controls.Image;
 
-/* TODO
- * ADD ENCHANTS TO GEAR
- * RENDER BOX FOR GEAR ITEM ON HOVER
- * HYPERLINKS FOR CLICKING NAME AND GEAR ITEMS
- * ADDITIONAL TABS FOR IO SCORE, ETC
-*/
-
 namespace BattleGearAssembly
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public static class Globals
     {
         public static string API_TOKEN = "";

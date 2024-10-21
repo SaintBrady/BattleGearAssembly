@@ -6,22 +6,91 @@
       xmlns:local="clr-namespace:BattleGearAssembly"
       mc:Ignorable="d" 
       d:DesignHeight="800" d:DesignWidth="800"
+      Loaded="Window_Loaded"
       Title="MythicPlus">
 
     <Grid>
-        <StackPanel Orientation="Horizontal" Height="100" VerticalAlignment="Bottom">
-            <Grid Width="100">
-                <Border BorderBrush="Black">
+        <Grid Height="720" Width="800" VerticalAlignment="Top" HorizontalAlignment="Right">
+            <Grid.Background>
+                <ImageBrush ImageSource="ImageResources/Backgrounds/Background_Deathwing.png" Stretch="UniformToFill"/>
+            </Grid.Background>
+        </Grid>
+        <TextBlock Text="Mythic+ Score" FontSize="32" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,30,0,0"/>
+        <TextBlock Name="Score" FontWeight="Bold" FontSize="32"  VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,80,0,0"/>
+
+        <StackPanel Name="DungeonSP" Orientation="Horizontal" Height="100" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+            <Grid Name="NW" Width="100">
+                <Image Source="ImageResources/Dungeons/Blanks/NW_Gray.png" Stretch="Fill"/>
+                <Border BorderThickness="3">
                     <Border.Effect>
                         <BlurEffect Radius="5"/>
                     </Border.Effect>
                 </Border>
-                <Image Name="DNG_IMG" Source="ImageResources/ItemBlanks/NeckBlank.png"/>
-                <TextBlock Text="12" FontSize="40" FontWeight="DemiBold" Foreground="DarkOrange" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
+            <Grid Name="DB" Width="100">
+                <Image Source="ImageResources/Dungeons/Blanks/DB_Gray.png" Stretch="Fill"/>
+                <Border BorderThickness="3">
+                    <Border.Effect>
+                        <BlurEffect Radius="5"/>
+                    </Border.Effect>
+                </Border>
+                <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
+            <Grid Name="SOB" Width="100">
+                <Image Source="ImageResources/Dungeons/Blanks/SOB_Gray.png" Stretch="Fill"/>
+                <Border BorderThickness="3">
+                    <Border.Effect>
+                        <BlurEffect Radius="5"/>
+                    </Border.Effect>
+                </Border>
+                <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
+            <Grid Name="GB" Width="100">
+                <Image Source="ImageResources/Dungeons/Blanks/GB_Gray.png" Stretch="Fill"/>
+                <Border BorderThickness="3">
+                    <Border.Effect>
+                        <BlurEffect Radius="5"/>
+                    </Border.Effect>
+                </Border>
+                <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
+            <Grid Name="SV" Width="100">
+                <Image Source="ImageResources/Dungeons/Blanks/SV_Gray.png" Stretch="Fill"/>
+                <Border BorderThickness="3">
+                    <Border.Effect>
+                        <BlurEffect Radius="5"/>
+                    </Border.Effect>
+                </Border>
+                <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
+            <Grid Name="COT" Width="100">
+                <Image Source="ImageResources/Dungeons/Blanks/COT_Gray.png" Stretch="Fill"/>
+                <Border BorderThickness="3">
+                    <Border.Effect>
+                        <BlurEffect Radius="5"/>
+                    </Border.Effect>
+                </Border>
+                <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
+            <Grid Name="AK" Width="100">
+                <Image Source="ImageResources/Dungeons/Blanks/AK_Gray.png" Stretch="Fill"/>
+                <Border BorderThickness="3">
+                    <Border.Effect>
+                        <BlurEffect Radius="5"/>
+                    </Border.Effect>
+                </Border>
+                <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
+            <Grid Name="MOTS" Width="100">
+                <Image Source="ImageResources/Dungeons/Blanks/MOTS_Gray.png" Stretch="Fill"/>
+                <Border BorderThickness="3">
+                    <Border.Effect>
+                        <BlurEffect Radius="5"/>
+                    </Border.Effect>
+                </Border>
+                <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
         </StackPanel>
-        
-        <TextBlock Text="Coming Soon" FontSize="100" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FFFFFF"/>
-        <Button Click="ShowMythicPlus" Content="Show" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
     </Grid>
 </Page>
