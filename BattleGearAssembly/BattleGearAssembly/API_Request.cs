@@ -14,8 +14,9 @@ namespace BattleGearAssembly
     public static class API_Globals
     {
         public static HttpClient client = new HttpClient();
-        public static string API_Token = "";
         public static Character character = new Character();
+
+        public static string API_Token;
 
         public static Dictionary<string, GearItem> Gear = new Dictionary<string, GearItem>();
         public static Dictionary<string, string> RealmSlugDict = new Dictionary<string, string>();
@@ -34,71 +35,64 @@ namespace BattleGearAssembly
 
     public class API_Request
     {
-        public static async Task<string> BuildHttpRequest(string token, string httpMessage)
+        public static async Task<string> BuildHttpRequest(string httpMessage)
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, httpMessage);
 
-            request.Headers.Add("Authorization", $"Bearer {token}");
+            request.Headers.Add("Authorization", $"Bearer {API_Globals.API_Token}");
 
             HttpResponseMessage response = await API_Globals.client.SendAsync(request);
             response.EnsureSuccessStatusCode(); //!!!// THROWS 404 ON CHARACTERS WITHOUT A KEY COMPLETED ON THE CURRENT SEASON //!!!//
-            string responseBody = await response.Content.ReadAsStringAsync();
 
-            return responseBody;
+            return await response.Content.ReadAsStringAsync();
         }
 
         // Generates API Token
-        public static async Task<string> RequestAsync()
+        public static async Task RequestAsync()
         {
-            string client_id = tokens.client_id;
-            string client_secret = tokens.client_secret;
-
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://oauth.battle.net/token");
 
-            request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes($"{client_id}:{client_secret}")));
+            request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes($"{tokens.client_id}:{tokens.client_secret}")));
             request.Content = new StringContent("grant_type=client_credentials");
             request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
             HttpResponseMessage response = await API_Globals.client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
-            string token = JObject.Parse(responseBody)["access_token"].ToString();
-
-            API_Globals.API_Token = token;
-            return token;
+            API_Globals.API_Token = JObject.Parse(responseBody)["access_token"].ToString();
         }
 
         // Gets Player Data for Given Character Profile
-        public static async Task<Character> LoadCharacterProfile(string token, string region, string realmSlug, string characterName)
+        public static async Task<Character> LoadCharacterProfile(string region, string realmSlug, string characterName)
         {
             realmSlug = API_Globals.RealmSlugDict[realmSlug];
             var parameters = new Dictionary<string, string> { { "namespace", "profile-" + region }, { "locale", "en_us" } };
             string httpMessage = $"https://{region}.api.blizzard.com/profile/wow/character/{realmSlug}/{characterName}?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
-            string responseBody = await BuildHttpRequest(token, httpMessage);
+            string responseBody = await BuildHttpRequest(httpMessage);
 
             return JsonConvert.DeserializeObject<Character>(responseBody);
         }
 
         // Gets Character Gear JSON from API Request and Converts to Gear List
-        public static async Task LoadGear(string token, string url)
+        public static async Task LoadGear(string url)
         {
-            string responseBody = await BuildHttpRequest(token, url + "&locale=en_us");
+            string responseBody = await BuildHttpRequest(url + "&locale=en_us");
 
             Root root = JsonConvert.DeserializeObject<Root>(responseBody);
 
             foreach (GearItem gearItem in root.GearItems)
             {
-                gearItem.Image = await LoadImage(API_Globals.API_Token, gearItem.ItemInfo.ID);
+                gearItem.Image = await LoadImage(gearItem.ItemInfo.ID);
                 API_Globals.Gear[gearItem.Slot.Type] = gearItem;
             }
         }
 
         // Gets Realms from given Region
-        public static async Task<List<string>> LoadRealms(string token, string region)
+        public static async Task<List<string>> LoadRealms(string region)
         {
             var parameters = new Dictionary<string, string> { { "namespace", "dynamic-" + region }, { "locale", "en_us" } };
             string httpMessage = $"https://{region}.api.blizzard.com/data/wow/realm/index?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
-            string responseBody = await BuildHttpRequest(token, httpMessage);
+            string responseBody = await BuildHttpRequest(httpMessage);
 
             dynamic d = JObject.Parse(responseBody);
             List<string> realmNames = new List<string>();
@@ -113,11 +107,11 @@ namespace BattleGearAssembly
             return realmNames;
         }
 
-        public static async Task LoadMythicPlus(string token)
+        public static async Task LoadMythicPlus()
         {
             int index = API_Globals.character.MythicPlus.Url.IndexOf('?');
             string url = API_Globals.character.MythicPlus.Url.Insert(index, "/season/13") + "&locale=en_us";
-            string responseBody = await BuildHttpRequest(token, url);
+            string responseBody = await BuildHttpRequest(url);
             API_Globals.character.KeyProfile = JsonConvert.DeserializeObject<KeyProfile>(responseBody);
 
             // Sorts so that highest keys are pulled into dict for MythicPlus.xaml
@@ -126,9 +120,9 @@ namespace BattleGearAssembly
         }
 
         // Gets Character Media JSON from API Request
-        public static async Task<ImageSource> LoadPlayerMedia(string token, string url)
+        public static async Task<ImageSource> LoadPlayerMedia(string url)
         {
-            string responseBody = await BuildHttpRequest(token, url);
+            string responseBody = await BuildHttpRequest(url);
 
             dynamic d = JObject.Parse(responseBody);
             string imageURL = d.assets[2]["value"].ToString();
@@ -136,11 +130,11 @@ namespace BattleGearAssembly
         }
 
         // Gets Image From API Source using item_id
-        public static async Task<ImageSource> LoadImage(string token, int item_id, string region = "us")
+        public static async Task<ImageSource> LoadImage(int item_id, string region = "us")
         {
             var parameters = new Dictionary<string, string> { { "namespace", "static-" + region }, { "locale", "en_US" } };
             string httpMessage = $"https://{region}.api.blizzard.com/data/wow/media/item/{item_id}?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
-            string responseBody = await BuildHttpRequest(token, httpMessage);
+            string responseBody = await BuildHttpRequest(httpMessage);
 
             string imageURL = JObject.Parse(responseBody)["assets"][0]["value"].ToString();
 

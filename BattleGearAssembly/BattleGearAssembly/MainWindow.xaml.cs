@@ -8,7 +8,6 @@ using System.Windows.Controls;
 
 namespace BattleGearAssembly
 {
-
     public partial class MainWindow : Window
     {
         public MainWindow()

@@ -11,11 +11,6 @@ using Image = System.Windows.Controls.Image;
 
 namespace BattleGearAssembly
 {
-    public static class Globals
-    {
-        public static string API_TOKEN = "";
-    }
-
     public partial class Gear : Page
     {
         public Gear()
@@ -25,19 +20,14 @@ namespace BattleGearAssembly
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            await GetAPIToken();
-            await API_Request.LoadRealms(Globals.API_TOKEN, "US");
+            await API_Request.RequestAsync();
         }
 
-        private async Task GetAPIToken()
+        private async void LoadRealms(object sender = null, EventArgs e = null)
         {
-            Globals.API_TOKEN = await API_Request.RequestAsync();
-        }
-
-        private async void LoadRealms(object sender = null, RoutedEventArgs e = null)
-        {
+            RealmCB.IsEnabled = true;
             RealmCB.Items.Clear();
-            List<string> realmList = await API_Request.LoadRealms(Globals.API_TOKEN, ((ComboBoxItem)RegionCB.SelectedItem).Content.ToString());
+            List<string> realmList = await API_Request.LoadRealms(((ComboBoxItem)RegionCB.SelectedItem).Content.ToString());
 
             foreach (string realm in realmList)
             {
@@ -53,9 +43,9 @@ namespace BattleGearAssembly
 
             try
             {
-                API_Globals.character = await API_Request.LoadCharacterProfile(Globals.API_TOKEN, RegionCB.Text, RealmCB.Text, CharacterNameBox.Text);
+                API_Globals.character = await API_Request.LoadCharacterProfile(RegionCB.Text, RealmCB.Text, CharacterNameBox.Text);
                 character = API_Globals.character;
-                await API_Request.LoadGear(Globals.API_TOKEN, character.Equipment.Url);
+                await API_Request.LoadGear(character.Equipment.Url);
 
                 ImageBrush backdrop = new ImageBrush();
                 backdrop.ImageSource = API_Request.RenderImage("ImageResources/Backgrounds/Background_Nzoth.png", 800, 800);
@@ -63,7 +53,7 @@ namespace BattleGearAssembly
                 MainGrid.Background = backdrop;
 
                 ImageBrush charImage = new ImageBrush();
-                charImage.ImageSource = await API_Request.LoadPlayerMedia(Globals.API_TOKEN, character.Media.Url);
+                charImage.ImageSource = await API_Request.LoadPlayerMedia(character.Media.Url);
                 MainPanel.Background = charImage;
             }
             catch (Exception ex)
@@ -130,7 +120,15 @@ namespace BattleGearAssembly
             Grid g = sender as Grid;
 
             if (CreateGearWindow(g.Name) != 0) return;
-            GearToolTip.Visibility = GearToolTip.Visibility == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
+            GearToolTip.Visibility = Visibility.Visible;
+        }
+
+        private void ToggleHideGearTT(object sender, EventArgs e)
+        {
+            Grid g = sender as Grid;
+
+            if (CreateGearWindow(g.Name) != 0) return;
+            GearToolTip.Visibility = Visibility.Collapsed;
         }
 
         private int CreateGearWindow(string slot)

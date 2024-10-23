@@ -15,7 +15,7 @@ namespace BattleGearAssembly
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            await API_Request.LoadMythicPlus(Globals.API_TOKEN);
+            await API_Request.LoadMythicPlus();
             ShowMythicPlus();
         }
 
