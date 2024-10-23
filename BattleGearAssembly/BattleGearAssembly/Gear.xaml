@@ -246,7 +246,7 @@
                 </StackPanel>
             </Grid>
 
-            <Grid Name="MAIN_HAND" Margin="0,0,310,0" Height="50" Width="300" HorizontalAlignment="Center" VerticalAlignment="Bottom" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleHideGearTT">
+            <Grid Name="MAIN_HAND" Margin="65,550,0,0" Height="50" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleHideGearTT">
                 <Image Name="MAIN_HAND_IMAGE" Source="ImageResources/ItemBlanks/Main_HandBlank.png" Height="50" Width="50" HorizontalAlignment="Right"/>
                 <Border Style="{StaticResource ItemBorder}" HorizontalAlignment="Right"/>
                 <StackPanel Margin="0,0,60,0">
@@ -254,7 +254,7 @@
                     <TextBlock Name="MAIN_HAND_ILVL" HorizontalAlignment="Right" FontWeight="Bold" Foreground="#CCCC00"/>
                 </StackPanel>
             </Grid>
-            <Grid Name="OFF_HAND" Margin="310,0,0,0" Height="50" Width="300" HorizontalAlignment="Center" VerticalAlignment="Bottom" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleHideGearTT">
+            <Grid Name="OFF_HAND" Margin="0,550,65,0" Height="50" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top" MouseEnter="ToggleShowGearTT" MouseLeave="ToggleHideGearTT">
                 <Image Name="OFF_HAND_IMAGE" Source="ImageResources/ItemBlanks/Off_HandBlank.png" Height="50" Width="50" HorizontalAlignment="Left"/>
                 <Border Style="{StaticResource ItemBorder}" HorizontalAlignment="Left"/>
                 <StackPanel Margin="60,0,0,0">
@@ -266,18 +266,19 @@
                 <ImageBrush Stretch="None" AlignmentY="Top"/>
             </Grid.Background>
         </Grid>
-        <UserControl Name="GearToolTip" Visibility="Collapsed">
-            <Viewbox Name ="GearViewBox" MaxWidth="350" MinHeight="350" Stretch="UniformToFill" StretchDirection="DownOnly">
+
+        <Button Name="LoadGearButton" Click="Button_LoadGear" Width="100" Height="30" Content="Load Gear" Margin="0,0,0,20" VerticalAlignment="Bottom" Background="DarkRed" Foreground="LightGray" FontSize="16" FontWeight="Bold"/>
+
+        <UserControl Name="GearToolTip" Visibility="Collapsed" >
+            <Viewbox Name ="GearViewBox" MaxWidth="350" Stretch="UniformToFill" StretchDirection="DownOnly">
                 <Border Background="#CCCCCC" CornerRadius="10" BorderThickness="3" Padding="2">
                     <Grid>
                         <Border Name="Mask" Background="Black" CornerRadius="7"/>
                         <StackPanel Name="GearInfoPanel" Margin="10" MinWidth="200">
                         </StackPanel>
-
                     </Grid>
                 </Border>
             </Viewbox>
         </UserControl>
-        <Button Name="LoadGearButton" Click="Button_LoadGear" Width="100" Height="30" Content="Load Gear" Margin="0,0,0,20" VerticalAlignment="Bottom" Background="DarkRed" Foreground="LightGray" FontSize="16" FontWeight="Bold"/>
     </Grid>
 </Page>

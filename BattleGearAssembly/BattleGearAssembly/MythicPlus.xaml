@@ -91,5 +91,66 @@
                 <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
         </StackPanel>
+
+        <UserControl Name="DungeonToolTip" Visibility="Collapsed">
+            <Viewbox Name ="DungeonViewBox" MaxWidth="200" Stretch="UniformToFill" StretchDirection="DownOnly">
+                <Border Background="#CCCCCC" CornerRadius="10" BorderThickness="3" Padding="2">
+                    <Grid>
+                        <Border Name="Mask" Background="#202020" CornerRadius="7"/>
+                        <StackPanel Name="GearInfoPanel" Margin="10" MinWidth="160" MinHeight="150">
+                            <StackPanel Name="Chest" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Grid Width="12">
+                                    <Image Source="ImageResources/Dungeons/Star.png"/>
+                                </Grid>
+                                <Grid Width="12">
+                                    <Image Source="ImageResources/Dungeons/Star.png"/>
+                                </Grid>
+                            </StackPanel>
+                            <Grid>
+                                <TextBlock Text="Ara-Kara, City of Echoes" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            </Grid>
+                            <StackPanel Name="Party" HorizontalAlignment="Left" Margin="20, 10, 0, 0">
+                                <Grid>
+                                    <Image Source="ImageResources/RoleIcons/tank.png" Width="8" HorizontalAlignment="Left"/>
+                                    <TextBlock Text="Crakenjoyer - Guardian Druid" Foreground="Orange" FontSize="6" FontWeight="DemiBold" Margin="10,0,0,1"/>
+                                </Grid>
+                                <Grid>
+                                    <Image Source="ImageResources/RoleIcons/healer.png" Width="8" HorizontalAlignment="Left"/>
+                                    <TextBlock Text="Aleksei - Restoration Shaman" Foreground="RoyalBlue" FontSize="6" FontWeight="DemiBold" Margin="10,0,0,1"/>
+                                </Grid>
+                                <Grid>
+                                    <Image Source="ImageResources/RoleIcons/dps.png" Width="8" HorizontalAlignment="Left"/>
+                                    <TextBlock Text="Euphrelia - Outlaw Rogue" Foreground="Yellow" FontSize="6" FontWeight="DemiBold" Margin="10,0,0,1"/>
+                                </Grid>
+                                <Grid>
+                                    <Image Source="ImageResources/RoleIcons/dps.png" Width="8" HorizontalAlignment="Left"/>
+                                    <TextBlock Text="Shoomain - Elemental Shaman" Foreground="RoyalBlue" FontSize="6" FontWeight="DemiBold" Margin="10,0,0,1"/>
+                                </Grid>
+                                <Grid>
+                                    <Image Source="ImageResources/RoleIcons/dps.png" Width="8" HorizontalAlignment="Left"/>
+                                    <TextBlock Text="Galther - Beast Mastery Hunter" Foreground="LightGreen" FontSize="6" FontWeight="DemiBold" Margin="10,0,0,1"/>
+                                </Grid>
+                            </StackPanel>
+                        </StackPanel>
+                        <Grid HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                            <Image Source="ImageResources/Dungeons/Compass.png" Width="48"/>
+                            <TextBlock Text="10" Foreground="Black" FontSize="18" FontWeight="ExtraBlack" FontFamily="Calibri" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="2,0,0,2"/>
+                            <TextBlock Text="10" Foreground="Orange" FontSize="18" FontWeight="ExtraBlack" FontFamily="Calibri" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                            <TextBlock Text="9" Foreground="Black" FontSize="18" FontWeight="ExtraBlack" FontFamily="Calibri" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,3,5"/>
+                            <TextBlock Text="9" Foreground="Purple" FontSize="18" FontWeight="ExtraBlack" FontFamily="Calibri" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="4"/>
+                        </Grid>
+                        <Grid HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="30" Margin="50,0,0,0">
+                            <TextBlock Text="324.7" Foreground="Yellow" FontWeight="DemiBold" FontStyle="Italic" FontSize="8" VerticalAlignment="Top"/>
+                            <TextBlock Text="BEST OVERALL" Foreground="Yellow" FontWeight="ExtraBlack" FontStyle="Italic" FontSize="6" VerticalAlignment="Top" Margin="25,2,0,0"/>
+                            <TextBlock Text="37:27" Foreground="Yellow" FontWeight="ExtraBlack" FontStyle="Italic" FontSize="6" VerticalAlignment="Top" Margin="75,2,0,0"/>
+                            <TextBlock Text="312.6" Foreground="White" FontWeight="DemiBold" FontStyle="Italic" FontSize="8" VerticalAlignment="Top" Margin="0,10,0,0"/>
+                            <TextBlock Text="BEST IN TIME" Foreground="White" FontWeight="ExtraBlack" FontStyle="Italic" FontSize="6" VerticalAlignment="Top" Margin="25,12,0,0"/>
+                            <TextBlock Text="31:40" Foreground="White" FontWeight="ExtraBlack" FontStyle="Italic" FontSize="6" VerticalAlignment="Top" Margin="75,12,0,0"/>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Viewbox>
+        </UserControl>
+
     </Grid>
 </Page>

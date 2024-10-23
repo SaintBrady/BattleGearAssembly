@@ -211,5 +211,13 @@
   <ItemGroup>
     <Resource Include="ImageResources\Backgrounds\Background_Deathwing.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageResources\Dungeons\Star.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageResources\RoleIcons\dps.png" />
+    <Resource Include="ImageResources\RoleIcons\healer.png" />
+    <Resource Include="ImageResources\RoleIcons\tank.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

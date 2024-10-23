@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -118,8 +117,17 @@ namespace BattleGearAssembly
         private void ToggleShowGearTT(object sender, EventArgs e)
         {
             Grid g = sender as Grid;
-
             if (CreateGearWindow(g.Name) != 0) return;
+
+            //!!!// Super Hacky. Fix me later //!!!//
+            double topMargin = g.Margin.Top - GearToolTip.ActualHeight - 200;
+            double bottomMargin = 0;
+
+            if (g.Name == "MAIN_HAND" || g.Name == "OFF_HAND") topMargin = 0; bottomMargin = 60;
+            GearToolTip.Margin = new Thickness(g.Margin.Left + 100, topMargin, g.Margin.Right + 100, bottomMargin);
+            //------------------------------//
+
+            GearToolTip.HorizontalAlignment = g.HorizontalAlignment;
             GearToolTip.Visibility = Visibility.Visible;
         }
 
