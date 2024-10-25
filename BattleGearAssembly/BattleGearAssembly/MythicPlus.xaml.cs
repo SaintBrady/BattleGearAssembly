@@ -19,6 +19,20 @@ namespace BattleGearAssembly
             ShowMythicPlus();
         }
 
+        private void ToggleShowDungeonTT(object sender, RoutedEventArgs e)
+        {
+            Grid g = sender as Grid;
+
+            DungeonToolTip.Visibility = DungeonToolTip.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        private void CreateDungeonTT()
+        {
+            // Handle no keys for dungeon
+
+
+        }
+
         public Dungeon getDungeon(string dungeonName)
         {
             foreach (Dungeon d in API_Globals.character.KeyProfile.Dungeons)

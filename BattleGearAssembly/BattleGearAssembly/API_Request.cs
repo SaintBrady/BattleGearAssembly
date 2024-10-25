@@ -117,6 +117,8 @@ namespace BattleGearAssembly
             // Sorts so that highest keys are pulled into dict for MythicPlus.xaml
             API_Globals.character.KeyProfile.Dungeons = API_Globals.character.KeyProfile.Dungeons.OrderBy(c => c.Level).ToArray();
             Array.Reverse(API_Globals.character.KeyProfile.Dungeons);
+
+            Console.WriteLine(responseBody);
         }
 
         // Gets Character Media JSON from API Request

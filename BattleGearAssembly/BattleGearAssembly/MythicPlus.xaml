@@ -18,7 +18,7 @@
         <TextBlock Name="Score" FontWeight="Bold" FontSize="32"  VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,80,0,0"/>
 
         <StackPanel Name="DungeonSP" Orientation="Horizontal" Height="100" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <Grid Name="NW" Width="100">
+            <Grid Name="NW" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
                 <Image Source="ImageResources/Dungeons/Blanks/NW_Gray.png" Stretch="Fill"/>
                 <Border BorderThickness="3">
                     <Border.Effect>
@@ -92,23 +92,17 @@
             </Grid>
         </StackPanel>
 
-        <UserControl Name="DungeonToolTip" Visibility="Collapsed">
+        <UserControl Name="DungeonToolTip" Visibility="Visible">
             <Viewbox Name ="DungeonViewBox" MaxWidth="200" Stretch="UniformToFill" StretchDirection="DownOnly">
                 <Border Background="#CCCCCC" CornerRadius="10" BorderThickness="3" Padding="2">
                     <Grid>
                         <Border Name="Mask" Background="#202020" CornerRadius="7"/>
                         <StackPanel Name="GearInfoPanel" Margin="10" MinWidth="160" MinHeight="150">
                             <StackPanel Name="Chest" Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Grid Width="12">
-                                    <Image Source="ImageResources/Dungeons/Star.png"/>
-                                </Grid>
-                                <Grid Width="12">
-                                    <Image Source="ImageResources/Dungeons/Star.png"/>
-                                </Grid>
+                                <Image Source="ImageResources/Dungeons/Star.png" Width="12"/>
+                                <Image Source="ImageResources/Dungeons/Star.png" Width="12"/>
                             </StackPanel>
-                            <Grid>
-                                <TextBlock Text="Ara-Kara, City of Echoes" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
-                            </Grid>
+                            <TextBlock Name="DungeonName" Text="Ara-Kara, City of Echoes" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
                             <StackPanel Name="Party" HorizontalAlignment="Left" Margin="20, 10, 0, 0">
                                 <Grid>
                                     <Image Source="ImageResources/RoleIcons/tank.png" Width="8" HorizontalAlignment="Left"/>
@@ -141,11 +135,9 @@
                         </Grid>
                         <Grid HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="30" Margin="50,0,0,0">
                             <TextBlock Text="324.7" Foreground="Yellow" FontWeight="DemiBold" FontStyle="Italic" FontSize="8" VerticalAlignment="Top"/>
-                            <TextBlock Text="BEST OVERALL" Foreground="Yellow" FontWeight="ExtraBlack" FontStyle="Italic" FontSize="6" VerticalAlignment="Top" Margin="25,2,0,0"/>
-                            <TextBlock Text="37:27" Foreground="Yellow" FontWeight="ExtraBlack" FontStyle="Italic" FontSize="6" VerticalAlignment="Top" Margin="75,2,0,0"/>
+                            <TextBlock Text="BEST OVERALL - 37:27" Foreground="Yellow" FontWeight="ExtraBlack" FontStyle="Italic" FontSize="6" VerticalAlignment="Top" Margin="25,2,0,0"/>
                             <TextBlock Text="312.6" Foreground="White" FontWeight="DemiBold" FontStyle="Italic" FontSize="8" VerticalAlignment="Top" Margin="0,10,0,0"/>
-                            <TextBlock Text="BEST IN TIME" Foreground="White" FontWeight="ExtraBlack" FontStyle="Italic" FontSize="6" VerticalAlignment="Top" Margin="25,12,0,0"/>
-                            <TextBlock Text="31:40" Foreground="White" FontWeight="ExtraBlack" FontStyle="Italic" FontSize="6" VerticalAlignment="Top" Margin="75,12,0,0"/>
+                            <TextBlock Text="BEST IN TIME - 31:40" Foreground="White" FontWeight="ExtraBlack" FontStyle="Italic" FontSize="6" VerticalAlignment="Top" Margin="25,12,0,0"/>
                         </Grid>
                     </Grid>
                 </Border>
