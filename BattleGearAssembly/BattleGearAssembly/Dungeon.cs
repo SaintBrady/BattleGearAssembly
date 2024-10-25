@@ -10,6 +10,9 @@ namespace BattleGearAssembly
         [JsonProperty("keystone_level")]
         public int Level { get; set; }
 
+        [JsonProperty("members")]
+        public DungeonCharacter[] Character { get; set; }
+
         [JsonProperty("map_rating")]
         public Rating Rating { get; set; }
     }
@@ -26,6 +29,27 @@ namespace BattleGearAssembly
     public class Info
     {
         [JsonProperty("name")]
+        public string Name { get; set; }
+    }
+
+    public class DungeonCharacter
+    {
+        [JsonProperty("character")]
+        public CharacterInfo Info { get; set; }
+
+        [JsonProperty("specialization")]
+        public Specialization Spec {  get; set; }
+    }
+
+    public class CharacterInfo
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; }
+    }
+
+    public class Specialization
+    {
+        [JsonProperty("specialization")]
         public string Name { get; set; }
     }
 

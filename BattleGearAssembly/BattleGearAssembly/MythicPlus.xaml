@@ -97,7 +97,7 @@
                 <Border Background="#CCCCCC" CornerRadius="10" BorderThickness="3" Padding="2">
                     <Grid>
                         <Border Name="Mask" Background="#202020" CornerRadius="7"/>
-                        <StackPanel Name="GearInfoPanel" Margin="10" MinWidth="160" MinHeight="150">
+                        <StackPanel Name="DungeonInfoPanel" Margin="10" MinWidth="160" MinHeight="150">
                             <StackPanel Name="Chest" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Image Source="ImageResources/Dungeons/Star.png" Width="12"/>
                                 <Image Source="ImageResources/Dungeons/Star.png" Width="12"/>

@@ -30,7 +30,15 @@ namespace BattleGearAssembly
         {
             // Handle no keys for dungeon
 
+            // In party
 
+            /*
+             <Grid>
+                <Image Source="ImageResources/RoleIcons/tank.png" Width="8" HorizontalAlignment="Left"/>
+                <TextBlock Text="Crakenjoyer - Guardian Druid" Foreground="Orange" FontSize="6" FontWeight="DemiBold" Margin="10,0,0,1"/>
+            </Grid> 
+             
+             */
         }
 
         public Dungeon getDungeon(string dungeonName)
