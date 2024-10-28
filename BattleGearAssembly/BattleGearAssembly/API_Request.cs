@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Newtonsoft.Json;
@@ -20,6 +22,7 @@ namespace BattleGearAssembly
 
         public static Dictionary<string, GearItem> Gear = new Dictionary<string, GearItem>();
         public static Dictionary<string, string> RealmSlugDict = new Dictionary<string, string>();
+        public static Dictionary<string, Specialization> SpecDict = new Dictionary<string, Specialization>();
         public static Dictionary<string, string> QualityColors = new Dictionary<string, string>
         {
             {"POOR", "#9D9D9D"},
@@ -30,6 +33,22 @@ namespace BattleGearAssembly
             {"LEGENDARY", "#FF8000"},
             {"ARTIFACT", "#E6CC80"},
             {"HEIRLOOM", "#00CCFF"}
+        };
+        public static Dictionary<string, string> ClassColors = new Dictionary<string, string>
+        {
+            {"Death Knight", "#C41E3A"},
+            {"Demon Hunter", "#A330C9"},
+            {"Druid", "#FF7C0A"},
+            {"Evoker", "#33937F"},
+            {"Hunter", "#33937F"},
+            {"Mage", "#3FC7EB"},
+            {"Monk", "#00FF98"},
+            {"Paladin", "#F48CBA"},
+            {"Priest", "#FFFFFF"},
+            {"Rogue", "#FFF468"},
+            {"Shaman", "#0070DD"},
+            {"Warlock", "#8788EE"},
+            {"Warrior", "#C69B6D"}
         };
     }
 
@@ -42,6 +61,7 @@ namespace BattleGearAssembly
             request.Headers.Add("Authorization", $"Bearer {API_Globals.API_Token}");
 
             HttpResponseMessage response = await API_Globals.client.SendAsync(request);
+            Console.WriteLine("Message: " + httpMessage);
             response.EnsureSuccessStatusCode(); //!!!// THROWS 404 ON CHARACTERS WITHOUT A KEY COMPLETED ON THE CURRENT SEASON //!!!//
 
             return await response.Content.ReadAsStringAsync();
@@ -65,7 +85,7 @@ namespace BattleGearAssembly
         // Gets Player Data for Given Character Profile
         public static async Task<Character> LoadCharacterProfile(string region, string realmSlug, string characterName)
         {
-            realmSlug = API_Globals.RealmSlugDict[realmSlug];
+            if(char.IsUpper(realmSlug[0])) realmSlug = API_Globals.RealmSlugDict[realmSlug]; // Returns slug if name, otherwise skips
             var parameters = new Dictionary<string, string> { { "namespace", "profile-" + region }, { "locale", "en_us" } };
             string httpMessage = $"https://{region}.api.blizzard.com/profile/wow/character/{realmSlug}/{characterName}?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
             string responseBody = await BuildHttpRequest(httpMessage);
@@ -117,9 +137,16 @@ namespace BattleGearAssembly
             // Sorts so that highest keys are pulled into dict for MythicPlus.xaml
             API_Globals.character.KeyProfile.Dungeons = API_Globals.character.KeyProfile.Dungeons.OrderBy(c => c.Level).ToArray();
             Array.Reverse(API_Globals.character.KeyProfile.Dungeons);
-
-            Console.WriteLine(responseBody);
         }
+
+        /*public static async Task<Specialization> LoadSpec(string region, string spec_id)
+        {
+            var parameters = new Dictionary<string, string> { { "namespace", "static-" + region }, { "locale", "en_US" } };
+            string httpMessage = $"https://{region}.api.blizzard.com/data/wow/playable-specialization/{spec_id}?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower(); ;
+            string responseBody = await BuildHttpRequest(httpMessage);
+
+            return JsonConvert.DeserializeObject<Specialization>(responseBody);
+        }*/
 
         // Gets Character Media JSON from API Request
         public static async Task<ImageSource> LoadPlayerMedia(string url)
@@ -155,6 +182,25 @@ namespace BattleGearAssembly
             image.EndInit();
 
             return image;
+        }
+
+        public static async Task LoadSpecs()
+        {
+            var parameters = new Dictionary<string, string> { { "namespace", "static-us" }, { "locale", "en_US" } };
+            string httpMessage = $"https://us.api.blizzard.com/data/wow/playable-specialization/index?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
+            string responseBody = await BuildHttpRequest(httpMessage);
+
+            Console.WriteLine(responseBody);
+
+            SpecRoot sr = JsonConvert.DeserializeObject<SpecRoot>(responseBody);
+
+            foreach (Specialization spec in sr.Specializations)
+            {
+                string httpMessage2 = $"https://us.api.blizzard.com/data/wow/playable-specialization/{spec.Id}?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
+                string responseBody2 = await BuildHttpRequest(httpMessage2);
+
+                API_Globals.SpecDict.Add(spec.Id, JsonConvert.DeserializeObject<Specialization>(responseBody2));
+            }
         }
     }
 }

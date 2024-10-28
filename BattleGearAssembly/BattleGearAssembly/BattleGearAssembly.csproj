@@ -71,6 +71,7 @@
     <Compile Include="MythicPlus.xaml.cs">
       <DependentUpon>MythicPlus.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Specialization.cs" />
     <Compile Include="tokens.cs" />
     <Page Include="Gear.xaml">
       <SubType>Designer</SubType>
@@ -215,9 +216,12 @@
     <Resource Include="ImageResources\Dungeons\Star.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="ImageResources\RoleIcons\dps.png" />
+    <Resource Include="ImageResources\RoleIcons\damage.png" />
     <Resource Include="ImageResources\RoleIcons\healer.png" />
     <Resource Include="ImageResources\RoleIcons\tank.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageResources\Dungeons\Compass.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

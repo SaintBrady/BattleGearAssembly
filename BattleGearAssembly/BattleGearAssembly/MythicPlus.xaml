@@ -8,6 +8,154 @@
       Loaded="Window_Loaded"
       Title="MythicPlus">
 
+    <Page.Resources>
+        <Style TargetType="TextBlock" x:Key="PartyMember">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="DemiBold"/>
+            <Setter Property="Margin" Value="30,0,0,5"/>
+        </Style>
+
+        <Style TargetType="UserControl" x:Key="DungeonToolTip">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Resources>
+                <Style TargetType="Viewbox" x:Key="DungeonViewBox">
+                    <Setter Property="MaxWidth" Value="400"/>
+                    <Setter Property="Stretch" Value="UniformToFill"/>
+                    <Setter Property="StretchDirection" Value="DownOnly"/>
+                    <Style.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="Background" Value="#CCCCCC"/>
+                            <Setter Property="CornerRadius" Value="10"/>
+                            <Setter Property="BorderThickness" Value="3"/>
+                            <Setter Property="Padding" Value="2"/>
+                            <Style.Resources>
+                                <Style TargetType="Grid">
+                                    <Style.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#202020"/>
+                                            <Setter Property="CornerRadius" Value="7"/>
+                                        </Style>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Margin" Value="10"/>
+                                            <Setter Property="MinWidth" Value="260"/>
+                                            <Setter Property="MinHeight" Value="260"/>
+                                            <Style.Resources>
+                                                <Style TargetType="StackPanel" x:Key="DungeonInfoPanel">
+                                                    <Setter Property="Orientation" Value="Horizontal"/>
+                                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                    <Style.Resources>
+                                                        <Style TargetType="Image">
+                                                            <Setter Property="Source" Value="ImageResources/Dungeons/Star.png"/>
+                                                            <Setter Property="Width" Value="32"/>
+                                                        </Style>
+                                                    </Style.Resources>
+                                                </Style>
+                                                <Style TargetType="TextBlock" x:Key="DungeonName">
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                    <Setter Property="FontWeight" Value="Bold"/>
+                                                    <Setter Property="FontSize" Value="24"/>
+                                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                </Style>
+                                                <Style TargetType="StackPanel" x:Key="Party">
+                                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                    <Setter Property="Margin" Value="0,10,0,50"/>
+                                                </Style>
+                                            </Style.Resources>
+                                        </Style>
+                                        <Style TargetType="Grid" x:Key="Levels">
+                                            <Setter Property="HorizontalAlignment" Value="Left"/>
+                                            <Setter Property="VerticalAlignment" Value="Bottom"/>
+                                            <Style.Resources>
+                                                <Style TargetType="Image">
+                                                    <Setter Property="Source" Value="ImageResources/Dungeons/Compass.png"/>
+                                                    <Setter Property="Width" Value="64"/>
+                                                </Style>
+                                                <Style TargetType="TextBlock" x:Key="Score1_BG">
+                                                    <Setter Property="Foreground" Value="Black"/>
+                                                    <Setter Property="FontSize" Value="24"/>
+                                                    <Setter Property="FontWeight" Value="ExtraBlack"/>
+                                                    <Setter Property="FontFamily" Value="Calibri"/>
+                                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                                    <Setter Property="Margin" Value="2,0,0,2"/>
+                                                </Style>
+                                                <Style TargetType="TextBlock" x:Key="Score1_FG">
+                                                    <Setter Property="Foreground" Value="Orange"/>
+                                                    <Setter Property="FontSize" Value="24"/>
+                                                    <Setter Property="FontWeight" Value="ExtraBlack"/>
+                                                    <Setter Property="FontFamily" Value="Calibri"/>
+                                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                                </Style>
+                                                <Style TargetType="TextBlock" x:Key="Score2_BG">
+                                                    <Setter Property="Foreground" Value="Black"/>
+                                                    <Setter Property="FontSize" Value="24"/>
+                                                    <Setter Property="FontWeight" Value="ExtraBlack"/>
+                                                    <Setter Property="FontFamily" Value="Calibri"/>
+                                                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                                                    <Setter Property="VerticalAlignment" Value="Bottom"/>
+                                                    <Setter Property="Margin" Value="0,0,3,5"/>
+                                                </Style>
+                                                <Style TargetType="TextBlock" x:Key="Score2_FG">
+                                                    <Setter Property="Foreground" Value="Purple"/>
+                                                    <Setter Property="FontSize" Value="24"/>
+                                                    <Setter Property="FontWeight" Value="ExtraBlack"/>
+                                                    <Setter Property="FontFamily" Value="Calibri"/>
+                                                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                                                    <Setter Property="VerticalAlignment" Value="Bottom"/>
+                                                    <Setter Property="Margin" Value="4"/>
+                                                </Style>
+                                            </Style.Resources>
+                                        </Style>
+                                        <Style TargetType="Grid" x:Key="Scores">
+                                            <Setter Property="HorizontalAlignment" Value="Left"/>
+                                            <Setter Property="VerticalAlignment" Value="Bottom"/>
+                                            <Setter Property="Height" Value="30"/>
+                                            <Setter Property="Margin" Value="80,0,0,10"/>
+                                            <Style.Resources>
+                                                <Style TargetType="TextBlock" x:Key="Score1">
+                                                    <Setter Property="Foreground" Value="Yellow"/>
+                                                    <Setter Property="FontSize" Value="12"/>
+                                                    <Setter Property="FontWeight" Value="DemiBold"/>
+                                                    <Setter Property="FontStyle" Value="Italic"/>
+                                                    <Setter Property="VerticalAlignment" Value="Top"/>
+                                                </Style>
+                                                <Style TargetType="TextBlock" x:Key="Score1_Time">
+                                                    <Setter Property="Foreground" Value="Yellow"/>
+                                                    <Setter Property="FontSize" Value="10"/>
+                                                    <Setter Property="FontWeight" Value="ExtraBlack"/>
+                                                    <Setter Property="FontStyle" Value="Italic"/>
+                                                    <Setter Property="VerticalAlignment" Value="Top"/>
+                                                    <Setter Property="Margin" Value="35,1,0,0"/>
+                                                </Style>
+                                                <Style TargetType="TextBlock" x:Key="Score2">
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                    <Setter Property="FontSize" Value="12"/>
+                                                    <Setter Property="FontWeight" Value="DemiBold"/>
+                                                    <Setter Property="FontStyle" Value="Italic"/>
+                                                    <Setter Property="VerticalAlignment" Value="Top"/>
+                                                    <Setter Property="Margin" Value="0,12,0,0"/>
+                                                </Style>
+                                                <Style TargetType="TextBlock" x:Key="Score2_Time">
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                    <Setter Property="FontSize" Value="10"/>
+                                                    <Setter Property="FontWeight" Value="ExtraBlack"/>
+                                                    <Setter Property="FontStyle" Value="Italic"/>
+                                                    <Setter Property="VerticalAlignment" Value="Top"/>
+                                                    <Setter Property="Margin" Value="35,13,0,0"/>
+                                                </Style>
+                                            </Style.Resources>
+                                        </Style>
+                                    </Style.Resources>
+                                </Style>
+                            </Style.Resources>
+                        </Style>
+                    </Style.Resources>
+                </Style>
+            </Style.Resources>
+        </Style>
+    </Page.Resources>
+
     <Grid>
         <Grid Height="720" Width="800" VerticalAlignment="Top" HorizontalAlignment="Right">
             <Grid.Background>
@@ -27,7 +175,7 @@
                 </Border>
                 <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
-            <Grid Name="DB" Width="100">
+            <Grid Name="DB" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
                 <Image Source="ImageResources/Dungeons/Blanks/DB_Gray.png" Stretch="Fill"/>
                 <Border BorderThickness="3">
                     <Border.Effect>
@@ -36,7 +184,7 @@
                 </Border>
                 <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
-            <Grid Name="SOB" Width="100">
+            <Grid Name="SOB" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
                 <Image Source="ImageResources/Dungeons/Blanks/SOB_Gray.png" Stretch="Fill"/>
                 <Border BorderThickness="3">
                     <Border.Effect>
@@ -45,7 +193,7 @@
                 </Border>
                 <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
-            <Grid Name="GB" Width="100">
+            <Grid Name="GB" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
                 <Image Source="ImageResources/Dungeons/Blanks/GB_Gray.png" Stretch="Fill"/>
                 <Border BorderThickness="3">
                     <Border.Effect>
@@ -54,7 +202,7 @@
                 </Border>
                 <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
-            <Grid Name="SV" Width="100">
+            <Grid Name="SV" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
                 <Image Source="ImageResources/Dungeons/Blanks/SV_Gray.png" Stretch="Fill"/>
                 <Border BorderThickness="3">
                     <Border.Effect>
@@ -63,7 +211,7 @@
                 </Border>
                 <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
-            <Grid Name="COT" Width="100">
+            <Grid Name="COT" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
                 <Image Source="ImageResources/Dungeons/Blanks/COT_Gray.png" Stretch="Fill"/>
                 <Border BorderThickness="3">
                     <Border.Effect>
@@ -72,7 +220,7 @@
                 </Border>
                 <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
-            <Grid Name="AK" Width="100">
+            <Grid Name="AK" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
                 <Image Source="ImageResources/Dungeons/Blanks/AK_Gray.png" Stretch="Fill"/>
                 <Border BorderThickness="3">
                     <Border.Effect>
@@ -81,7 +229,7 @@
                 </Border>
                 <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
-            <Grid Name="MOTS" Width="100">
+            <Grid Name="MOTS" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
                 <Image Source="ImageResources/Dungeons/Blanks/MOTS_Gray.png" Stretch="Fill"/>
                 <Border BorderThickness="3">
                     <Border.Effect>
@@ -92,57 +240,35 @@
             </Grid>
         </StackPanel>
 
-        <UserControl Name="DungeonToolTip" Visibility="Visible">
-            <Viewbox Name ="DungeonViewBox" MaxWidth="200" Stretch="UniformToFill" StretchDirection="DownOnly">
+        <UserControl Name="DungeonToolTip" Visibility="Collapsed">
+            <Viewbox Name ="DungeonViewBox" MaxWidth="400" Stretch="UniformToFill" StretchDirection="DownOnly">
                 <Border Background="#CCCCCC" CornerRadius="10" BorderThickness="3" Padding="2">
                     <Grid>
                         <Border Name="Mask" Background="#202020" CornerRadius="7"/>
-                        <StackPanel Name="DungeonInfoPanel" Margin="10" MinWidth="160" MinHeight="150">
+                        <StackPanel Name="DungeonInfoPanel" Margin="10" MinWidth="260" MinHeight="260">
                             <StackPanel Name="Chest" Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Image Source="ImageResources/Dungeons/Star.png" Width="12"/>
-                                <Image Source="ImageResources/Dungeons/Star.png" Width="12"/>
+                                <Image Source="ImageResources/Dungeons/Star.png" Width="32"/>
+                                <Image Source="ImageResources/Dungeons/Star.png" Width="32"/>
                             </StackPanel>
-                            <TextBlock Name="DungeonName" Text="Ara-Kara, City of Echoes" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
-                            <StackPanel Name="Party" HorizontalAlignment="Left" Margin="20, 10, 0, 0">
-                                <Grid>
-                                    <Image Source="ImageResources/RoleIcons/tank.png" Width="8" HorizontalAlignment="Left"/>
-                                    <TextBlock Text="Crakenjoyer - Guardian Druid" Foreground="Orange" FontSize="6" FontWeight="DemiBold" Margin="10,0,0,1"/>
-                                </Grid>
-                                <Grid>
-                                    <Image Source="ImageResources/RoleIcons/healer.png" Width="8" HorizontalAlignment="Left"/>
-                                    <TextBlock Text="Aleksei - Restoration Shaman" Foreground="RoyalBlue" FontSize="6" FontWeight="DemiBold" Margin="10,0,0,1"/>
-                                </Grid>
-                                <Grid>
-                                    <Image Source="ImageResources/RoleIcons/dps.png" Width="8" HorizontalAlignment="Left"/>
-                                    <TextBlock Text="Euphrelia - Outlaw Rogue" Foreground="Yellow" FontSize="6" FontWeight="DemiBold" Margin="10,0,0,1"/>
-                                </Grid>
-                                <Grid>
-                                    <Image Source="ImageResources/RoleIcons/dps.png" Width="8" HorizontalAlignment="Left"/>
-                                    <TextBlock Text="Shoomain - Elemental Shaman" Foreground="RoyalBlue" FontSize="6" FontWeight="DemiBold" Margin="10,0,0,1"/>
-                                </Grid>
-                                <Grid>
-                                    <Image Source="ImageResources/RoleIcons/dps.png" Width="8" HorizontalAlignment="Left"/>
-                                    <TextBlock Text="Galther - Beast Mastery Hunter" Foreground="LightGreen" FontSize="6" FontWeight="DemiBold" Margin="10,0,0,1"/>
-                                </Grid>
-                            </StackPanel>
+                            <TextBlock Name="DungeonName" Text="Ara-Kara, City of Echoes" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" FontSize="24"/>
+                            <StackPanel Name="Party" HorizontalAlignment="Center" Margin="0, 10, 0, 50"/>
                         </StackPanel>
                         <Grid HorizontalAlignment="Left" VerticalAlignment="Bottom">
-                            <Image Source="ImageResources/Dungeons/Compass.png" Width="48"/>
-                            <TextBlock Text="10" Foreground="Black" FontSize="18" FontWeight="ExtraBlack" FontFamily="Calibri" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="2,0,0,2"/>
-                            <TextBlock Text="10" Foreground="Orange" FontSize="18" FontWeight="ExtraBlack" FontFamily="Calibri" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                            <TextBlock Text="9" Foreground="Black" FontSize="18" FontWeight="ExtraBlack" FontFamily="Calibri" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,3,5"/>
-                            <TextBlock Text="9" Foreground="Purple" FontSize="18" FontWeight="ExtraBlack" FontFamily="Calibri" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="4"/>
+                            <Image Source="ImageResources/Dungeons/Compass.png" Width="64"/>
+                            <TextBlock Name="Score1_BG" Text="10" Foreground="Black" FontSize="24" FontWeight="ExtraBlack" FontFamily="Calibri" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="2,0,0,2"/>
+                            <TextBlock Name="Score1_FG" Text="10" Foreground="Orange" FontSize="24" FontWeight="ExtraBlack" FontFamily="Calibri" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                            <TextBlock Name="Score2_BG" Text="9" Foreground="Black" FontSize="24" FontWeight="ExtraBlack" FontFamily="Calibri" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,3,5"/>
+                            <TextBlock Name="Score2_FG" Text="9" Foreground="Purple" FontSize="24" FontWeight="ExtraBlack" FontFamily="Calibri" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="4"/>
                         </Grid>
-                        <Grid HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="30" Margin="50,0,0,0">
-                            <TextBlock Text="324.7" Foreground="Yellow" FontWeight="DemiBold" FontStyle="Italic" FontSize="8" VerticalAlignment="Top"/>
-                            <TextBlock Text="BEST OVERALL - 37:27" Foreground="Yellow" FontWeight="ExtraBlack" FontStyle="Italic" FontSize="6" VerticalAlignment="Top" Margin="25,2,0,0"/>
-                            <TextBlock Text="312.6" Foreground="White" FontWeight="DemiBold" FontStyle="Italic" FontSize="8" VerticalAlignment="Top" Margin="0,10,0,0"/>
-                            <TextBlock Text="BEST IN TIME - 31:40" Foreground="White" FontWeight="ExtraBlack" FontStyle="Italic" FontSize="6" VerticalAlignment="Top" Margin="25,12,0,0"/>
+                        <Grid HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="30" Margin="80,0,0,10">
+                            <TextBlock Name="Score1" Text="324.7" Foreground="Yellow" FontWeight="DemiBold" FontStyle="Italic" FontSize="12" VerticalAlignment="Top"/>
+                            <TextBlock Name="Score1_Time" Text="BEST OVERALL - 37:27" Foreground="Yellow" FontWeight="ExtraBlack" FontStyle="Italic" FontSize="10" VerticalAlignment="Top" Margin="35,1,0,0"/>
+                            <TextBlock Name="Score2" Text="312.6" Foreground="White" FontWeight="DemiBold" FontStyle="Italic" FontSize="12" VerticalAlignment="Top" Margin="0,12,0,0"/>
+                            <TextBlock Name="Score2_Time" Text="BEST IN TIME - 31:40" Foreground="White" FontWeight="ExtraBlack" FontStyle="Italic" FontSize="10" VerticalAlignment="Top" Margin="35,13,0,0"/>
                         </Grid>
                     </Grid>
                 </Border>
             </Viewbox>
         </UserControl>
-
     </Grid>
 </Page>

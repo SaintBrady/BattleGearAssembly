@@ -7,6 +7,11 @@ namespace BattleGearAssembly
         [JsonProperty("name")]
         public string Name { get; set; }
 
+        public string Region { get; set; }
+
+        [JsonProperty("realm")]
+        public Realm Realm { get; set; }
+
         [JsonProperty("equipped_item_level")]
         public string Ilvl { get; set; }
 
@@ -15,6 +20,12 @@ namespace BattleGearAssembly
 
         [JsonProperty("faction")]
         public Faction Faction { get; set; }
+
+        [JsonProperty("character_class")]
+        public CharacterClass Class { get; set; }
+
+        [JsonProperty("active_spec")]
+        public Specialization Spec { get; set; }
 
         public KeyProfile KeyProfile { get; set; }
 
@@ -28,6 +39,15 @@ namespace BattleGearAssembly
         public Href MythicPlus { get; set; }
     }
 
+    public class Realm
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("slug")]
+        public string Slug { get; set; }
+    }
+
     public class Faction
     {
         [JsonProperty("type")]
@@ -39,6 +59,23 @@ namespace BattleGearAssembly
         [JsonProperty("name")]
         public string Name { get; set; }
     }
+
+    public class CharacterClass
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        public string getColor()
+        {
+            return API_Globals.ClassColors[Name];
+        }
+    }
+
+    /*public class Specialization
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; }
+    }*/
 
     public class Href
     {

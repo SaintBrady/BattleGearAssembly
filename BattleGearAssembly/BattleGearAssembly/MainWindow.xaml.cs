@@ -20,6 +20,12 @@ namespace BattleGearAssembly
             InitializeComponent();
         }
 
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            await API_Request.RequestAsync();
+            await API_Request.LoadSpecs();
+        }
+
         private void ChangeWindow(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;

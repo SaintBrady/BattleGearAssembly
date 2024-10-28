@@ -177,7 +177,7 @@
                 <Border Style="{StaticResource ItemBorder}" HorizontalAlignment="Left"/>
                 <StackPanel Margin="60,0,0,0">
                     <TextBlock Style="{StaticResource ItemName}" Name="WRIST_NAME" HorizontalAlignment="Left"/>
-                    <TextBlock Name="WRIST_ILVL" HorizontalAlignment="Left" FontWeight="Bold"/>
+                    <TextBlock Name="WRIST_ILVL" HorizontalAlignment="Left" FontWeight="Bold" Foreground="#CCCC00"/>
                 </StackPanel>
             </Grid>
 

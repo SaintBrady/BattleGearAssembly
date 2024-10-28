@@ -1,13 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace BattleGearAssembly
 {
+    public static class MythicPlusGlobals
+    {
+        //public static Dictionary<Dungeon, Character[]> dungeonMembers = new Dictionary<string, Dungeon>()
+
+        public static Dictionary<string, string> dungeonAlias = new Dictionary<string, string>()
+            {
+                {"NW", "The Necrotic Wake"},
+                {"MOTS", "Mists of Tirna Scithe"},
+                {"SOB", "Siege of Boralus"},
+                {"COT", "City of Threads"},
+                {"AK", "Ara-Kara, City of Echoes"},
+                {"GB", "Grim Batol"},
+                {"SV", "The Stonevault"},
+                {"DB", "The Dawnbreaker"}
+            };
+    }
+
     public partial class MythicPlus : Page
     {
+
         public MythicPlus()
         {
             InitializeComponent();
@@ -21,31 +41,62 @@ namespace BattleGearAssembly
 
         private void ToggleShowDungeonTT(object sender, RoutedEventArgs e)
         {
+            if (DungeonToolTip.Visibility == Visibility.Visible) {
+                DungeonToolTip.Visibility = Visibility.Collapsed;
+                Party.Children.Clear();
+                return; 
+            }
+
             Grid g = sender as Grid;
+            Dungeon d = getDungeon(MythicPlusGlobals.dungeonAlias[g.Name]);
 
-            DungeonToolTip.Visibility = DungeonToolTip.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
-        }
-
-        private void CreateDungeonTT()
-        {
             // Handle no keys for dungeon
 
-            // In party
+            // ForNum chests add <Image Source="ImageResources/Dungeons/Star.png" Width="16"/> to ChestSP
+            //for (int i = 0; i < d.) Need to get chesting values from other API?
 
-            /*
-             <Grid>
-                <Image Source="ImageResources/RoleIcons/tank.png" Width="8" HorizontalAlignment="Left"/>
-                <TextBlock Text="Crakenjoyer - Guardian Druid" Foreground="Orange" FontSize="6" FontWeight="DemiBold" Margin="10,0,0,1"/>
-            </Grid> 
-             
-             */
+            DungeonName.Text = d.Name.Value;
+
+            string region = API_Globals.character.Region;
+
+            foreach (DungeonCharacter dc in d.Characters)
+            {
+                dc.Spec = API_Globals.SpecDict[dc.Spec.Id];//await API_Request.LoadSpec(region, dc.Spec.Id);
+            }
+
+            IEnumerable<DungeonCharacter> dunChars = d.Characters.OrderByDescending(c => c.Spec.Role.Name);
+
+            foreach (DungeonCharacter dc in dunChars)
+            {
+                Grid memberGrid = new Grid();
+
+                Image roleIcon = new Image();
+                roleIcon.Source = API_Request.RenderImage($"ImageResources/RoleIcons/{dc.Spec.Role.Name}.png", 64, 64);
+                roleIcon.HorizontalAlignment = HorizontalAlignment.Left;
+                memberGrid.Children.Add(roleIcon);
+
+                TextBlock t = new TextBlock();
+                t.Style = Resources["PartyMember"] as Style;
+                t.Text = $"{dc.Info.Name} - {dc.Spec.Name} {dc.Spec.Class.Name}"; // Gets spec when dungeon was run
+                t.Foreground = new SolidColorBrush((Color)System.Windows.Media.ColorConverter.ConvertFromString(dc.Spec.Class.getColor()));
+                memberGrid.Children.Add(t);
+
+                Party.Children.Add(memberGrid);
+            }
+
+            Score1_FG.Text = d.Level.ToString();
+            Score1_BG.Text = Score1_FG.Text;
+            Score1.Text = d.Rating.Value.ToString("0.0");
+            Score1_Time.Text = "BEST OVERALL - " + d.GetTime();
+
+            DungeonToolTip.Visibility = Visibility.Visible;
         }
 
         public Dungeon getDungeon(string dungeonName)
         {
             foreach (Dungeon d in API_Globals.character.KeyProfile.Dungeons)
             {
-                if (d.Info.Name == dungeonName)
+                if (d.Name.Value == dungeonName)
                 {
                     return d;
                 }

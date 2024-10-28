@@ -19,7 +19,8 @@ namespace BattleGearAssembly
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            await API_Request.RequestAsync();
+            //await API_Request.RequestAsync();
+            //await API_Request.LoadSpecs();
         }
 
         private async void LoadRealms(object sender = null, EventArgs e = null)
@@ -43,6 +44,8 @@ namespace BattleGearAssembly
             try
             {
                 API_Globals.character = await API_Request.LoadCharacterProfile(RegionCB.Text, RealmCB.Text, CharacterNameBox.Text);
+                API_Globals.character.Region = RegionCB.Text;
+
                 character = API_Globals.character;
                 await API_Request.LoadGear(character.Equipment.Url);
 
@@ -63,6 +66,7 @@ namespace BattleGearAssembly
             }
 
             CHARACTER_NAME.Text = character.Name;
+            CHARACTER_NAME.Foreground = new SolidColorBrush((Color)System.Windows.Media.ColorConverter.ConvertFromString(character.Class.getColor()));
             CHARACTER_TITLE.Text = character.Title == null ? "" : character.Title.Name;
             CHARACTER_FACTION.Source = character.Faction.Type == "HORDE" ? API_Request.RenderImage("ImageResources/Faction/Horde.png", 240, 240) : API_Request.RenderImage("ImageResources/Faction/Alliance.png", 240, 240);
             CHARACTER_ILVL.Text = "Item Level " + character.Ilvl;
