@@ -1,18 +1,20 @@
 ﻿using Newtonsoft.Json;
-using System;
 
 namespace BattleGearAssembly
 {
     public class Dungeon
     {
         [JsonProperty("dungeon")]
-        public DungeonName Name { get; set; }
+        public DungeonInfo Info { get; set; }
 
         [JsonProperty("keystone_level")]
         public int Level { get; set; }
 
         [JsonProperty("duration")]
         public int Duration { get; set; }
+
+        [JsonProperty("keystone_upgrades")]
+        public KeystoneUpgrade[] KeystoneUpgrades { get; set; }
 
         [JsonProperty("members")]
         public DungeonCharacter[] Characters { get; set; }
@@ -23,14 +25,17 @@ namespace BattleGearAssembly
         public string GetTime()
         {
             double dur = Duration / 1000.0;
-            Console.WriteLine("Duration: " + dur);
-            
-            double seconds = dur % 60;
-            Console.WriteLine("Seconds: " + seconds);
             int minutes = (int)(dur / 60);
+            double seconds = dur - (minutes * 60);
 
             return $"{minutes}:{seconds:00.000}";
         }
+    }
+
+    public class DungeonRoot
+    {
+        [JsonProperty("keystone_upgrades")]
+        public KeystoneUpgrade[] KeystoneUpgrades { get; set; }
     }
 
     public class KeyProfile
@@ -42,10 +47,13 @@ namespace BattleGearAssembly
         public Rating Rating { get; set; }
     }
 
-    public class DungeonName
+    public class DungeonInfo
     {
         [JsonProperty("name")]
-        public string Value { get; set; }
+        public string Name { get; set; }
+
+        [JsonProperty("id")]
+        public string Id { get; set; }
     }
 
     public class Rating
@@ -55,6 +63,15 @@ namespace BattleGearAssembly
 
         [JsonProperty("color")]
         public DisplayColor Color { get; set; }
+    }
+
+    public class KeystoneUpgrade
+    {
+        [JsonProperty("upgrade_level")]
+        public int Level { get; set; }
+
+        [JsonProperty("qualifying_duration")]
+        public int Duration { get; set; }
     }
 
     public class DungeonCharacter

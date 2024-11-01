@@ -71,12 +71,6 @@ namespace BattleGearAssembly
         }
     }
 
-    /*public class Specialization
-    {
-        [JsonProperty("name")]
-        public string Name { get; set; }
-    }*/
-
     public class Href
     {
         [JsonProperty("href")]

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -10,7 +11,13 @@ namespace BattleGearAssembly
 {
     public static class Pages
     {
-        public static Page GearPage;
+        public static Dictionary<string, Page> pages = new Dictionary<string, Page>()
+        {
+            { "Gear", null },
+            { "MythicPlus", null },
+        };
+
+        public static string ActivePage = "Gear";
     }
 
     public partial class MainWindow : Window
@@ -26,23 +33,26 @@ namespace BattleGearAssembly
             await API_Request.LoadSpecs();
         }
 
+        public void MythicPlus_Enabled(bool enabled)
+        {
+            MythicPlus.IsEnabled = enabled;
+        }
+
         private void ChangeWindow(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
-            
-            //!!!// Eventually move to dictionary when enough pages are added //!!!//
 
-            if (button.Name != "Gear")
-            {
-                Pages.GearPage = ActiveFrame.Content as Page;
-            }
+            if (button.Name == Pages.ActivePage) return;
 
+            Pages.pages[Pages.ActivePage] = ActiveFrame.Content as Page;
             ActiveFrame.Source = new Uri("pack://application:,,,/" + button.Name + ".xaml");
 
-            if (button.Name == "Gear")
+            if (Pages.pages[button.Name] != null)
             {
-                ActiveFrame.Content = Pages.GearPage;
+                ActiveFrame.Content = Pages.pages[button.Name];
             }
+
+            Pages.ActivePage = button.Name;
         }
     }
 }

@@ -246,10 +246,7 @@
                     <Grid>
                         <Border Name="Mask" Background="#202020" CornerRadius="7"/>
                         <StackPanel Name="DungeonInfoPanel" Margin="10" MinWidth="260" MinHeight="260">
-                            <StackPanel Name="Chest" Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Image Source="ImageResources/Dungeons/Star.png" Width="32"/>
-                                <Image Source="ImageResources/Dungeons/Star.png" Width="32"/>
-                            </StackPanel>
+                            <StackPanel Name="Chest" Orientation="Horizontal" HorizontalAlignment="Center"/>
                             <TextBlock Name="DungeonName" Text="Ara-Kara, City of Echoes" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" FontSize="24"/>
                             <StackPanel Name="Party" HorizontalAlignment="Center" Margin="0, 10, 0, 50"/>
                         </StackPanel>

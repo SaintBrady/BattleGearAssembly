@@ -92,7 +92,7 @@ namespace BattleGearAssembly
         }
     }
 
-    public class Root
+    public class GearRoot
     {
         [JsonProperty("equipped_items")]
         public GearItem[] GearItems { get; set; }

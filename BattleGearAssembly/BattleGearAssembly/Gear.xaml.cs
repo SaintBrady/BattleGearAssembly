@@ -17,12 +17,6 @@ namespace BattleGearAssembly
             InitializeComponent();
         }
 
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            //await API_Request.RequestAsync();
-            //await API_Request.LoadSpecs();
-        }
-
         private async void LoadRealms(object sender = null, EventArgs e = null)
         {
             RealmCB.IsEnabled = true;
