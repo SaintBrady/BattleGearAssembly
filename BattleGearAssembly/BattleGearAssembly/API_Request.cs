@@ -208,6 +208,15 @@ namespace BattleGearAssembly
 
                 API_Globals.SpecDict.Add(spec.Id, JsonConvert.DeserializeObject<Specialization>(responseBody2));
             }
+            Test();
+        }
+
+        private static async void Test()
+        {
+            var parameters = new Dictionary<string, string> { { "namespace", "profile-us" }, { "locale", "en_US" } };
+            string httpMessage = $"https://us.api.blizzard.com/profile/wow/character/thrall/euphrelia/professions?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
+            string responseBody = await BuildHttpRequest(httpMessage);
+            Console.WriteLine(responseBody);
         }
     }
 }

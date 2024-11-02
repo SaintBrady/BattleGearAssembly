@@ -38,7 +38,7 @@
         <Grid>
             <StackPanel Name="NavigationPanel" VerticalAlignment="Top" HorizontalAlignment="Left" Height="800">
                 <Button Name="Gear" Width="35" Height="25" Content="GEAR" Margin="0,0,0,0" Click="ChangeWindow" Foreground="LightGray" FontWeight="Bold" FontStyle="Italic" FontSize="10"/>
-                <Button Name="MythicPlus" Width="35" Height="25" Content="M+" Margin="0,20,0,0" Click="ChangeWindow" Foreground="LightGray" FontWeight="Bold" FontStyle="Italic" FontSize="10"/>
+                <Button Name="MythicPlus" Width="35" IsEnabled="False" Height="25" Content="M+" Margin="0,20,0,0" Click="ChangeWindow" Foreground="LightGray" FontWeight="Bold" FontStyle="Italic" FontSize="10"/>
             </StackPanel>
             <Frame Name="ActiveFrame" Source="Gear.xaml" NavigationUIVisibility="Hidden"/>
         </Grid>

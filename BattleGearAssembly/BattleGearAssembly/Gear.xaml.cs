@@ -1,15 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Security.Policy;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using static System.Net.WebRequestMethods;
 using Image = System.Windows.Controls.Image;
 
 namespace BattleGearAssembly
 {
+    /*public class GearItemElement : INotifyPropertyChanged
+    {
+        //public Image Image { get; set; }
+        //public TextBlock Ilvl {  get; set; }
+        //public TextBlock Name { get; set; }
+        //public Border Border { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        int s = 12;
+
+        public int S
+        {
+            set
+            {
+                if (s != value)
+                {
+                    s = value;
+
+                    if (PropertyChanged != null)
+                    {
+                        PropertyChanged(this, new PropertyChangedEventArgs("S"));
+                    }
+                }
+            }
+            get
+            {
+                return s;
+            }
+        }
+    }*/
+
     public partial class Gear : Page
     {
         public Gear()
@@ -27,6 +64,16 @@ namespace BattleGearAssembly
             {
                 RealmCB.Items.Add(realm);
             }
+        }
+
+        private void LookupItem(object sender, RoutedEventArgs e)
+        {
+            Grid g = sender as Grid;
+            if (!API_Globals.Gear.ContainsKey(g.Name)) { return; }
+
+            string item_id = API_Globals.Gear[g.Name].ItemInfo.ID.ToString();
+            string url = $"https://www.wowhead.com/item={item_id}";
+            Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true });
         }
 
         private async void Button_LoadGear(object sender, RoutedEventArgs e)
@@ -87,12 +134,12 @@ namespace BattleGearAssembly
                 }
                 catch (System.Collections.Generic.KeyNotFoundException)
                 {
-                    LoadEmptySlot(image, sp, itemName, ilvl, border, g);
+                    LoadEmptySlot(image, itemName, ilvl, border, g);
                 }
             }
         }
 
-        private void LoadEmptySlot(Image image, StackPanel sp, TextBlock itemName, TextBlock ilvl, Border border, Grid g)
+        private void LoadEmptySlot(Image image, TextBlock itemName, TextBlock ilvl, Border border, Grid g)
         {
             Dictionary<string, GearItem> Gear = API_Globals.Gear;
 

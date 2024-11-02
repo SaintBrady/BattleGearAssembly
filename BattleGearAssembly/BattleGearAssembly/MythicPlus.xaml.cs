@@ -14,7 +14,6 @@ namespace BattleGearAssembly
 
     public partial class MythicPlus : Page
     {
-
         public MythicPlus()
         {
             InitializeComponent();
@@ -35,17 +34,11 @@ namespace BattleGearAssembly
             }
 
             Grid g = sender as Grid;
-            Dungeon d;
 
             // Resolves dungeons with no keystone data for given player
-            try
-            {
-                d = MythicPlusGlobals.dungeons[g.Name];
-            }
-            catch (KeyNotFoundException)
-            {
-                return;
-            }
+            if (!MythicPlusGlobals.dungeons.ContainsKey(g.Name)) return;
+
+            Dungeon d = MythicPlusGlobals.dungeons[g.Name];
 
             foreach (KeystoneUpgrade k in d.KeystoneUpgrades)
             {
@@ -108,7 +101,6 @@ namespace BattleGearAssembly
                 {"The Stonevault", "SV"},
                 {"The Dawnbreaker", "DB"}
             };
-            Console.WriteLine("Loading Dungeons for: " + API_Globals.character.Name);
 
             foreach (Dungeon d in API_Globals.character.KeyProfile.Dungeons)
             {
@@ -136,9 +128,7 @@ namespace BattleGearAssembly
                 Image image = g.Children.OfType<Image>().First();
                 Border border = g.Children.OfType<Border>().First();
 
-                //Dungeon d = MythicPlusGlobals.dungeons[g.Name];
-
-                try//if (d != null)
+                if (MythicPlusGlobals.dungeons.ContainsKey(g.Name))
                 {
                     Dungeon d = MythicPlusGlobals.dungeons[g.Name];
                     textBlock.Text = d.Level.ToString();
@@ -149,7 +139,6 @@ namespace BattleGearAssembly
                     textBlock.Foreground = levelColor;
                     border.BorderBrush = levelColor;
                 }
-                catch { }
             }
         }
     }

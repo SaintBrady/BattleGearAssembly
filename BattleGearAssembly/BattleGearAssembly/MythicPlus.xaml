@@ -38,7 +38,7 @@
                                         <Style TargetType="StackPanel">
                                             <Setter Property="Margin" Value="10"/>
                                             <Setter Property="MinWidth" Value="260"/>
-                                            <Setter Property="MinHeight" Value="260"/>
+                                            <Setter Property="MinHeight" Value="200"/>
                                             <Style.Resources>
                                                 <Style TargetType="StackPanel" x:Key="DungeonInfoPanel">
                                                     <Setter Property="Orientation" Value="Horizontal"/>
