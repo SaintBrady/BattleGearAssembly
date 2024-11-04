@@ -19,7 +19,6 @@ namespace BattleGearAssembly
 
         public static string API_Token;
 
-        public static Dictionary<string, GearItem> Gear = new Dictionary<string, GearItem>();
         public static Dictionary<string, string> RealmSlugDict = new Dictionary<string, string>();
         public static Dictionary<string, Specialization> SpecDict = new Dictionary<string, Specialization>();
         public static Dictionary<string, string> QualityColors = new Dictionary<string, string>
@@ -81,14 +80,17 @@ namespace BattleGearAssembly
         }
 
         // Gets Player Data for Given Character Profile
-        public static async Task<Character> LoadCharacterProfile(string region, string realmSlug, string characterName)
+        public static async Task LoadCharacterProfile(string region, string realmSlug, string characterName)
         {
             if(char.IsUpper(realmSlug[0])) realmSlug = API_Globals.RealmSlugDict[realmSlug]; // Returns slug if name, otherwise skips
             var parameters = new Dictionary<string, string> { { "namespace", "profile-" + region }, { "locale", "en_us" } };
             string httpMessage = $"https://{region}.api.blizzard.com/profile/wow/character/{realmSlug}/{characterName}?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
             string responseBody = await BuildHttpRequest(httpMessage);
 
-            return JsonConvert.DeserializeObject<Character>(responseBody);
+            API_Globals.character = JsonConvert.DeserializeObject<Character>(responseBody);
+            API_Globals.character.Region = region;
+
+            await LoadGear(API_Globals.character.Equipment.Url);
         }
 
         // Gets Character Gear JSON from API Request and Converts to Gear List
@@ -101,7 +103,7 @@ namespace BattleGearAssembly
             foreach (GearItem gearItem in root.GearItems)
             {
                 gearItem.Image = await LoadImage(gearItem.ItemInfo.ID);
-                API_Globals.Gear[gearItem.Slot.Type] = gearItem;
+                API_Globals.character.Gear.Add(gearItem.Slot.Type, gearItem);
             }
 
             await LoadMythicPlus();
@@ -208,13 +210,13 @@ namespace BattleGearAssembly
 
                 API_Globals.SpecDict.Add(spec.Id, JsonConvert.DeserializeObject<Specialization>(responseBody2));
             }
-            Test();
+            //Test();
         }
 
         private static async void Test()
         {
             var parameters = new Dictionary<string, string> { { "namespace", "profile-us" }, { "locale", "en_US" } };
-            string httpMessage = $"https://us.api.blizzard.com/profile/wow/character/thrall/euphrelia/professions?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
+            string httpMessage = $"https://us.api.blizzard.com/profile/wow/character/thrall/euphrelia/mythic-keystone-profile?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
             string responseBody = await BuildHttpRequest(httpMessage);
             Console.WriteLine(responseBody);
         }

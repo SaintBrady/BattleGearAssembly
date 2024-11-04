@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace BattleGearAssembly
 {
@@ -26,6 +27,8 @@ namespace BattleGearAssembly
 
         [JsonProperty("active_spec")]
         public Specialization Spec { get; set; }
+
+        public Dictionary<string, GearItem> Gear {  get; set; } = new Dictionary<string, GearItem>();
 
         public KeyProfile KeyProfile { get; set; }
 

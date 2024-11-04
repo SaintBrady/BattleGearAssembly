@@ -65,15 +65,19 @@ namespace BattleGearAssembly
             {
                 Grid memberGrid = new Grid();
 
-                Image roleIcon = new Image();
-                roleIcon.Source = API_Request.RenderImage($"ImageResources/RoleIcons/{dc.Spec.Role.Name}.png", 64, 64);
-                roleIcon.HorizontalAlignment = HorizontalAlignment.Left;
+                Image roleIcon = new Image()
+                {
+                    Source = API_Request.RenderImage($"ImageResources/RoleIcons/{dc.Spec.Role.Name}.png", 64, 64),
+                    HorizontalAlignment = HorizontalAlignment.Left
+                };
                 memberGrid.Children.Add(roleIcon);
 
-                TextBlock t = new TextBlock();
-                t.Style = Resources["PartyMember"] as Style;
-                t.Text = $"{dc.Info.Name} - {dc.Spec.Name} {dc.Spec.Class.Name}"; // Gets spec when dungeon was run
-                t.Foreground = new SolidColorBrush((Color)System.Windows.Media.ColorConverter.ConvertFromString(dc.Spec.Class.getColor()));
+                TextBlock t = new TextBlock()
+                {
+                    Style = Resources["PartyMember"] as Style,
+                    Text = $"{dc.Info.Name} - {dc.Spec.Name} {dc.Spec.Class.Name}", // Gets spec when dungeon was run
+                    Foreground = new SolidColorBrush((Color)System.Windows.Media.ColorConverter.ConvertFromString(dc.Spec.Class.getColor()))
+                };
                 memberGrid.Children.Add(t);
 
                 Party.Children.Add(memberGrid);

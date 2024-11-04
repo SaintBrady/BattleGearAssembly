@@ -223,5 +223,9 @@
   <ItemGroup>
     <Resource Include="ImageResources\Dungeons\Compass.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageResources\Backgrounds\AllianceBG.png" />
+    <Resource Include="ImageResources\Backgrounds\HordeBG.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

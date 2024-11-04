@@ -69,48 +69,47 @@ namespace BattleGearAssembly
         private void LookupItem(object sender, RoutedEventArgs e)
         {
             Grid g = sender as Grid;
-            if (!API_Globals.Gear.ContainsKey(g.Name)) { return; }
+            if (!API_Globals.character.Gear.ContainsKey(g.Name)) { return; }
 
-            string item_id = API_Globals.Gear[g.Name].ItemInfo.ID.ToString();
+            string item_id = API_Globals.character.Gear[g.Name].ItemInfo.ID.ToString();
             string url = $"https://www.wowhead.com/item={item_id}";
             Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true });
         }
 
         private async void Button_LoadGear(object sender, RoutedEventArgs e)
         {
-            API_Globals.Gear.Clear();
-            Dictionary<string, GearItem> Gear = API_Globals.Gear;
-            Character character = new Character();
-
             try
             {
-                API_Globals.character = await API_Request.LoadCharacterProfile(RegionCB.Text, RealmCB.Text, CharacterNameBox.Text);
-                API_Globals.character.Region = RegionCB.Text;
-
-                character = API_Globals.character;
-                await API_Request.LoadGear(character.Equipment.Url);
-
-                ImageBrush backdrop = new ImageBrush();
-                backdrop.ImageSource = API_Request.RenderImage("ImageResources/Backgrounds/Background_Nzoth.png", 800, 800);
-                backdrop.Opacity = 0.6;
-                MainGrid.Background = backdrop;
-
-                ImageBrush charImage = new ImageBrush();
-                charImage.ImageSource = await API_Request.LoadPlayerMedia(character.Media.Url);
-                MainPanel.Background = charImage;
+                 await API_Request.LoadCharacterProfile(RegionCB.Text, RealmCB.Text, CharacterNameBox.Text);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine("Caught Exception: " + ex);
                 MessageBox.Show("Error: Failed to load player profile data");
                 return;
             }
+
+            Character character = API_Globals.character;
+
+            ImageBrush backdrop = new ImageBrush()
+            {
+                ImageSource = character.Faction.Type == "HORDE" ? API_Request.RenderImage("ImageResources/Backgrounds/HordeBG.png", 800, 800) : API_Request.RenderImage("ImageResources/Backgrounds/AllianceBG.png", 800, 800),
+                Opacity = 1.0
+            };
+            ImageBrush charImage = new ImageBrush()
+            {
+                ImageSource = await API_Request.LoadPlayerMedia(character.Media.Url)
+            };
+
+            MainGrid.Background = backdrop;
+            MainPanel.Background = charImage;
 
             CHARACTER_NAME.Text = character.Name;
             CHARACTER_NAME.Foreground = new SolidColorBrush((Color)System.Windows.Media.ColorConverter.ConvertFromString(character.Class.getColor()));
             CHARACTER_TITLE.Text = character.Title == null ? "" : character.Title.Name;
             CHARACTER_FACTION.Source = character.Faction.Type == "HORDE" ? API_Request.RenderImage("ImageResources/Faction/Horde.png", 240, 240) : API_Request.RenderImage("ImageResources/Faction/Alliance.png", 240, 240);
             CHARACTER_ILVL.Text = "Item Level " + character.Ilvl;
+
+            Dictionary<string, GearItem> Gear = API_Globals.character.Gear;
 
             //!!!// EVENTUALLY MOVE TO INSTANTIATE GRIDS BASED ON STYLES? //!!!//
             foreach (Grid g in MainPanel.Children)
@@ -141,8 +140,6 @@ namespace BattleGearAssembly
 
         private void LoadEmptySlot(Image image, TextBlock itemName, TextBlock ilvl, Border border, Grid g)
         {
-            Dictionary<string, GearItem> Gear = API_Globals.Gear;
-
             string gearSlotName = g.Name;
             if (gearSlotName.Contains("_1") || gearSlotName.Contains("_2")) { gearSlotName = gearSlotName.Substring(0, gearSlotName.Length - 2); }
 
@@ -164,14 +161,10 @@ namespace BattleGearAssembly
             Grid g = sender as Grid;
             if (CreateGearWindow(g.Name) != 0) return;
 
-            //!!!// Super Hacky. Fix me later //!!!//
-            double topMargin = g.Margin.Top - GearToolTip.ActualHeight - 200;
-            double bottomMargin = 0;
+            double topMargin = Math.Min(Math.Max(g.Margin.Top - (GearViewBox.ActualHeight / 2), 50), 650 - GearViewBox.ActualHeight);
+            if (g.Name == "MAIN_HAND" || g.Name == "OFF_HAND") topMargin -= 100;
 
-            if (g.Name == "MAIN_HAND" || g.Name == "OFF_HAND") topMargin = 0; bottomMargin = 60;
-            GearToolTip.Margin = new Thickness(g.Margin.Left + 100, topMargin, g.Margin.Right + 100, bottomMargin);
-            //------------------------------//
-
+            GearToolTip.Margin = new Thickness(g.Margin.Left + 150, topMargin, g.Margin.Right + 150, 0);
             GearToolTip.HorizontalAlignment = g.HorizontalAlignment;
             GearToolTip.Visibility = Visibility.Visible;
         }
@@ -187,7 +180,7 @@ namespace BattleGearAssembly
         private int CreateGearWindow(string slot)
         {
             // Handles empty gear slot hover
-            if (!API_Globals.Gear.TryGetValue(slot, out GearItem item)) return -1;
+            if (!API_Globals.character.Gear.TryGetValue(slot, out GearItem item)) return -1;
 
             GearInfoPanel.Children.Clear();
 
@@ -294,19 +287,17 @@ namespace BattleGearAssembly
                             catch
                             {
                                 gemImage.Source = API_Request.RenderImage("ImageResources/Gems/Unknown.png", 12, 12);
+                                t = GearItem.ItemText(new string[] { item.Sockets[i].Value });
                             }
 
-                            StackPanel socketPanel = new StackPanel();
-                            socketPanel.Orientation = Orientation.Horizontal;
-
-                            Border border = new Border();
-                            border.Style = (Style)Resources["GemBorder"];
-
-                            Border mask = new Border();
-                            mask.Style = (Style)Resources["GemMask"];
-
                             Grid gr = new Grid();
-                            border.Child = gr;
+                            StackPanel socketPanel = new StackPanel() { Orientation = Orientation.Horizontal };
+
+                            Border mask = new Border() { Style = (Style)Resources["GemMask"] };
+                            Border border = new Border() {
+                                Style = (Style)Resources["GemBorder"],
+                                Child = gr
+                            };
 
                             gr.Children.Add(mask);
                             gr.Children.Add(gemImage);
@@ -352,8 +343,7 @@ namespace BattleGearAssembly
                         break;
 
                     case "SellPrice":
-                        StackPanel stackPanel = new StackPanel();
-                        stackPanel.Orientation = Orientation.Horizontal;
+                        StackPanel stackPanel = new StackPanel() { Orientation = Orientation.Horizontal };
                         stackPanel.Children.Add(GearItem.ItemText(new string[] { "Sell Price: " }));
 
                         PropertyInfo[] priceProperties = item.SellPrice.Value.GetType().GetProperties();

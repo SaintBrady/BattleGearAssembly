@@ -83,6 +83,15 @@
         <Style TargetType="Grid" x:Key="Item">
             <Setter Property="Height" Value="50"/>
             <Setter Property="Width" Value="300"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#00000000" Offset="0"/>
+                        <GradientStop Color="#50000000" Offset="0.25"/>
+                        <GradientStop Color="#00000000" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
             <EventSetter Event="MouseDown" Handler="LookupItem"/>
             <EventSetter Event="MouseEnter" Handler="ToggleShowGearTT"/>
             <EventSetter Event="MouseLeave" Handler="ToggleHideGearTT"/>
