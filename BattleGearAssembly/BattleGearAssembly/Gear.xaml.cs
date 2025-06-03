@@ -15,38 +15,6 @@ using Image = System.Windows.Controls.Image;
 
 namespace BattleGearAssembly
 {
-    /*public class GearItemElement : INotifyPropertyChanged
-    {
-        //public Image Image { get; set; }
-        //public TextBlock Ilvl {  get; set; }
-        //public TextBlock Name { get; set; }
-        //public Border Border { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        int s = 12;
-
-        public int S
-        {
-            set
-            {
-                if (s != value)
-                {
-                    s = value;
-
-                    if (PropertyChanged != null)
-                    {
-                        PropertyChanged(this, new PropertyChangedEventArgs("S"));
-                    }
-                }
-            }
-            get
-            {
-                return s;
-            }
-        }
-    }*/
-
     public partial class Gear : Page
     {
         public Gear()
@@ -104,7 +72,7 @@ namespace BattleGearAssembly
             MainPanel.Background = charImage;
 
             CHARACTER_NAME.Text = character.Name;
-            CHARACTER_NAME.Foreground = new SolidColorBrush((Color)System.Windows.Media.ColorConverter.ConvertFromString(character.Class.getColor()));
+            CHARACTER_NAME.Foreground = character.Class.getColor();
             CHARACTER_TITLE.Text = character.Title == null ? "" : character.Title.Name;
             CHARACTER_FACTION.Source = character.Faction.Type == "HORDE" ? API_Request.RenderImage("ImageResources/Faction/Horde.png", 240, 240) : API_Request.RenderImage("ImageResources/Faction/Alliance.png", 240, 240);
             CHARACTER_ILVL.Text = "Item Level " + character.Ilvl;

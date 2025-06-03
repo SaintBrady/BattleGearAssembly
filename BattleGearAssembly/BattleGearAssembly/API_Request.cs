@@ -10,14 +10,18 @@ using System.Windows.Media.Imaging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+// Switch to using System.Text.Json?
+
 namespace BattleGearAssembly
 {
     public static class API_Globals
     {
         public static HttpClient client = new HttpClient();
         public static Character character = new Character();
+        public static Dictionary<string, DungeonRoot> dungeonsList = new Dictionary<string, DungeonRoot>();
 
         public static string API_Token;
+        public const int MythicPlusSeason = 14;
 
         public static Dictionary<string, string> RealmSlugDict = new Dictionary<string, string>();
         public static Dictionary<string, Specialization> SpecDict = new Dictionary<string, Specialization>();
@@ -83,20 +87,19 @@ namespace BattleGearAssembly
         public static async Task LoadCharacterProfile(string region, string realmSlug, string characterName)
         {
             if(char.IsUpper(realmSlug[0])) realmSlug = API_Globals.RealmSlugDict[realmSlug]; // Returns slug if name, otherwise skips
-            var parameters = new Dictionary<string, string> { { "namespace", "profile-" + region }, { "locale", "en_us" } };
-            string httpMessage = $"https://{region}.api.blizzard.com/profile/wow/character/{realmSlug}/{characterName}?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
+            string httpMessage = $"https://{region}.api.blizzard.com/profile/wow/character/{realmSlug}/{characterName}?namespace=profile-{region}&locale=en_us".ToLower();
             string responseBody = await BuildHttpRequest(httpMessage);
 
             API_Globals.character = JsonConvert.DeserializeObject<Character>(responseBody);
             API_Globals.character.Region = region;
 
-            await LoadGear(API_Globals.character.Equipment.Url);
+            await LoadGear();
         }
 
         // Gets Character Gear JSON from API Request and Converts to Gear List
-        public static async Task LoadGear(string url)
+        public static async Task LoadGear()
         {
-            string responseBody = await BuildHttpRequest(url + "&locale=en_us");
+            string responseBody = await BuildHttpRequest(API_Globals.character.Equipment.Url + "&locale=en_us");
 
             GearRoot root = JsonConvert.DeserializeObject<GearRoot>(responseBody);
 
@@ -112,8 +115,7 @@ namespace BattleGearAssembly
         // Gets Realms from given Region
         public static async Task<List<string>> LoadRealms(string region)
         {
-            var parameters = new Dictionary<string, string> { { "namespace", "dynamic-" + region }, { "locale", "en_us" } };
-            string httpMessage = $"https://{region}.api.blizzard.com/data/wow/realm/index?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
+            string httpMessage = $"https://{region}.api.blizzard.com/data/wow/realm/index?namespace=dynamic-{region}&locale=en_us".ToLower();
             string responseBody = await BuildHttpRequest(httpMessage);
 
             dynamic d = JObject.Parse(responseBody);
@@ -131,31 +133,31 @@ namespace BattleGearAssembly
 
         public static async Task LoadMythicPlus()
         {
-            int index = API_Globals.character.MythicPlus.Url.IndexOf('?');
-            string url = API_Globals.character.MythicPlus.Url.Insert(index, "/season/13") + "&locale=en_us";
             MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
 
             // Resolves players with no keys done for the current season
             try
             {
-                string responseBody = await BuildHttpRequest(url);
+                Character character = API_Globals.character;
+                string httpMessage = $"https://{character.Region}.api.blizzard.com/profile/wow/character/{character.Realm.Slug}/{character.Name}/mythic-keystone-profile/season/{API_Globals.MythicPlusSeason}?namespace=profile-{character.Region}&locale=en_us".ToLower();
+                string responseBody = await BuildHttpRequest(httpMessage);
 
                 // Sorts so that highest keys are pulled into dict for MythicPlus.xaml
-                API_Globals.character.KeyProfile = JsonConvert.DeserializeObject<KeyProfile>(responseBody);
-                API_Globals.character.KeyProfile.Dungeons = API_Globals.character.KeyProfile.Dungeons.OrderBy(c => c.Level).ToArray();
-                Array.Reverse(API_Globals.character.KeyProfile.Dungeons);
+                character.KeyProfile = JsonConvert.DeserializeObject<KeyProfile>(responseBody);
+                character.getTopDungeons();
 
-                foreach (Dungeon d in API_Globals.character.KeyProfile.Dungeons)
+                foreach (KeyValuePair<string, Dungeon> kv in character.TopDungeons)
                 {
-                    string responseBody2 = await BuildHttpRequest($"https://us.api.blizzard.com/data/wow/mythic-keystone/dungeon/{d.Info.Id}?namespace=dynamic-us&locale=en_US");
-                    DungeonRoot Root = JsonConvert.DeserializeObject<DungeonRoot>(responseBody2);
-                    d.KeystoneUpgrades = Root.KeystoneUpgrades;
+                    if (kv.Value == null) continue;
+                    kv.Value.KeystoneUpgrades = API_Globals.dungeonsList[kv.Key].KeystoneUpgrades;
                 }
-                mainWindow.MythicPlus_Enabled(true);
+
+                mainWindow.MythicPlus.IsEnabled = true;
             }
-            catch
+            catch (Exception ex)
             {
-                mainWindow.MythicPlus_Enabled(false);
+                Console.WriteLine(ex.ToString());
+                mainWindow.MythicPlus.IsEnabled = false;
             }
         }
 
@@ -172,8 +174,7 @@ namespace BattleGearAssembly
         // Gets Image From API Source using item_id
         public static async Task<ImageSource> LoadImage(int item_id, string region = "us")
         {
-            var parameters = new Dictionary<string, string> { { "namespace", "static-" + region }, { "locale", "en_US" } };
-            string httpMessage = $"https://{region}.api.blizzard.com/data/wow/media/item/{item_id}?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
+            string httpMessage = $"https://{region}.api.blizzard.com/data/wow/media/item/{item_id}?namespace=static-{region}&locale=en_us".ToLower();
             string responseBody = await BuildHttpRequest(httpMessage);
 
             string imageURL = JObject.Parse(responseBody)["assets"][0]["value"].ToString();
@@ -197,26 +198,38 @@ namespace BattleGearAssembly
 
         public static async Task LoadSpecs()
         {
-            var parameters = new Dictionary<string, string> { { "namespace", "static-us" }, { "locale", "en_US" } };
-            string httpMessage = $"https://us.api.blizzard.com/data/wow/playable-specialization/index?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
+            string httpMessage = $"https://us.api.blizzard.com/data/wow/playable-specialization/index?namespace=static-us&locale=en_us".ToLower();
             string responseBody = await BuildHttpRequest(httpMessage);
 
             SpecRoot sr = JsonConvert.DeserializeObject<SpecRoot>(responseBody);
 
             foreach (Specialization spec in sr.Specializations)
             {
-                string httpMessage2 = $"https://us.api.blizzard.com/data/wow/playable-specialization/{spec.Id}?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
+                string httpMessage2 = $"https://us.api.blizzard.com/data/wow/playable-specialization/{spec.Id}?namespace=static-us&locale=en_US".ToLower();
                 string responseBody2 = await BuildHttpRequest(httpMessage2);
 
-                API_Globals.SpecDict.Add(spec.Id, JsonConvert.DeserializeObject<Specialization>(responseBody2));
+                Specialization specParse = JsonConvert.DeserializeObject<Specialization>(responseBody2);
+                API_Globals.SpecDict.Add(spec.Id, specParse);
             }
-            //Test();
+        }
+
+        public static async Task LoadDungeons()
+        {
+            string[] dungeonIDs = { "525", "506", "504", "500", "499", "382", "370", "247" };
+
+            for (int i = 0; i < 8; i++)
+            {
+                string dungeonJson = await BuildHttpRequest($"https://us.api.blizzard.com/data/wow/mythic-keystone/dungeon/{dungeonIDs[i]}?namespace=dynamic-us&locale=en_us");
+                API_Globals.dungeonsList.Add(dungeonIDs[i], JsonConvert.DeserializeObject<DungeonRoot>(dungeonJson));
+            }
         }
 
         private static async void Test()
         {
-            var parameters = new Dictionary<string, string> { { "namespace", "profile-us" }, { "locale", "en_US" } };
-            string httpMessage = $"https://us.api.blizzard.com/profile/wow/character/thrall/euphrelia/mythic-keystone-profile?namespace={parameters["namespace"]}&locale={parameters["locale"]}".ToLower();
+            var parameters = new Dictionary<string, string> { { "namespace", "dynamic-us" }, { "locale", "en_US" } };
+            string httpMessage = $"https://us.api.blizzard.com/profile/wow/character/thrall/Tool/mythic-keystone-profile/season/{API_Globals.MythicPlusSeason}?namespace=profile-us&locale=en_us".ToLower();
+
+
             string responseBody = await BuildHttpRequest(httpMessage);
             Console.WriteLine(responseBody);
         }

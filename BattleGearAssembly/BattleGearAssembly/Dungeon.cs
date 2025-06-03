@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Windows.Media;
 
 namespace BattleGearAssembly
 {
@@ -12,6 +14,9 @@ namespace BattleGearAssembly
 
         [JsonProperty("duration")]
         public int Duration { get; set; }
+
+        [JsonProperty("is_completed_within_time")]
+        public bool IsTimed { get; set; }
 
         [JsonProperty("keystone_upgrades")]
         public KeystoneUpgrade[] KeystoneUpgrades { get; set; }
@@ -30,21 +35,20 @@ namespace BattleGearAssembly
 
             return $"{minutes}:{seconds:00.000}";
         }
+
+        public SolidColorBrush getLevelColor()
+        {
+            return new SolidColorBrush((Color)System.Windows.Media.ColorConverter.ConvertFromString(Rating.Color.GetColor()));
+        }
     }
 
     public class DungeonRoot
     {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
         [JsonProperty("keystone_upgrades")]
         public KeystoneUpgrade[] KeystoneUpgrades { get; set; }
-    }
-
-    public class KeyProfile
-    {
-        [JsonProperty("best_runs")]
-        public Dungeon[] Dungeons { get; set; }
-
-        [JsonProperty("mythic_rating")]
-        public Rating Rating { get; set; }
     }
 
     public class DungeonInfo

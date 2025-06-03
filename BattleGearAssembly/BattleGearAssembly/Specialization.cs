@@ -5,7 +5,7 @@ namespace BattleGearAssembly
     public class Specialization
     {
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } //Resolves Blizzard's ingenious new embedded localization JSON properties
 
         [JsonProperty("id")]
         public string Id { get; set; }

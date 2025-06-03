@@ -4,13 +4,17 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+/*
+ * TO DO
+ * Add images to dungeons w/ greyscaling
+ * Fix "Best in Time" defaulting to 312.6 value
+ * Box being overscaled for Workshop due to name overflow
+ * 
+ * Add specs file where can directly read rather than pull API requests
+ */
 
 namespace BattleGearAssembly
 {
-    public static class MythicPlusGlobals
-    {
-        public static Dictionary<string, Dungeon> dungeons = new Dictionary<string, Dungeon>();
-    }
 
     public partial class MythicPlus : Page
     {
@@ -26,6 +30,8 @@ namespace BattleGearAssembly
 
         private void ToggleShowDungeonTT(object sender, RoutedEventArgs e)
         {
+            Grid g = sender as Grid;
+
             if (DungeonToolTip.Visibility == Visibility.Visible) {
                 DungeonToolTip.Visibility = Visibility.Collapsed;
                 Chest.Children.Clear();
@@ -33,12 +39,10 @@ namespace BattleGearAssembly
                 return; 
             }
 
-            Grid g = sender as Grid;
-
             // Resolves dungeons with no keystone data for given player
-            if (!MythicPlusGlobals.dungeons.ContainsKey(g.Name)) return;
+            if (API_Globals.character.TopDungeons[g.Tag.ToString()] == null) return;
 
-            Dungeon d = MythicPlusGlobals.dungeons[g.Name];
+            Dungeon d = API_Globals.character.TopDungeons[g.Tag.ToString()];
 
             foreach (KeystoneUpgrade k in d.KeystoneUpgrades)
             {
@@ -52,22 +56,20 @@ namespace BattleGearAssembly
 
             DungeonName.Text = d.Info.Name;
 
-            string region = API_Globals.character.Region;
-
-            foreach (DungeonCharacter dc in d.Characters)
+            foreach (DungeonCharacter dunChar in d.Characters)
             {
-                dc.Spec = API_Globals.SpecDict[dc.Spec.Id];
+                dunChar.Spec = API_Globals.SpecDict[dunChar.Spec.Id];
             }
 
             IEnumerable<DungeonCharacter> dunChars = d.Characters.OrderByDescending(c => c.Spec.Role.Name);
 
-            foreach (DungeonCharacter dc in dunChars)
+            foreach (DungeonCharacter dunChar in dunChars)
             {
                 Grid memberGrid = new Grid();
 
                 Image roleIcon = new Image()
                 {
-                    Source = API_Request.RenderImage($"ImageResources/RoleIcons/{dc.Spec.Role.Name}.png", 64, 64),
+                    Source = API_Request.RenderImage($"ImageResources/RoleIcons/{dunChar.Spec.Role.Name}.png", 64, 64),
                     HorizontalAlignment = HorizontalAlignment.Left
                 };
                 memberGrid.Children.Add(roleIcon);
@@ -75,8 +77,8 @@ namespace BattleGearAssembly
                 TextBlock t = new TextBlock()
                 {
                     Style = Resources["PartyMember"] as Style,
-                    Text = $"{dc.Info.Name} - {dc.Spec.Name} {dc.Spec.Class.Name}", // Gets spec when dungeon was run
-                    Foreground = new SolidColorBrush((Color)System.Windows.Media.ColorConverter.ConvertFromString(dc.Spec.Class.getColor()))
+                    Text = $"{dunChar.Info.Name} - {dunChar.Spec.Name} {dunChar.Spec.Class.Name}", // Gets spec when dungeon was run
+                    Foreground = dunChar.Spec.Class.getColor()
                 };
                 memberGrid.Children.Add(t);
 
@@ -91,40 +93,10 @@ namespace BattleGearAssembly
             DungeonToolTip.Visibility = Visibility.Visible;
         }
 
-        public void getDungeons()
-        {
-            MythicPlusGlobals.dungeons.Clear();
-            Dictionary<string, string> dungeonAliases = new Dictionary<string, string>()
-            {
-                {"The Necrotic Wake", "NW"},
-                {"Mists of Tirna Scithe", "MOTS"},
-                {"Siege of Boralus", "SOB"},
-                {"City of Threads", "COT"},
-                {"Ara-Kara, City of Echoes", "AK"},
-                {"Grim Batol", "GB"},
-                {"The Stonevault", "SV"},
-                {"The Dawnbreaker", "DB"}
-            };
-
-            foreach (Dungeon d in API_Globals.character.KeyProfile.Dungeons)
-            {
-                string dunName = dungeonAliases[d.Info.Name];
-
-                if(!MythicPlusGlobals.dungeons.ContainsKey(dunName))
-                {
-                    MythicPlusGlobals.dungeons.Add(dunName, d);
-                }
-            }
-        }
-
         public void ShowMythicPlus()
         {
-            getDungeons();
-
-            SolidColorBrush scoreColor = new SolidColorBrush((Color)System.Windows.Media.ColorConverter.ConvertFromString(API_Globals.character.KeyProfile.Rating.Color.GetColor()));
-
-            Score.Text = ((int)API_Globals.character.KeyProfile.Rating.Value).ToString();
-            Score.Foreground = scoreColor;
+            Score.Text = ((int)API_Globals.character.getMythicPluScore()).ToString();
+            Score.Foreground = API_Globals.character.getScoreColor();
 
             foreach (Grid g in DungeonSP.Children)
             {
@@ -132,16 +104,21 @@ namespace BattleGearAssembly
                 Image image = g.Children.OfType<Image>().First();
                 Border border = g.Children.OfType<Border>().First();
 
-                if (MythicPlusGlobals.dungeons.ContainsKey(g.Name))
+                if (API_Globals.character.TopDungeons[g.Tag.ToString()] != null)
                 {
-                    Dungeon d = MythicPlusGlobals.dungeons[g.Name];
+                    Dungeon d = API_Globals.character.TopDungeons[g.Tag.ToString()];
                     textBlock.Text = d.Level.ToString();
                     image.Source = API_Request.RenderImage("ImageResources/Dungeons/" + g.Name + ".png", 100, 100);
 
-                    string colorHex = d.Rating.Color.GetColor();
-                    SolidColorBrush levelColor = new SolidColorBrush((Color)System.Windows.Media.ColorConverter.ConvertFromString(colorHex));
+                    SolidColorBrush levelColor = d.getLevelColor();
                     textBlock.Foreground = levelColor;
                     border.BorderBrush = levelColor;
+                }
+                else
+                {
+                    image.Source = API_Request.RenderImage("ImageResources/Dungeons/Blanks/" + g.Name + "_Gray.png", 100, 100);
+                    textBlock.Text = "";
+                    border.BorderBrush = new SolidColorBrush(Color.FromRgb(0, 0, 0));
                 }
             }
         }

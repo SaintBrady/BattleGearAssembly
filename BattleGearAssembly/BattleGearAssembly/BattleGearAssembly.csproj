@@ -190,24 +190,24 @@
     <Resource Include="ImageResources\Faction\Horde.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="ImageResources\Dungeons\AK.png" />
-    <Resource Include="ImageResources\Dungeons\GB.png" />
-    <Resource Include="ImageResources\Dungeons\COT.png" />
-    <Resource Include="ImageResources\Dungeons\DB.png" />
-    <Resource Include="ImageResources\Dungeons\MOTS.png" />
-    <Resource Include="ImageResources\Dungeons\NW.png" />
-    <Resource Include="ImageResources\Dungeons\SOB.png" />
-    <Resource Include="ImageResources\Dungeons\SV.png" />
+    <Resource Include="ImageResources\Dungeons\Old\AK.png" />
+    <Resource Include="ImageResources\Dungeons\Old\GB.png" />
+    <Resource Include="ImageResources\Dungeons\Old\COT.png" />
+    <Resource Include="ImageResources\Dungeons\Old\DB.png" />
+    <Resource Include="ImageResources\Dungeons\Old\MOTS.png" />
+    <Resource Include="ImageResources\Dungeons\Old\NW.png" />
+    <Resource Include="ImageResources\Dungeons\Old\SOB.png" />
+    <Resource Include="ImageResources\Dungeons\Old\SV.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="ImageResources\Dungeons\Blanks\AK_GRAY.png" />
-    <Resource Include="ImageResources\Dungeons\Blanks\COT_GRAY.png" />
-    <Resource Include="ImageResources\Dungeons\Blanks\DB_GRAY.png" />
-    <Resource Include="ImageResources\Dungeons\Blanks\GB_GRAY.png" />
-    <Resource Include="ImageResources\Dungeons\Blanks\MOTS_GRAY.png" />
-    <Resource Include="ImageResources\Dungeons\Blanks\NW_GRAY.png" />
-    <Resource Include="ImageResources\Dungeons\Blanks\SOB_GRAY.png" />
-    <Resource Include="ImageResources\Dungeons\Blanks\SV_GRAY.png" />
+    <Resource Include="ImageResources\Dungeons\Old\AK_GRAY.png" />
+    <Resource Include="ImageResources\Dungeons\Old\COT_GRAY.png" />
+    <Resource Include="ImageResources\Dungeons\Old\DB_GRAY.png" />
+    <Resource Include="ImageResources\Dungeons\Old\GB_GRAY.png" />
+    <Resource Include="ImageResources\Dungeons\Old\MOTS_GRAY.png" />
+    <Resource Include="ImageResources\Dungeons\Old\NW_GRAY.png" />
+    <Resource Include="ImageResources\Dungeons\Old\SOB_GRAY.png" />
+    <Resource Include="ImageResources\Dungeons\Old\SV_GRAY.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="ImageResources\Backgrounds\Background_Deathwing.png" />
@@ -221,10 +221,36 @@
     <Resource Include="ImageResources\RoleIcons\tank.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="ImageResources\Backgrounds\AllianceBG.png" />
+    <Resource Include="ImageResources\Backgrounds\HordeBG_Old.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageResources\Backgrounds\Background_XalAlleria.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="ImageResources\Dungeons\Compass.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="ImageResources\Backgrounds\AllianceBG.png" />
+    <Resource Include="ImageResources\Dungeons\CBM.png" />
+    <Resource Include="ImageResources\Dungeons\DFC.png" />
+    <Resource Include="ImageResources\Dungeons\ML.png" />
+    <Resource Include="ImageResources\Dungeons\OF.png" />
+    <Resource Include="ImageResources\Dungeons\PSF.png" />
+    <Resource Include="ImageResources\Dungeons\RK.png" />
+    <Resource Include="ImageResources\Dungeons\TOP.png" />
+    <Resource Include="ImageResources\Dungeons\WS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageResources\Dungeons\Blanks\CBM_Gray.png" />
+    <Resource Include="ImageResources\Dungeons\Blanks\DFC_Gray.png" />
+    <Resource Include="ImageResources\Dungeons\Blanks\ML_Gray.png" />
+    <Resource Include="ImageResources\Dungeons\Blanks\OF_Gray.png" />
+    <Resource Include="ImageResources\Dungeons\Blanks\PSF_Gray.png" />
+    <Resource Include="ImageResources\Dungeons\Blanks\RK_Gray.png" />
+    <Resource Include="ImageResources\Dungeons\Blanks\TOP_Gray.png" />
+    <Resource Include="ImageResources\Dungeons\Blanks\WS_Gray.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="ImageResources\Backgrounds\HordeBG.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

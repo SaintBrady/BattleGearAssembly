@@ -85,10 +85,9 @@
             <Setter Property="Width" Value="300"/>
             <Setter Property="Background">
                 <Setter.Value>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <LinearGradientBrush StartPoint="0,.5" EndPoint=".5,.5" SpreadMethod="Reflect">
                         <GradientStop Color="#00000000" Offset="0"/>
-                        <GradientStop Color="#50000000" Offset="0.25"/>
-                        <GradientStop Color="#00000000" Offset="1"/>
+                        <GradientStop Color="#90000000" Offset="0.5"/>
                     </LinearGradientBrush>
                 </Setter.Value>
             </Setter>
@@ -112,7 +111,7 @@
             <ComboBox Name="RealmCB" HorizontalAlignment="Left" Margin="200,40,0,0" VerticalAlignment="Top" Width="200" Height="20"/>
 
             <Label Content="Character Name" HorizontalAlignment="Left" Margin="425,20,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold"/>
-            <TextBox Name="CharacterNameBox" FontSize="16" FontWeight="Bold" Foreground="LightGray" Background="DarkRed" HorizontalAlignment="Left" Margin="430,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="25"/>
+            <TextBox Name="CharacterNameBox" Text="Euphrelia" FontSize="16" FontWeight="Bold" Foreground="LightGray" Background="DarkRed" HorizontalAlignment="Left" Margin="430,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="25"/>
 
             <TextBlock Name="CHARACTER_NAME" Margin="100,0,0,70" Text="" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontWeight="Bold"  FontSize="26" FontFamily="Franklin Gothic" Foreground="#CCCC00"/>
             <TextBlock Name="CHARACTER_TITLE" Margin="100,0,0,50" Text="" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontWeight="Bold"  FontSize="20" FontFamily="Franklin Gothic" Foreground="#FFFFFF"/>
@@ -274,7 +273,7 @@
 
         <Button Name="LoadGearButton" Click="Button_LoadGear" Width="80" Height="30" Content="SUBMIT" Margin="0,0,0,20" VerticalAlignment="Bottom" Background="DarkRed" Foreground="LightGray" FontSize="16" FontWeight="Bold"/>
 
-        <UserControl Name="GearToolTip" Visibility="Collapsed" >
+        <UserControl Name="GearToolTip" Visibility="Collapsed">
             <Viewbox Name ="GearViewBox" MaxWidth="350" Stretch="UniformToFill" StretchDirection="DownOnly">
                 <Border Background="#CCCCCC" CornerRadius="10" BorderThickness="3" Padding="2">
                     <Grid>

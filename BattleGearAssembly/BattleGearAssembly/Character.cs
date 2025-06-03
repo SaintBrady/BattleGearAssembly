@@ -1,5 +1,8 @@
 ﻿using Newtonsoft.Json;
+using System;
+using System.Linq;
 using System.Collections.Generic;
+using System.Windows.Media;
 
 namespace BattleGearAssembly
 {
@@ -30,6 +33,18 @@ namespace BattleGearAssembly
 
         public Dictionary<string, GearItem> Gear {  get; set; } = new Dictionary<string, GearItem>();
 
+        public Dictionary<string, Dungeon> TopDungeons { get; set; } = new Dictionary<string, Dungeon>
+        {
+            { "525", null },
+            { "506", null },
+            { "504", null },
+            { "500", null },
+            { "499", null },
+            { "382", null },
+            { "370", null },
+            { "247", null },
+        };
+
         public KeyProfile KeyProfile { get; set; }
 
         [JsonProperty("equipment")]
@@ -40,6 +55,26 @@ namespace BattleGearAssembly
 
         [JsonProperty("mythic_keystone_profile")]
         public Href MythicPlus { get; set; }
+
+        public SolidColorBrush getScoreColor()
+        {
+            return new SolidColorBrush((Color)System.Windows.Media.ColorConverter.ConvertFromString(KeyProfile.Rating.Color.GetColor()));
+        }
+
+        public float getMythicPluScore()
+        {
+            return KeyProfile.Rating.Value;
+        }
+
+        public void getTopDungeons()
+        {
+            KeyProfile.Dungeons = KeyProfile.Dungeons.Where(d => d.IsTimed).ToList();
+
+            foreach (Dungeon d in KeyProfile.Dungeons)
+            {
+                TopDungeons[d.Info.Id] = d;
+            }
+        }
     }
 
     public class Realm
@@ -68,10 +103,19 @@ namespace BattleGearAssembly
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        public string getColor()
+        public SolidColorBrush getColor()
         {
-            return API_Globals.ClassColors[Name];
+            return new SolidColorBrush((Color)System.Windows.Media.ColorConverter.ConvertFromString(API_Globals.ClassColors[Name]));
         }
+    }
+
+    public class KeyProfile
+    {
+        [JsonProperty("best_runs")]
+        public List<Dungeon> Dungeons { get; set; }
+
+        [JsonProperty("mythic_rating")]
+        public Rating Rating { get; set; }
     }
 
     public class Href

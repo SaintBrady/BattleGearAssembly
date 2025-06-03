@@ -31,11 +31,7 @@ namespace BattleGearAssembly
         {
             await API_Request.RequestAsync();
             await API_Request.LoadSpecs();
-        }
-
-        public void MythicPlus_Enabled(bool enabled)
-        {
-            MythicPlus.IsEnabled = enabled;
+            await API_Request.LoadDungeons();
         }
 
         private void ChangeWindow(object sender, RoutedEventArgs e)

@@ -19,9 +19,8 @@
             <Setter Property="Visibility" Value="Collapsed"/>
             <Style.Resources>
                 <Style TargetType="Viewbox" x:Key="DungeonViewBox">
-                    <Setter Property="MaxWidth" Value="400"/>
+                    <Setter Property="MaxWidth" Value="450"/>
                     <Setter Property="Stretch" Value="UniformToFill"/>
-                    <Setter Property="StretchDirection" Value="DownOnly"/>
                     <Style.Resources>
                         <Style TargetType="Border">
                             <Setter Property="Background" Value="#CCCCCC"/>
@@ -38,7 +37,8 @@
                                         <Style TargetType="StackPanel">
                                             <Setter Property="Margin" Value="10"/>
                                             <Setter Property="MinWidth" Value="260"/>
-                                            <Setter Property="MinHeight" Value="200"/>
+                                            <Setter Property="MaxWidth" Value="350"/>
+                                            <Setter Property="MinHeight" Value="220"/>
                                             <Style.Resources>
                                                 <Style TargetType="StackPanel" x:Key="DungeonInfoPanel">
                                                     <Setter Property="Orientation" Value="Horizontal"/>
@@ -53,12 +53,12 @@
                                                 <Style TargetType="TextBlock" x:Key="DungeonName">
                                                     <Setter Property="Foreground" Value="White"/>
                                                     <Setter Property="FontWeight" Value="Bold"/>
-                                                    <Setter Property="FontSize" Value="24"/>
+                                                    <Setter Property="FontSize" Value="24" />
                                                     <Setter Property="HorizontalAlignment" Value="Center"/>
                                                 </Style>
                                                 <Style TargetType="StackPanel" x:Key="Party">
                                                     <Setter Property="HorizontalAlignment" Value="Center"/>
-                                                    <Setter Property="Margin" Value="0,10,0,50"/>
+                                                    <Setter Property="Margin" Value="0,10,0,20"/>
                                                 </Style>
                                             </Style.Resources>
                                         </Style>
@@ -159,15 +159,15 @@
     <Grid>
         <Grid Height="720" Width="800" VerticalAlignment="Top" HorizontalAlignment="Right">
             <Grid.Background>
-                <ImageBrush ImageSource="ImageResources/Backgrounds/Background_Deathwing.png" Stretch="UniformToFill"/>
+                <ImageBrush ImageSource="ImageResources/Backgrounds/Background_XalAlleria.png" Stretch="UniformToFill"/>
             </Grid.Background>
         </Grid>
         <TextBlock Text="Mythic+ Score" FontSize="32" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,30,0,0"/>
         <TextBlock Name="Score" FontWeight="Bold" FontSize="32"  VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,80,0,0"/>
 
         <StackPanel Name="DungeonSP" Orientation="Horizontal" Height="100" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <Grid Name="NW" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
-                <Image Source="ImageResources/Dungeons/Blanks/NW_Gray.png" Stretch="Fill"/>
+            <Grid Name="OF" Tag="525" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
+                <Image Source="ImageResources/Dungeons/Blanks/OF_Gray.png" Stretch="Fill"/>
                 <Border BorderThickness="3">
                     <Border.Effect>
                         <BlurEffect Radius="5"/>
@@ -175,8 +175,8 @@
                 </Border>
                 <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
-            <Grid Name="DB" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
-                <Image Source="ImageResources/Dungeons/Blanks/DB_Gray.png" Stretch="Fill"/>
+            <Grid Name="CBM" Tag="506" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
+                <Image Source="ImageResources/Dungeons/Blanks/CBM_Gray.png" Stretch="Fill"/>
                 <Border BorderThickness="3">
                     <Border.Effect>
                         <BlurEffect Radius="5"/>
@@ -184,8 +184,8 @@
                 </Border>
                 <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
-            <Grid Name="SOB" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
-                <Image Source="ImageResources/Dungeons/Blanks/SOB_Gray.png" Stretch="Fill"/>
+            <Grid Name="DFC" Tag="504" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
+                <Image Source="ImageResources/Dungeons/Blanks/DFC_Gray.png" Stretch="Fill"/>
                 <Border BorderThickness="3">
                     <Border.Effect>
                         <BlurEffect Radius="5"/>
@@ -193,8 +193,8 @@
                 </Border>
                 <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
-            <Grid Name="GB" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
-                <Image Source="ImageResources/Dungeons/Blanks/GB_Gray.png" Stretch="Fill"/>
+            <Grid Name="RK" Tag="500" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
+                <Image Source="ImageResources/Dungeons/Blanks/RK_Gray.png" Stretch="Fill"/>
                 <Border BorderThickness="3">
                     <Border.Effect>
                         <BlurEffect Radius="5"/>
@@ -202,8 +202,8 @@
                 </Border>
                 <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
-            <Grid Name="SV" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
-                <Image Source="ImageResources/Dungeons/Blanks/SV_Gray.png" Stretch="Fill"/>
+            <Grid Name="PSF" Tag="499" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
+                <Image Source="ImageResources/Dungeons/Blanks/PSF_Gray.png" Stretch="Fill"/>
                 <Border BorderThickness="3">
                     <Border.Effect>
                         <BlurEffect Radius="5"/>
@@ -211,8 +211,8 @@
                 </Border>
                 <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
-            <Grid Name="COT" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
-                <Image Source="ImageResources/Dungeons/Blanks/COT_Gray.png" Stretch="Fill"/>
+            <Grid Name="TOP" Tag="382" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
+                <Image Source="ImageResources/Dungeons/Blanks/TOP_Gray.png" Stretch="Fill"/>
                 <Border BorderThickness="3">
                     <Border.Effect>
                         <BlurEffect Radius="5"/>
@@ -220,8 +220,8 @@
                 </Border>
                 <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
-            <Grid Name="AK" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
-                <Image Source="ImageResources/Dungeons/Blanks/AK_Gray.png" Stretch="Fill"/>
+            <Grid Name="WS" Tag="370" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
+                <Image Source="ImageResources/Dungeons/Blanks/WS_Gray.png" Stretch="Fill"/>
                 <Border BorderThickness="3">
                     <Border.Effect>
                         <BlurEffect Radius="5"/>
@@ -229,8 +229,8 @@
                 </Border>
                 <TextBlock FontSize="40" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
-            <Grid Name="MOTS" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
-                <Image Source="ImageResources/Dungeons/Blanks/MOTS_Gray.png" Stretch="Fill"/>
+            <Grid Name="ML" Tag="247" Width="100" MouseEnter="ToggleShowDungeonTT" MouseLeave="ToggleShowDungeonTT">
+                <Image Source="ImageResources/Dungeons/Blanks/ML_Gray.png" Stretch="Fill"/>
                 <Border BorderThickness="3">
                     <Border.Effect>
                         <BlurEffect Radius="5"/>
@@ -241,21 +241,21 @@
         </StackPanel>
 
         <UserControl Name="DungeonToolTip" Visibility="Collapsed">
-            <Viewbox Name ="DungeonViewBox" MaxWidth="400" Stretch="UniformToFill" StretchDirection="DownOnly">
-                <Border Background="#CCCCCC" CornerRadius="10" BorderThickness="3" Padding="2">
+            <Viewbox Name ="DungeonViewBox" StretchDirection="DownOnly" VerticalAlignment="Bottom" Margin="0,0,0,100">
+                <Border Name="DungeonBorder" Background ="Yellow" CornerRadius ="10" Padding ="2">
                     <Grid>
-                        <Border Name="Mask" Background="#202020" CornerRadius="7"/>
-                        <StackPanel Name="DungeonInfoPanel" Margin="10" MinWidth="260" MinHeight="260">
+                        <Border Name="Mask" Background="#262626" CornerRadius="7"/>
+                        <StackPanel Name="DungeonInfoPanel" Margin="10" MinWidth="260" MinHeight="220">
                             <StackPanel Name="Chest" Orientation="Horizontal" HorizontalAlignment="Center"/>
-                            <TextBlock Name="DungeonName" Text="Ara-Kara, City of Echoes" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" FontSize="24"/>
-                            <StackPanel Name="Party" HorizontalAlignment="Center" Margin="0, 10, 0, 50"/>
+                            <TextBlock Name="DungeonName" Text="Ara-Kara, City of Echoes" Foreground="Yellow" FontWeight="Bold" HorizontalAlignment="Center" FontSize="24"/>
+                            <StackPanel Name="Party" HorizontalAlignment="Center" Margin="0, 10, 0, 20"/>
                         </StackPanel>
                         <Grid HorizontalAlignment="Left" VerticalAlignment="Bottom">
                             <Image Source="ImageResources/Dungeons/Compass.png" Width="64"/>
                             <TextBlock Name="Score1_BG" Text="10" Foreground="Black" FontSize="24" FontWeight="ExtraBlack" FontFamily="Calibri" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="2,0,0,2"/>
-                            <TextBlock Name="Score1_FG" Text="10" Foreground="Orange" FontSize="24" FontWeight="ExtraBlack" FontFamily="Calibri" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                            <TextBlock Name="Score1_FG" Text="10" Foreground="Yellow" FontSize="24" FontWeight="ExtraBlack" FontFamily="Calibri" VerticalAlignment="Center" HorizontalAlignment="Center" />
                             <TextBlock Name="Score2_BG" Text="9" Foreground="Black" FontSize="24" FontWeight="ExtraBlack" FontFamily="Calibri" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,3,5"/>
-                            <TextBlock Name="Score2_FG" Text="9" Foreground="Purple" FontSize="24" FontWeight="ExtraBlack" FontFamily="Calibri" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="4"/>
+                            <TextBlock Name="Score2_FG" Text="9" Foreground="White" FontSize="24" FontWeight="ExtraBlack" FontFamily="Calibri" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="4"/>
                         </Grid>
                         <Grid HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="30" Margin="80,0,0,10">
                             <TextBlock Name="Score1" Text="324.7" Foreground="Yellow" FontWeight="DemiBold" FontStyle="Italic" FontSize="12" VerticalAlignment="Top"/>
